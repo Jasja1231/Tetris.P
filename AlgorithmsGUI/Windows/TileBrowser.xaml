@@ -1,0 +1,23 @@
+﻿<Window x:Class="AlgorithmsGUI.TileBrowser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:AlgorithmsGUI.Controls"
+        Title="MainWindow" Height="650" Width="650">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0">
+            <UniformGrid  Name="TilesPanel">
+                <UniformGrid.Resources>
+                    <Style TargetType="{x:Type Controls:TileControl}">
+                        <Setter Property="BorderThickness"  Value="2"/>
+                    </Style>
+                </UniformGrid.Resources>
+            </UniformGrid>
+        </ScrollViewer>
+        <Button Grid.Row="1" HorizontalAlignment="Right" Content="Apply" Background="WhiteSmoke" Width="50" Margin="0 5 5 0" Click="ApplyClick"></Button>
+        <Button Grid.Row="1" HorizontalAlignment="Right" Content="Cancel" Background="WhiteSmoke" Width="50" Margin="0 5 65 0" Click="CancelClick"></Button>
+    </Grid>
+</Window>
