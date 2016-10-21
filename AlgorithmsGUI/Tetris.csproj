@@ -79,6 +79,8 @@
       <DependentUpon>NumberSetter.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileReader.cs" />
+    <Compile Include="shape.cs" />
+    <Compile Include="shape_comparer.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -116,9 +118,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="set5.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
