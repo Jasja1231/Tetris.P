@@ -55,7 +55,7 @@ namespace AlgorithmsGUI.Controls
             Random r = new Random();
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(TileArray.GetLength(1), TileArray.GetLength(0));
             System.Drawing.Color background =  System.Drawing.Color.FromArgb((byte)0, (byte)(255), (byte)(255), (byte)255);
-            System.Drawing.Color c =  System.Drawing.Color.FromArgb((byte)0, (byte)r.Next(255), (byte)r.Next(255), (byte)r.Next(255));
+            System.Drawing.Color c =  System.Drawing.Color.FromArgb((byte)0, (byte)r.Next(20,235), (byte)r.Next(20,235), (byte)r.Next(20,235));
             System.Drawing.Color c2 =  System.Drawing.Color.FromArgb((byte)0, (byte)(c.R + (byte)20), (byte)(c.G + (byte)20), (byte)(c.B + (byte)20));
             for (int x = 0; x < TileArray.GetLength(0);x++)
             {

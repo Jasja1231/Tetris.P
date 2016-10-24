@@ -8,8 +8,8 @@ namespace Tetris
     {
         public bool Equals(shape s1, shape s2)
         {
-            bool[,] map = s2.rotations.ElementAt(0);
-            foreach (bool[,] rotation in s1.rotations)
+            byte[,] map = s2.rotations.ElementAt(0);
+            foreach (byte[,] rotation in s1.rotations)
             {
                 int checker = 0;
                 if (rotation.GetLength(1) == map.GetLength(1) && rotation.GetLength(0) == map.GetLength(0))

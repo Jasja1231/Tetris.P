@@ -50,16 +50,43 @@ namespace AlgorithmsGUI
             {
                 try
                 {
+
                     string[] content = System.IO.File.ReadAllLines(theDialog.FileName);
                     Tiles = FileReader.GetBricksFromFile(content);
                     TileBrowser TB = new TileBrowser(Tiles);
-                    TB.Show();
+                    List<Tetris.shape> Shapes = new List<Tetris.shape>();
+                    foreach(byte[,] b in Tiles)
+                        {
+                            Tetris.shape s = new Tetris.shape(b);
+                            s.findAllRotations();
+                            Shapes.Add(s);
+                        }
+
+                    for (int i = 0; i < Shapes.Count; i++ )
+                    {
+                        for (int j=0;j<Shapes.Count;j++)
+                        {
+                            if (i!=j)
+                            {
+                             //   foreach (byte [,] x in Shapes.ElementAt)
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                        TB.Show();
                 }
                 catch
                 {
                     MessageBox.Show("Error occured while loading the selected file.");
                 }
             }
+        }
+
+        private void PlayClick(object sender, RoutedEventArgs e)
+        {
+            this.PlayButton.Content = String.Equals(this.PlayButton.Content, "Play") ? "Pause" : "Play";
         }        
     }
 }
