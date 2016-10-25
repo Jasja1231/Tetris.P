@@ -18,7 +18,7 @@ namespace AlgorithmsGUI.Controls
     /// <summary>
     /// Interaction logic for NumberChooser.xaml
     /// </summary>
-    public partial class NumberSetter : UserControl
+    public partial class NumberSetter : UserControl 
     {
         private int selectedvalue;
         public int SelectedValue { get { return selectedvalue; } set { selectedvalue = value; this.ValueBlock.Text = selectedvalue.ToString(); } }
