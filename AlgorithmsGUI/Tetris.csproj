@@ -71,6 +71,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Algorithms\CheckDensity.cs" />
+    <Compile Include="Algorithms\Helper.cs" />
+    <Compile Include="Algorithms\Main.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -79,8 +82,8 @@
       <DependentUpon>NumberSetter.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileReader.cs" />
-    <Compile Include="shape.cs" />
-    <Compile Include="shape_comparer.cs" />
+    <Compile Include="Shape.cs" />
+    <Compile Include="Shape_comparer.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

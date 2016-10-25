@@ -58,7 +58,7 @@ namespace AlgorithmsGUI
                       
                         for (int i = 0; i < 50; i++)
                         {
-                            Tetris.shape s = new Tetris.shape(Tiles.ElementAt(r.Next(Tiles.Count - 1)));
+                            Tetris.Shape s = new Tetris.Shape(Tiles.ElementAt(r.Next(Tiles.Count - 1)));
                             this.AddTileToBitmap(ref bitmap, s, r.Next(0, x - 5), r.Next(0, 75 - 5), r.Next(3), r);
                         }
                     }
@@ -96,7 +96,7 @@ namespace AlgorithmsGUI
 
             }
         }
-        private void AddTileToBitmap (ref System.Drawing.Bitmap Bm, Tetris.shape Sh, int x, int y, int rotation, Random r)
+        private void AddTileToBitmap (ref System.Drawing.Bitmap Bm, Tetris.Shape Sh, int x, int y, int rotation, Random r)
         {
            // Random r = new Random();
             System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, r.Next(20, 230), r.Next(20, 230), r.Next(20, 230));
@@ -139,10 +139,10 @@ namespace AlgorithmsGUI
                     string[] content = System.IO.File.ReadAllLines(theDialog.FileName);
                     Tiles = FileReader.GetBricksFromFile(content);
                     TileBrowser TB = new TileBrowser(Tiles);
-                    List<Tetris.shape> Shapes = new List<Tetris.shape>();
+                    List<Tetris.Shape> Shapes = new List<Tetris.Shape>();
                     foreach(byte[,] b in Tiles)
                         {
-                            Tetris.shape s = new Tetris.shape(b);
+                            Tetris.Shape s = new Tetris.Shape(b);
                             s.findAllRotations();
                             Shapes.Add(s);
                         }

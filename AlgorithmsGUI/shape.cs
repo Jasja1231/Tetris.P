@@ -4,19 +4,19 @@ using System.Text;
 
 namespace Tetris
 {
-    class shape
+    class Shape
     {
         //*******************************CLASS FIELDS**************************************/
         //a list of 4 2D arrays containing our shape in rotations
         public List<byte[,]> rotations;
         //*******************************CLASS METHODS*************************************/
-        public shape()
+        public Shape()
         {
             //TODO: create "original" bool map and add it as first rotation
             //TODO: find all rotations
         }
         //make a copy of the shape passed in as argument
-        public shape(byte[,] map)
+        public Shape(byte[,] map)
         {
             rotations = new List<byte[,]>();
             rotations.Add((byte[,])map.Clone());
