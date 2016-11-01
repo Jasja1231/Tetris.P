@@ -1,18 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using AlgorithmsGUI.Controls;
+using Tetris;
 
 namespace AlgorithmsGUI
 {
@@ -26,16 +16,25 @@ namespace AlgorithmsGUI
             InitializeComponent();
         }
 
-        public TileBrowser(List<byte[,]> Tiles)
+        public TileBrowser(List<byte[,]> Tiles, ref List<Shape> Shapes)
         {
             InitializeComponent();
             Random r = new Random();
             foreach (byte[,] b in Tiles)
             {
-                TileControl t = new TileControl(b, System.Drawing.Color.FromArgb(0, (byte)r.Next(20,235), (byte)r.Next(20,235), (byte)r.Next(20,235)));
+                TileControl t = new TileControl(b, ref Shapes, System.Drawing.Color.FromArgb(0, (byte)r.Next(20,235), (byte)r.Next(20,235), (byte)r.Next(20,235)));
                 this.TilesPanel.Children.Add(t);
             }
-
+        }
+        public TileBrowser(ref List<Shape> Shapes)
+        {
+            InitializeComponent();
+            Random r = new Random();
+            foreach (Shape s in Shapes)
+            {
+                TileControl t = new TileControl(s);
+                this.TilesPanel.Children.Add(t);
+            }
         }
 
         private void ApplyClick(object sender, RoutedEventArgs e)

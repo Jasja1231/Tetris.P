@@ -4,27 +4,26 @@ using System.Text;
 
 namespace Tetris
 {
-    class Shape
+    public class Shape
     {
         //*******************************CLASS FIELDS**************************************/
         //a list of 4 2D arrays containing our shape in rotations
         public List<byte[,]> rotations;
+        public System.Drawing.Color c1 { get; }
+        public System.Drawing.Color c2 { get; }
         //*******************************CLASS METHODS*************************************/
-        public Shape()
-        {
-            //TODO: create "original" bool map and add it as first rotation
-            //TODO: find all rotations
-        }
-        //make a copy of the shape passed in as argument
-        public Shape(byte[,] map)
+        //create a shape class using byte array passed in as arguments (also finds rotations)
+        public Shape(byte[,] map, System.Drawing.Color c1, System.Drawing.Color c2)
         {
             rotations = new List<byte[,]>();
             rotations.Add((byte[,])map.Clone());
             findAllRotations();
+            this.c1 = c1;
+            this.c2 = c2;
         }
         //finds 3 other rotations based on the first element from rotations list
         //ex. uniqueList = shapeList.Distinct(new shape_comparer()).ToList();
-        public void findAllRotations()
+        private void findAllRotations()
         {
             byte[,] map = rotations.ElementAt(0);
             byte[,] outputMatrix;

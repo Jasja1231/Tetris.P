@@ -12,7 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Tetris;
 
 namespace AlgorithmsGUI
 {
@@ -21,13 +21,17 @@ namespace AlgorithmsGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<byte[,]> Tiles { get; set; }
+        //*********************************CLASS FIELDS****************************************/
+        public List<Shape> Shapes;
+        int K = 5; //the user set K variable, constant for now
+        //*********************************CLASS METHODS***************************************/
         public MainWindow()
         {
             InitializeComponent();
             FFStepSetter.SelectedValue = 2;
             KSetter.SelectedValue = 4;
             AddBitMaps();
+            Shapes = new List<Tetris.Shape>();
         }
 
         private void AddBitMaps()
@@ -35,35 +39,34 @@ namespace AlgorithmsGUI
             System.Drawing.Bitmap bitmap;
             this.WellsPanel.Children.Clear();
             int x = 50;
-
-            for (int k = 0; k < 5; k++)
+            
+            for (int k = 0; k < K; k++)
             {
                 Image im = new Image();
-    
-                    bitmap = new System.Drawing.Bitmap(x, 75);
-                    System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, 220, 220, 220);
-                    System.Drawing.Color c2 = System.Drawing.Color.FromArgb(0, 230, 230, 230);
+                bitmap = new System.Drawing.Bitmap(x, 75);
+                System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, 220, 220, 220);
+                System.Drawing.Color c2 = System.Drawing.Color.FromArgb(0, 230, 230, 230);
 
-                    for (int i = 0; i < bitmap.Width; i++)
+                for (int i = 0; i < bitmap.Width; i++)
+                {
+                    for (int j = 0; j < bitmap.Height; j++)
                     {
-                        for (int j = 0; j < bitmap.Height; j++)
-                        {
-                            bitmap.SetPixel(i, j, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? c1 : c2);
-                        }
+                        bitmap.SetPixel(i, j, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? c1 : c2);
                     }
+                }
 
-                    if (this.Tiles != null)
+                if (this.Shapes.Count != 0)
+                {
+                    //plase 50 random shapes on board
+                    Random r = new Random();
+                    for (int i = 0; i < 50; i++)
                     {
-                        Random r = new Random();
-                      
-                        for (int i = 0; i < 50; i++)
-                        {
-                            Tetris.Shape s = new Tetris.Shape(Tiles.ElementAt(r.Next(Tiles.Count - 1)));
-                            this.AddTileToBitmap(ref bitmap, s, r.Next(0, x - 5), r.Next(0, 75 - 5), r.Next(3), r);
-                        }
+                        this.AddTileToBitmap(ref bitmap, Shapes.ElementAt(r.Next(Shapes.Count - 1)),
+                            r.Next(0, x - 5), r.Next(0, 75 - 5), r.Next(3), r);
                     }
-
-              /*  else
+                }
+                //TODO: what is this ? -KB
+                /*  else
                 {
                     bitmap = new System.Drawing.Bitmap(100, 200);
                     System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, 100, 100, 100);
@@ -79,7 +82,6 @@ namespace AlgorithmsGUI
                 }*/
 
                 BitmapImage bitmapimage = new BitmapImage();
-
                 using (MemoryStream memory = new MemoryStream())
                 {
                     bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
@@ -93,31 +95,29 @@ namespace AlgorithmsGUI
 
                 im.Source = bitmapimage;
                 this.WellsPanel.Children.Add(im);
-
             }
         }
-        private void AddTileToBitmap (ref System.Drawing.Bitmap Bm, Tetris.Shape Sh, int x, int y, int rotation, Random r)
+        private void AddTileToBitmap (ref System.Drawing.Bitmap Bm, Shape Sh, int x, int y, int rotation, Random r)
         {
            // Random r = new Random();
-            System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, r.Next(20, 230), r.Next(20, 230), r.Next(20, 230));
-            System.Drawing.Color c2 = System.Drawing.Color.FromArgb(0, c1.R + 5, c1.G + 5, c1.B + 5);
-
             for (int i = x, i2 = 0; i< x + Sh.rotations.ElementAt(rotation).GetLength(0);i++,i2++)
             {
                 for (int j = y + Sh.rotations.ElementAt(rotation).GetLength(1) - 1, j2=Sh.rotations.ElementAt(rotation).GetLength(1)-1; j >= y; j--,j2--)
                 {
                     if (Sh.rotations.ElementAt(rotation)[i2,j2] == 1)
                     {
-                        Bm.SetPixel(i,j, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? c1 : c2);
+                        Bm.SetPixel(i,j, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? Sh.c1 : Sh.c2);
                     }
                 }
             }
         }
+        //*******************************ON CLICK HANDLERS**************************************/
+        //on click handler for "show tile browser" button
         private void ShowTileBrowser(object sender, RoutedEventArgs e)
         {
-            if (Tiles != null)
+            if (Shapes.Count != 0)
             {
-                TileBrowser TB = new TileBrowser(Tiles);
+                TileBrowser TB = new TileBrowser(ref Shapes);
                 TB.Show();
             }
             else
@@ -125,42 +125,20 @@ namespace AlgorithmsGUI
                 MessageBox.Show("No file has been loaded");
             }
         }
-
+        //on click handler for "load file" button
         private void LoadFile(object sender, RoutedEventArgs e)
         {
-
+            List<byte[,]> Tiles;
             OpenFileDialog theDialog = new OpenFileDialog();
             theDialog.Title = "Open file";
             if (theDialog.ShowDialog() == true)
             {
                 try
                 {
-
                     string[] content = System.IO.File.ReadAllLines(theDialog.FileName);
                     Tiles = FileReader.GetBricksFromFile(content);
-                    TileBrowser TB = new TileBrowser(Tiles);
-                    List<Tetris.Shape> Shapes = new List<Tetris.Shape>();
-                    foreach(byte[,] b in Tiles)
-                        {
-                            Tetris.Shape s = new Tetris.Shape(b);
-                            s.findAllRotations();
-                            Shapes.Add(s);
-                        }
-
-                    for (int i = 0; i < Shapes.Count; i++ )
-                    {
-                        for (int j=0;j<Shapes.Count;j++)
-                        {
-                            if (i!=j)
-                            {
-                             //   foreach (byte [,] x in Shapes.ElementAt)
-                                {
-
-                                }
-                            }
-                        }
-                    }
-                        TB.Show();
+                    TileBrowser TB = new TileBrowser(Tiles, ref Shapes);
+                    TB.Show();
                 }
                 catch
                 {
@@ -169,22 +147,18 @@ namespace AlgorithmsGUI
 
             }
         }
-
+        //on click handler for "play" button
         private void PlayClick(object sender, RoutedEventArgs e)
         {
             this.PlayButton.Content = String.Equals(this.PlayButton.Content, "Play") ? "Pause" : "Play";
             AddBitMaps();
-
         }
-
         private void ZoomChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-
             var st = (ScaleTransform)WellsPanel.LayoutTransform;
             double zoom = e.NewValue;
             st.ScaleX = zoom * 2;
             st.ScaleY = zoom * 2;
         }
-        
     }
 }

@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
+using Tetris;
 namespace AlgorithmsGUI.Controls
 {
     /// <summary>
@@ -22,15 +13,24 @@ namespace AlgorithmsGUI.Controls
     public partial class TileControl : UserControl
     {
         public int NumTiles { get; private set; }
+        static System.Drawing.Color BACKGROUND = System.Drawing.Color.FromArgb((byte)0, (byte)(255), (byte)(255), (byte)255);
         public TileControl()
         {
             InitializeComponent();
         }
-        public TileControl(byte[,] TileArray, System.Drawing.Color Col)
+        public TileControl(byte[,] TileArray, ref List<Shape> Shapes, System.Drawing.Color Col)
         {
             InitializeComponent();
             NumTiles = 1;
-            this.TileImage.Source = BitmapToImageSource(GetTileBitmap(TileArray, Col));
+            this.TileImage.Source = BitmapToImageSource(GetTileBitmap(TileArray, ref Shapes, Col));
+            this.TileImage.SnapsToDevicePixels = true;
+        }
+        //constructor from existing shape
+        public TileControl(Shape s)
+        {
+            InitializeComponent();
+            NumTiles = 1;
+            this.TileImage.Source = BitmapToImageSource(GetTileBitmap(s));
             this.TileImage.SnapsToDevicePixels = true;
         }
 
@@ -50,42 +50,42 @@ namespace AlgorithmsGUI.Controls
             }
         }
 
-        private System.Drawing.Bitmap GetTileBitmap(byte[,]TileArray)
+        private System.Drawing.Bitmap GetTileBitmap(Shape s)
         {
-            Random r = new Random();
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(TileArray.GetLength(1), TileArray.GetLength(0));
-            System.Drawing.Color background =  System.Drawing.Color.FromArgb((byte)0, (byte)(255), (byte)(255), (byte)255);
-            System.Drawing.Color c =  System.Drawing.Color.FromArgb((byte)0, (byte)r.Next(20,235), (byte)r.Next(20,235), (byte)r.Next(20,235));
-            System.Drawing.Color c2 =  System.Drawing.Color.FromArgb((byte)0, (byte)(c.R + (byte)20), (byte)(c.G + (byte)20), (byte)(c.B + (byte)20));
-            for (int x = 0; x < TileArray.GetLength(0);x++)
+            int width = s.rotations[0].GetLength(0);
+            int height = s.rotations[0].GetLength(1);
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height);
+            for (int x = 0; x < width; x++)
             {
-                for (int y=0; y< TileArray.GetLength(1);y++)
+                for (int y = 0; y < height; y++)
                 {
-                    if (TileArray[x,y]==1)
+                    if (s.rotations[0][x, y] == 1)
                     {
-                       if ((x%2==0 && y%2 ==0)||(x%2!=0 && y%2 !=0))
-                       {
-                           bitmap.SetPixel(x,y,c);
-                       }
-                       else
-                       {
-                           bitmap.SetPixel(x,y,c2);
-                       }
+                        if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0))
+                        {
+                            bitmap.SetPixel(x, y, s.c1);
+                        }
+                        else
+                        {
+                            bitmap.SetPixel(x, y, s.c2);
+                        }
                     }
                     else
                     {
-                        bitmap.SetPixel(x,y,background);
+                        bitmap.SetPixel(x, y, BACKGROUND);
                     }
                 }
             }
-                return bitmap;  
+            return bitmap;
         }
 
-        private System.Drawing.Bitmap GetTileBitmap(byte[,] TileArray, System.Drawing.Color Col)
+        private System.Drawing.Bitmap GetTileBitmap(byte[,] TileArray, ref List<Shape>Shapes, System.Drawing.Color Col)
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(TileArray.GetLength(0), TileArray.GetLength(1));
-            System.Drawing.Color background = System.Drawing.Color.FromArgb((byte)0, (byte)(255), (byte)(255), (byte)255);
             System.Drawing.Color c2 = System.Drawing.Color.FromArgb((byte)0, (byte)((Col.R + (byte)20) > 255 ? 255 : (byte)(Col.R + (byte)20)), (Col.G + (byte)20) > 255 ? 255 : (byte)(Col.G + (byte)20), (Col.B + (byte)20) > 255 ? 255 : (byte)(Col.B + (byte)20));
+            //both tile colors are defined here, the proper (and not intuitive...) place to create a shape
+            Shapes.Add(new Shape(TileArray, Col, c2));
+
             for (int x = 0; x < TileArray.GetLength(0); x++)
             {
                 for (int y = 0; y < TileArray.GetLength(1); y++)
@@ -103,7 +103,7 @@ namespace AlgorithmsGUI.Controls
                     }
                     else
                     {
-                        bitmap.SetPixel(x, y, background);
+                        bitmap.SetPixel(x, y, BACKGROUND);
                     }
                 }
             }
