@@ -40,3 +40,17 @@ C:\Users\wobbaf\Source\Repos\Tetris.P\AlgorithmsGUI\obj\Debug\Windows\TileBrowse
 C:\Users\wobbaf\Source\Repos\Tetris.P\AlgorithmsGUI\obj\Debug\Tetris.g.resources
 C:\Users\wobbaf\Source\Repos\Tetris.P\AlgorithmsGUI\obj\Debug\Tetris.Properties.Resources.resources
 C:\Users\wobbaf\Source\Repos\Tetris.P\AlgorithmsGUI\obj\Debug\Tetris.csproj.GenerateResource.Cache
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\bin\Debug\Tetris.exe.config
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Tetris.exe
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Tetris.pdb
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Tetris.csprojResolveAssemblyReference.cache
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Controls\NumberSetter.baml
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Controls\TileControl.baml
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Controls\NumberSetter.g.cs
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\GUI\MainWindow.g.cs
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Controls\TileControl.g.cs
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\GUI\TileBrowser.g.cs
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\App.g.cs
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Tetris_MarkupCompile.cache
+C:\Users\K\Desktop\Tetris.P\AlgorithmsGUI\obj\Debug\Tetris_MarkupCompile.lref
