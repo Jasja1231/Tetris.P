@@ -22,7 +22,7 @@ namespace AlgorithmsGUI
     public partial class MainWindow : Window
     {
         //*********************************CLASS FIELDS****************************************/
-        public List<Shape> Shapes;
+        public List<Shape> Shapes = new List<Tetris.Shape>();
         int K = 5; //the user set K variable, constant for now
         //*********************************CLASS METHODS***************************************/
         public MainWindow()
@@ -31,7 +31,7 @@ namespace AlgorithmsGUI
             FFStepSetter.SelectedValue = 2;
             KSetter.SelectedValue = 4;
             AddBitMaps();
-            Shapes = new List<Tetris.Shape>();
+           
         }
 
         private void AddBitMaps()
