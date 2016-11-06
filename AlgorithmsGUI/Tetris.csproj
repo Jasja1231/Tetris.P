@@ -72,8 +72,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Algorithms\CheckDensity.cs" />
-    <Compile Include="Algorithms\Helper.cs" />
+    <Compile Include="Algorithms\FindGoodPlacement.cs" />
     <Compile Include="Algorithms\Main.cs" />
+    <Compile Include="Algorithms\ThreadWorker.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

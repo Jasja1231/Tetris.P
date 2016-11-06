@@ -3,16 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Tetris;
+using Tetris.Algorithms;
 
 namespace AlgorithmsGUI
 {
@@ -31,7 +28,6 @@ namespace AlgorithmsGUI
             FFStepSetter.SelectedValue = 2;
             KSetter.SelectedValue = 4;
             AddBitMaps();
-           
         }
 
         private void AddBitMaps()
@@ -57,29 +53,18 @@ namespace AlgorithmsGUI
 
                 if (this.Shapes.Count != 0)
                 {
-                    //plase 50 random shapes on board
+                    /*//plase 50 random shapes on board
                     Random r = new Random();
                     for (int i = 0; i < 50; i++)
                     {
                         this.AddTileToBitmap(ref bitmap, Shapes.ElementAt(r.Next(Shapes.Count - 1)),
                             r.Next(0, x - 5), r.Next(0, 75 - 5), r.Next(3), r);
+                    }*/
+                    foreach(Shape s in Shapes)
+                    {
+                        this.AddTileToBitmap(ref bitmap, s, 0, 0, 0);
                     }
                 }
-                //TODO: what is this ? -KB
-                /*  else
-                {
-                    bitmap = new System.Drawing.Bitmap(100, 200);
-                    System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, 100, 100, 100);
-                    System.Drawing.Color c2 = System.Drawing.Color.FromArgb(0, 120, 120, 120);
-
-                    for (int i = 0; i < bitmap.Width; i++)
-                    {
-                        for (int j = 0; j < bitmap.Height; j++)
-                        {
-                            bitmap.SetPixel(i, j, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? c1 : c2);
-                        }
-                    }
-                }*/
 
                 BitmapImage bitmapimage = new BitmapImage();
                 using (MemoryStream memory = new MemoryStream())
@@ -97,21 +82,34 @@ namespace AlgorithmsGUI
                 this.WellsPanel.Children.Add(im);
             }
         }
-        private void AddTileToBitmap (ref System.Drawing.Bitmap Bm, Shape Sh, int x, int y, int rotation, Random r)
+        private void AddTileToBitmap (ref System.Drawing.Bitmap Bm, Shape Sh, int x, int y, int rotation)
         {
-           // Random r = new Random();
-            for (int i = x, i2 = 0; i< x + Sh.rotations.ElementAt(rotation).GetLength(0);i++,i2++)
+            int ShWidth = Sh.rotations.ElementAt(rotation).GetLength(0) - 1;
+            int ShHeight = Sh.rotations.ElementAt(rotation).GetLength(1) - 1;
+
+            for (int i = x, i2 = 0; i <= x + ShWidth; i++, i2++)
             {
-                for (int j = y + Sh.rotations.ElementAt(rotation).GetLength(1) - 1, j2=Sh.rotations.ElementAt(rotation).GetLength(1)-1; j >= y; j--,j2--)
+                for (int j = Bm.Height - 1 - y, j2 = ShHeight; j >= Bm.Height - 1 - y - ShHeight; j--, j2--)
                 {
-                    if (Sh.rotations.ElementAt(rotation)[i2,j2] == 1)
+                    if (Sh.rotations.ElementAt(rotation)[i2, j2] == 1)
                     {
-                        Bm.SetPixel(i,j, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? Sh.c1 : Sh.c2);
+                        Bm.SetPixel(i, j, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? Sh.c1 : Sh.c2);
                     }
                 }
             }
         }
         //*******************************ON CLICK HANDLERS**************************************/
+        private void TestThreads(object sender, RoutedEventArgs e)
+        {
+            for (int i=0; i < K; i++)
+            {
+                ThreadWorker tw = new ThreadWorker();
+                tw.InitializeThreadWorker();
+                FindGoodPlacement fpg = new FindGoodPlacement();
+                tw.bw.RunWorkerAsync(fpg);
+                //ThreadPool.QueueUserWorkItem(tw.DoWork, )
+            }
+        }
         //on click handler for "show tile browser" button
         private void ShowTileBrowser(object sender, RoutedEventArgs e)
         {
