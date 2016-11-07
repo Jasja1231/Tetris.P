@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Tetris;
-namespace AlgorithmsGUI.Controls
+namespace Tetris.Controls
 {
     /// <summary>
     /// Interaction logic for TileControl.xaml
@@ -18,7 +18,7 @@ namespace AlgorithmsGUI.Controls
         {
             InitializeComponent();
         }
-        public TileControl(byte[,] TileArray, ref List<Shape> Shapes, System.Drawing.Color Col)
+        public TileControl(byte[,] TileArray, ref List<Algorithms.Shape> Shapes, System.Drawing.Color Col)
         {
             InitializeComponent();
             NumTiles = 1;
@@ -26,7 +26,7 @@ namespace AlgorithmsGUI.Controls
             this.TileImage.SnapsToDevicePixels = true;
         }
         //constructor from existing shape
-        public TileControl(Shape s)
+        public TileControl(Algorithms.Shape s)
         {
             InitializeComponent();
             NumTiles = 1;
@@ -50,7 +50,7 @@ namespace AlgorithmsGUI.Controls
             }
         }
 
-        private System.Drawing.Bitmap GetTileBitmap(Shape s)
+        private System.Drawing.Bitmap GetTileBitmap(Algorithms.Shape s)
         {
             int width = s.rotations[0].GetLength(0);
             int height = s.rotations[0].GetLength(1);
@@ -79,12 +79,12 @@ namespace AlgorithmsGUI.Controls
             return bitmap;
         }
 
-        private System.Drawing.Bitmap GetTileBitmap(byte[,] TileArray, ref List<Shape>Shapes, System.Drawing.Color Col)
+        private System.Drawing.Bitmap GetTileBitmap(byte[,] TileArray, ref List<Algorithms.Shape> Shapes, System.Drawing.Color Col)
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(TileArray.GetLength(0), TileArray.GetLength(1));
             System.Drawing.Color c2 = System.Drawing.Color.FromArgb((byte)0, (byte)((Col.R + (byte)20) > 255 ? 255 : (byte)(Col.R + (byte)20)), (Col.G + (byte)20) > 255 ? 255 : (byte)(Col.G + (byte)20), (Col.B + (byte)20) > 255 ? 255 : (byte)(Col.B + (byte)20));
             //both tile colors are defined here, the proper (and not intuitive...) place to create a shape
-            Shapes.Add(new Shape(TileArray, Col, c2));
+            Shapes.Add(new Algorithms.Shape(TileArray, Col, c2));
 
             for (int x = 0; x < TileArray.GetLength(0); x++)
             {

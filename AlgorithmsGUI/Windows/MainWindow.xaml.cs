@@ -11,20 +11,25 @@ using System.Windows.Media.Imaging;
 using Tetris;
 using Tetris.Algorithms;
 
-namespace AlgorithmsGUI
+namespace Tetris.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, Tetris.ObserverDP.Observer
     {
         //*********************************CLASS FIELDS****************************************/
-        public List<Shape> Shapes = new List<Tetris.Shape>();
-        int K = 5; //the user set K variable, constant for now
+        /// <summary>
+        /// Algorithm - logic of the application. Subject for MainVindow.
+        /// </summary>
+        AlgorithmMain algorithm;
+
+
         //*********************************CLASS METHODS***************************************/
-        public MainWindow()
+        public MainWindow(AlgorithmMain alg)
         {
             InitializeComponent();
+            algorithm = alg;
             FFStepSetter.SelectedValue = 2;
             KSetter.SelectedValue = 4;
             AddBitMaps();
@@ -36,7 +41,7 @@ namespace AlgorithmsGUI
             this.WellsPanel.Children.Clear();
             int x = 50;
             
-            for (int k = 0; k < K; k++)
+            for (int k = 0; k < algorithm.K; k++)
             {
                 Image im = new Image();
                 bitmap = new System.Drawing.Bitmap(x, 75);
@@ -51,7 +56,7 @@ namespace AlgorithmsGUI
                     }
                 }
 
-                if (this.Shapes.Count != 0)
+                if (this.algorithm.Shapes.Count != 0)
                 {
                     /*//plase 50 random shapes on board
                     Random r = new Random();
@@ -60,7 +65,7 @@ namespace AlgorithmsGUI
                         this.AddTileToBitmap(ref bitmap, Shapes.ElementAt(r.Next(Shapes.Count - 1)),
                             r.Next(0, x - 5), r.Next(0, 75 - 5), r.Next(3), r);
                     }*/
-                    foreach(Shape s in Shapes)
+                    foreach (Shape s in algorithm.Shapes)
                     {
                         this.AddTileToBitmap(ref bitmap, s, 0, 0, 0);
                     }
@@ -82,6 +87,8 @@ namespace AlgorithmsGUI
                 this.WellsPanel.Children.Add(im);
             }
         }
+
+
         private void AddTileToBitmap (ref System.Drawing.Bitmap Bm, Shape Sh, int x, int y, int rotation)
         {
             int ShWidth = Sh.rotations.ElementAt(rotation).GetLength(0) - 1;
@@ -98,10 +105,12 @@ namespace AlgorithmsGUI
                 }
             }
         }
+
+
         //*******************************ON CLICK HANDLERS**************************************/
         private void TestThreads(object sender, RoutedEventArgs e)
         {
-            for (int i=0; i < K; i++)
+            for (int i = 0; i < algorithm.K; i++)
             {
                 ThreadWorker tw = new ThreadWorker();
                 tw.InitializeThreadWorker();
@@ -110,12 +119,13 @@ namespace AlgorithmsGUI
                 //ThreadPool.QueueUserWorkItem(tw.DoWork, )
             }
         }
+
         //on click handler for "show tile browser" button
         private void ShowTileBrowser(object sender, RoutedEventArgs e)
         {
-            if (Shapes.Count != 0)
+            if (algorithm.Shapes.Count != 0)
             {
-                TileBrowser TB = new TileBrowser(ref Shapes);
+                TileBrowser TB = new TileBrowser(algorithm.Shapes);
                 TB.Show();
             }
             else
@@ -135,7 +145,7 @@ namespace AlgorithmsGUI
                 {
                     string[] content = System.IO.File.ReadAllLines(theDialog.FileName);
                     Tiles = FileReader.GetBricksFromFile(content);
-                    TileBrowser TB = new TileBrowser(Tiles, ref Shapes);
+                    TileBrowser TB = new TileBrowser(Tiles, /*ref*/ algorithm.Shapes);
                     TB.Show();
                 }
                 catch
@@ -145,18 +155,30 @@ namespace AlgorithmsGUI
 
             }
         }
+
         //on click handler for "play" button
         private void PlayClick(object sender, RoutedEventArgs e)
         {
             this.PlayButton.Content = String.Equals(this.PlayButton.Content, "Play") ? "Pause" : "Play";
             AddBitMaps();
         }
+
         private void ZoomChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var st = (ScaleTransform)WellsPanel.LayoutTransform;
             double zoom = e.NewValue;
             st.ScaleX = zoom * 2;
             st.ScaleY = zoom * 2;
+        }
+
+
+        /// <summary>
+        /// Method that updates GUI when you call Notify(arg) from AlgorithmMain
+        /// </summary>
+        /// <param name="arg"></param>
+        public void Update(int arg)
+        {
+            throw new NotImplementedException();
         }
     }
 }

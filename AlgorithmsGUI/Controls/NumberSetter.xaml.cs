@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AlgorithmsGUI.Controls
+namespace Tetris.Controls
 {
     /// <summary>
     /// Interaction logic for NumberChooser.xaml

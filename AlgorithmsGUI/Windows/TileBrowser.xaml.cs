@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using AlgorithmsGUI.Controls;
+using Tetris.Controls;
 using Tetris;
+using Tetris.Algorithms;
 
-namespace AlgorithmsGUI
+namespace Tetris.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -16,7 +17,7 @@ namespace AlgorithmsGUI
             InitializeComponent();
         }
 
-        public TileBrowser(List<byte[,]> Tiles, ref List<Shape> Shapes)
+        public TileBrowser(List<byte[,]> Tiles, /*ref*/ List<Shape> Shapes)
         {
             InitializeComponent();
             Random r = new Random();
@@ -26,7 +27,9 @@ namespace AlgorithmsGUI
                 this.TilesPanel.Children.Add(t);
             }
         }
-        public TileBrowser(ref List<Shape> Shapes)
+
+
+        public TileBrowser(/*ref*/List<Shape> Shapes)
         {
             InitializeComponent();
             Random r = new Random();

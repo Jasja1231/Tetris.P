@@ -2,15 +2,15 @@
 using System.Linq;
 using System.Text;
 
-namespace Tetris
+namespace Tetris.Algorithms
 {
     public class Shape
     {
         //*******************************CLASS FIELDS**************************************/
         //a list of 4 2D arrays containing our shape in rotations
         public List<byte[,]> rotations;
-        public System.Drawing.Color c1 { get; }
-        public System.Drawing.Color c2 { get; }
+        public System.Drawing.Color c1 { get; set; }
+        public System.Drawing.Color c2 { get; set; }
         //*******************************CLASS METHODS*************************************/
         //create a shape class using byte array passed in as arguments (also finds rotations)
         public Shape(byte[,] map, System.Drawing.Color c1, System.Drawing.Color c2)

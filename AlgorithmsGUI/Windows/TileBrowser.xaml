@@ -1,7 +1,7 @@
-﻿<Window x:Class="AlgorithmsGUI.TileBrowser"
+﻿<Window x:Class="Tetris.Windows.TileBrowser"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:Controls="clr-namespace:AlgorithmsGUI.Controls"
+        xmlns:Controls="clr-namespace:Tetris.Controls"
         Title="Tile Browser" Height="650" Width="700" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tetris
+namespace Tetris.Algorithms
 {
     class Shape_comparer : IEqualityComparer<Shape>
     {
