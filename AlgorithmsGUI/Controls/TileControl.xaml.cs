@@ -13,10 +13,45 @@ namespace Tetris.Controls
     public partial class TileControl : UserControl
     {
         public int NumTiles { get; private set; }
+        public Algorithms.Shape Shape { get; set; }
+
         static System.Drawing.Color BACKGROUND = System.Drawing.Color.FromArgb((byte)0, (byte)(255), (byte)(255), (byte)255);
         public TileControl()
         {
             InitializeComponent();
+        }
+
+        private void AdjustForValidationResult (int ValidValue)
+        {
+            //1-tile is hollow, 2-tile is disconnected, 3-tile is empty
+            
+            if (ValidValue == 1)
+            {
+                AdjustControlForInvalidTile("Hole");
+                this.NumTiles = 0;
+            }
+            else if (ValidValue == 2)
+            {
+                AdjustControlForInvalidTile("Disconnected");
+                this.NumTiles = 0;
+
+            }
+            else if (ValidValue == 3)
+            {
+                AdjustControlForInvalidTile("Empty");
+                this.NumTiles = 0;
+            }
+        }
+
+        private void AdjustControlForInvalidTile(string message)
+        {
+            this.TileLabel.Content = message;
+            this.TilesAmountBox.Text = "0";
+            this.TilesAmountBox.Foreground = System.Windows.Media.Brushes.OrangeRed;
+            this.PlusButton.Visibility = Visibility.Hidden;
+            this.MinusButton.Visibility = System.Windows.Visibility.Hidden;
+            this.TileLabel.Foreground = System.Windows.Media.Brushes.OrangeRed;
+            this.BorderBrush = System.Windows.Media.Brushes.OrangeRed;
         }
         public TileControl(byte[,] TileArray, ref List<Algorithms.Shape> Shapes, System.Drawing.Color Col)
         {
@@ -32,6 +67,9 @@ namespace Tetris.Controls
             NumTiles = 1;
             this.TileImage.Source = BitmapToImageSource(GetTileBitmap(s));
             this.TileImage.SnapsToDevicePixels = true;
+            this.Shape = s;
+            AdjustForValidationResult(Algorithms.ShapeValidator.isTileValid(this.Shape));
+
         }
 
         BitmapImage BitmapToImageSource(System.Drawing.Bitmap bitmap)

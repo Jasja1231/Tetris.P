@@ -76,6 +76,8 @@
     <Compile Include="Algorithms\FindGoodPlacement.cs" />
     <Compile Include="Algorithms\AlgorithmMain.cs" />
     <Compile Include="Algorithms\Shape.cs" />
+    <Compile Include="Algorithms\ShapeInfo.cs" />
+    <Compile Include="Algorithms\Shapes.cs" />
     <Compile Include="Algorithms\Shape_Comparer.cs" />
     <Compile Include="Algorithms\ThreadWorker.cs" />
     <Compile Include="App.xaml.cs">

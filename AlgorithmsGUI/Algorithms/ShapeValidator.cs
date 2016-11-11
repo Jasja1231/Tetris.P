@@ -22,13 +22,13 @@ namespace Tetris.Algorithms
 
             for (int i = 0, i2 = 1; i < arr2.GetLength(0); i++, i2++)
             {
-                for (int j = 0, j2 = 1; j < arr2.GetLength(0); j++, j2++)
+                for (int j = 0, j2 = 1; j < arr2.GetLength(1); j++, j2++)
                 {
                     arr2extended[i2, j2] = arr[i, j];
                 }
             }
 
-            var Index0 = CoordinatesOf((byte[,])arr, (byte)0);
+            var Index0 = CoordinatesOf(arr2extended, (byte)0);
             var Index1 = CoordinatesOf((byte[,])arr, (byte)1);
 
             if (Index1.Item1 != -1 && Index1.Item2 != -1)   //there is a tile
@@ -53,8 +53,6 @@ namespace Tetris.Algorithms
                 return 2;
 
             return 0;
-
-
         }
 
         private static Tuple<int, int> CoordinatesOf<T>(this T[,] matrix, T value)

@@ -37,6 +37,19 @@ namespace Tetris.Algorithms
             private set { k = value; }
         }
 
+        public bool IsTilePlacementValid (byte[,]Map, byte[,]Tile, int x, int y)
+        {
+            for (int i = x, i2 = 0; i <= x + Tile.GetLength(0); i++, i2++)
+            {
+                for (int j = Map.GetLength(1) - 1 - y, j2 = Tile.GetLength(1); j >= Map.GetLength(1) - 1 - y - Tile.GetLength(1); j--, j2--)
+                {
+                    if (Map[i, j] + Tile[i2, j2] > 1)
+                        return false;
+                }
+            }
+
+            return true;
+        }
 
 
     }

@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Tetris.Algorithms
 {
-    class Shape_comparer : IEqualityComparer<Shape>
+    public  class Shape_comparer : IEqualityComparer<Shape>
     {
-        public bool Equals(Shape s1, Shape s2)
+        public  bool Equals(Shape s1, Shape s2)
         {
             byte[,] map = s2.rotations.ElementAt(0);
             foreach (byte[,] rotation in s1.rotations)
@@ -28,7 +28,7 @@ namespace Tetris.Algorithms
             return false;
         }
         //TODO: figure out good hash function for our shape class
-        public int GetHashCode(Shape obj)
+        public  int GetHashCode(Shape obj)
         {
             throw new NotImplementedException();
         }

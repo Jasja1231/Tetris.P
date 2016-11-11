@@ -84,5 +84,20 @@ namespace Tetris.Algorithms
                 sb.Append("\n");
             }
         }
+
+        /// <summary>
+        /// Override of Shape's Equals, so that it uses the ShapeComparer
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            if (this.GetType() == obj.GetType())
+            {
+                if (new Shape_comparer().Equals(this, (Shape)obj))
+                    return true;
+            }
+            return false;
+        }
     }
 }
