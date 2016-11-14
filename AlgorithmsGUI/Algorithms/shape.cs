@@ -21,6 +21,8 @@ namespace Tetris.Algorithms
             this.c1 = c1;
             this.c2 = c2;
         }
+        //TODO: remove after stubs not neede
+        public Shape() { }
         //finds 3 other rotations based on the first element from rotations list
         //ex. uniqueList = shapeList.Distinct(new shape_comparer()).ToList();
         private void findAllRotations()

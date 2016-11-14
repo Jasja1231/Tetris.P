@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -23,7 +24,6 @@ namespace Tetris.Windows
         /// Algorithm - logic of the application. Subject for MainVindow.
         /// </summary>
         AlgorithmMain algorithm;
-
 
         //*********************************CLASS METHODS***************************************/
         public MainWindow(AlgorithmMain alg)
@@ -110,14 +110,30 @@ namespace Tetris.Windows
         //*******************************ON CLICK HANDLERS**************************************/
         private void TestThreads(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < algorithm.K; i++)
+            //start tasks with (LongRunning) work
+            int numOfTasks = algorithm.K;
+            Task<Result>[] tasks = new Task<Result>[numOfTasks];
+            Result[] results = new Result[numOfTasks];
+            string display = "Results\n";
+            for (int i = 0; i < numOfTasks; i++)
             {
-                ThreadWorker tw = new ThreadWorker();
-                tw.InitializeThreadWorker();
-                FindGoodPlacement fpg = new FindGoodPlacement();
-                tw.bw.RunWorkerAsync(fpg);
-                //ThreadPool.QueueUserWorkItem(tw.DoWork, )
+                //create stubs MainTable/Shape
+                MainTable mt = new MainTable(i);
+                Shape s = new Shape();
+                tasks[i] = Task<Result>.Factory.StartNew(() =>
+                {
+                    FindGoodPlacement fpg = new FindGoodPlacement();
+                    return fpg.work(mt, s);
+                }, TaskCreationOptions.LongRunning);
             }
+            Task.WaitAll(tasks);
+            //collect results
+            for (int i = 0; i < numOfTasks; i++)
+            {
+                results[i] = tasks[i].Result;
+                display += "MainTable=" + results[i].Kth + ":(" + results[i].x + "," + results[i].y + ")\n";
+            }
+            MessageBox.Show(display);
         }
 
         //on click handler for "show tile browser" button

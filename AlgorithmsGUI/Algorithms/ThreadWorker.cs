@@ -18,7 +18,7 @@ namespace Tetris.Algorithms
         {
             FindGoodPlacement fgp = (FindGoodPlacement)e.Argument;
             // Return the value through the Result property.
-            e.Result = fgp.work();
+            //e.Result = fgp.work();
         }
 
         public void work_completed(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
