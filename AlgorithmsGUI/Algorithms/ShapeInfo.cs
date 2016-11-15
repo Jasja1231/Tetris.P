@@ -9,7 +9,7 @@ namespace Tetris.Algorithms
     /// <summary>
     /// Pair of Shape and its count
     /// </summary>
-    class ShapeInfo
+    public class ShapeInfo
     {
 
         private Shape shape;

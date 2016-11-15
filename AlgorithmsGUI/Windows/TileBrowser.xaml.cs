@@ -4,6 +4,7 @@ using System.Windows;
 using Tetris.Controls;
 using Tetris;
 using Tetris.Algorithms;
+using System.Linq;
 
 namespace Tetris.Windows
 {
@@ -18,6 +19,11 @@ namespace Tetris.Windows
             InitializeComponent();
         }
 
+        private void SortTilesByValidity()
+        {
+            this.TilesPanel.Children.Clear();
+            TileControls = TileControls.OrderBy(x => x.IsDuplicate).ThenBy(y => y.IsValid).ToList();
+        }
         public TileBrowser(List<byte[,]> Tiles, /*ref*/ List<Shape> Shapes)
         {
             InitializeComponent();
@@ -35,11 +41,18 @@ namespace Tetris.Windows
         {
             InitializeComponent();
             Random r = new Random();
+
             foreach (Shape s in Shapes)
             {
                 TileControl t = new TileControl(s);
-                this.TilesPanel.Children.Add(t);
                 TileControls.Add(t);
+            }
+
+            SortTilesByValidity();
+
+            foreach (TileControl tc in TileControls)
+            {
+                this.TilesPanel.Children.Add(tc);
             }
         }
 

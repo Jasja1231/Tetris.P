@@ -15,10 +15,16 @@ namespace Tetris.Controls
         public int NumTiles { get; private set; }
         public Algorithms.Shape Shape { get; set; }
 
+        public bool IsValid { get; set; }
+
+        public bool IsDuplicate { get; set; }
+
         static System.Drawing.Color BACKGROUND = System.Drawing.Color.FromArgb((byte)0, (byte)(255), (byte)(255), (byte)255);
         public TileControl()
         {
             InitializeComponent();
+            IsValid = true;
+            IsDuplicate = false;
         }
 
         private void AdjustForValidationResult (int ValidValue)
@@ -29,17 +35,19 @@ namespace Tetris.Controls
             {
                 AdjustControlForInvalidTile("Hole");
                 this.NumTiles = 0;
+                IsValid = false;
             }
             else if (ValidValue == 2)
             {
                 AdjustControlForInvalidTile("Disconnected");
                 this.NumTiles = 0;
-
+                IsValid = false;
             }
             else if (ValidValue == 3)
             {
                 AdjustControlForInvalidTile("Empty");
                 this.NumTiles = 0;
+                IsValid = false;
             }
         }
 
@@ -68,8 +76,20 @@ namespace Tetris.Controls
             this.TileImage.Source = BitmapToImageSource(GetTileBitmap(s));
             this.TileImage.SnapsToDevicePixels = true;
             this.Shape = s;
+            IsValid = true;
+            IsDuplicate = false;
             AdjustForValidationResult(Algorithms.ShapeValidator.isTileValid(this.Shape));
 
+        }
+
+        public void MarkAsDuplicate ()
+        {
+            AdjustControlForInvalidTile("Duplicate");
+            this.TilesAmountBox.Foreground = System.Windows.Media.Brushes.Yellow;
+            this.TileLabel.Foreground = System.Windows.Media.Brushes.Yellow;
+            this.BorderBrush = System.Windows.Media.Brushes.Yellow;
+            this.NumTiles = 0;
+            IsDuplicate = true;
         }
 
         BitmapImage BitmapToImageSource(System.Drawing.Bitmap bitmap)
