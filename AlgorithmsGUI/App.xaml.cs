@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Tetris.Windows;
 using Tetris.Algorithms;
-//using Tetris.Controllers;
+using Tetris.Controllers;
 
 namespace Tetris
 {
@@ -18,9 +18,9 @@ namespace Tetris
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            AlgorithmMain model = new AlgorithmMain();
-            //Controller controller = new Controller(model);
-            MainWindow mainView = new MainWindow(model);//, controller);
+            Model model = new Model();
+            Controller controller = new Controller(model);
+            MainWindow mainView = new MainWindow(model, controller);
             mainView.Show();
         }
     }

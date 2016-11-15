@@ -74,18 +74,19 @@
     <Compile Include="Algorithms\CheckDensity.cs" />
     <Compile Include="Algorithms\FileReader.cs" />
     <Compile Include="Algorithms\FindGoodPlacement.cs" />
-    <Compile Include="Algorithms\AlgorithmMain.cs" />
+    <Compile Include="Algorithms\Model.cs" />
     <Compile Include="Algorithms\MainTable.cs" />
     <Compile Include="Algorithms\Result.cs" />
     <Compile Include="Algorithms\Shape.cs" />
     <Compile Include="Algorithms\ShapeInfo.cs" />
-    <Compile Include="Algorithms\Shapes.cs" />
+    <Compile Include="Algorithms\ShapesInfoListWrapper.cs" />
     <Compile Include="Algorithms\Shape_Comparer.cs" />
     <Compile Include="Algorithms\ThreadWorker.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controls\NumberSetter.xaml.cs">
       <DependentUpon>NumberSetter.xaml</DependentUpon>
     </Compile>

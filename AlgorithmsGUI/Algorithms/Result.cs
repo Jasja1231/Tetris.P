@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tetris.Algorithms
 {
+    /// <summary>
+    /// Class used by thread  to return result of its' computation.
+    /// </summary>
     class Result
     {
         //*********************************CLASS FIELDS****************************************/

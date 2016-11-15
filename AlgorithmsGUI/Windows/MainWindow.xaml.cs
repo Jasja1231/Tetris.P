@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Tetris;
 using Tetris.Algorithms;
+using Tetris.Controllers;
 
 namespace Tetris.Windows
 {
@@ -23,13 +24,19 @@ namespace Tetris.Windows
         /// <summary>
         /// Algorithm - logic of the application. Subject for MainVindow.
         /// </summary>
-        AlgorithmMain algorithm;
+        Model model;
+
+        Controller controller;
 
         //*********************************CLASS METHODS***************************************/
-        public MainWindow(AlgorithmMain alg)
+        public MainWindow(Model alg, Controller control)
         {
             InitializeComponent();
-            algorithm = alg;
+
+            model = alg;
+            controller = control;
+            controller.setView(this);
+
             FFStepSetter.SelectedValue = 2;
             KSetter.SelectedValue = 4;
             AddBitMaps();
@@ -41,7 +48,7 @@ namespace Tetris.Windows
             this.WellsPanel.Children.Clear();
             int x = 50;
             
-            for (int k = 0; k < algorithm.K; k++)
+            for (int k = 0; k < model.K; k++)
             {
                 Image im = new Image();
                 bitmap = new System.Drawing.Bitmap(x, 75);
@@ -56,16 +63,16 @@ namespace Tetris.Windows
                     }
                 }
 
-                if (this.algorithm.Shapes.Count != 0)
+                if (this.model.Shapes.Count != 0)
                 {
                     /*//plase 50 random shapes on board
                     Random r = new Random();
                     for (int i = 0; i < 50; i++)
                     {
-                        this.AddTileToBitmap(ref bitmap, Shapes.ElementAt(r.Next(Shapes.Count - 1)),
+                        this.AddTileToBitmap(ref bitmap, ShapesInfoListWrapper.ElementAt(r.Next(ShapesInfoListWrapper.Count - 1)),
                             r.Next(0, x - 5), r.Next(0, 75 - 5), r.Next(3), r);
                     }*/
-                    foreach (Shape s in algorithm.Shapes)
+                    foreach (Shape s in model.Shapes)
                     {
                         this.AddTileToBitmap(ref bitmap, s, 0, 0, 0);
                     }
@@ -111,7 +118,7 @@ namespace Tetris.Windows
         private void TestThreads(object sender, RoutedEventArgs e)
         {
             //start tasks with (LongRunning) work
-            int numOfTasks = algorithm.K;
+            int numOfTasks = model.K;
             Task<Result>[] tasks = new Task<Result>[numOfTasks];
             Result[] results = new Result[numOfTasks];
             string display = "Results\n";
@@ -139,37 +146,52 @@ namespace Tetris.Windows
         //on click handler for "show tile browser" button
         private void ShowTileBrowser(object sender, RoutedEventArgs e)
         {
-            if (algorithm.Shapes.Count != 0)
+            if (model.Shapes.Count != 0)
             {
-                TileBrowser TB = new TileBrowser(algorithm.Shapes);
-                TB.Show();
+                TileBrowser TB = new TileBrowser(model.Shapes);
+                if (TB.ShowDialog() == true)
+                {
+                    controller.ApplyShapes(TB.TileControls);
+                }
             }
             else
             {
                 MessageBox.Show("No file has been loaded");
             }
         }
-        //on click handler for "load file" button
+
+
+        /// <summary>
+        ///On click handler for "load file" button that asks controller to load from selected file.
+        ///Creates and opens TileBrowser
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadFile(object sender, RoutedEventArgs e)
         {
-            List<byte[,]> Tiles;
+            //List<byte[,]> Tiles;
             OpenFileDialog theDialog = new OpenFileDialog();
             theDialog.Title = "Open file";
             if (theDialog.ShowDialog() == true)
             {
-                try
-                {
-                    string[] content = System.IO.File.ReadAllLines(theDialog.FileName);
-                    Tiles = FileReader.GetBricksFromFile(content);
-                    TileBrowser TB = new TileBrowser(Tiles, /*ref*/ algorithm.Shapes);
-                    TB.Show();
-                }
-                catch
+                //ask controller to load selected file
+                bool loaded = this.controller.LoadFromFile(theDialog.FileName);
+
+                if (loaded == false)
                 {
                     MessageBox.Show("Error occured while loading the selected file.");
                 }
-
+                else {
+                    TileBrowser TB = new TileBrowser(model.Shapes);
+                    if (TB.ShowDialog() == true)
+                    {
+                        controller.ApplyShapes(TB.TileControls);
+                    }
+                }
             }
+
+            
+
         }
 
         //on click handler for "play" button

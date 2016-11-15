@@ -21,6 +21,8 @@ namespace Tetris.Algorithms
             this.c1 = c1;
             this.c2 = c2;
         }
+
+
         //TODO: remove after stubs not neede
         public Shape() { }
         //finds 3 other rotations based on the first element from rotations list
@@ -30,7 +32,7 @@ namespace Tetris.Algorithms
             byte[,] map = rotations.ElementAt(0);
             byte[,] outputMatrix;
             var x = 0;
-            //col 1 becomes row 1 reversed, 90 degree rotation
+            //r 1 becomes row 1 reversed, 90 degree rotation
             outputMatrix = new byte[map.GetLength(1), map.GetLength(0)];
             for (int i = 0; i < map.GetLength(0); i++)
             {
@@ -57,7 +59,7 @@ namespace Tetris.Algorithms
                 x++;
             }
             rotations.Add(outputMatrix);
-            // row 1 becomes col 1 reversed, 270 degree rotation
+            // row 1 becomes r 1 reversed, 270 degree rotation
             outputMatrix = new byte[map.GetLength(1), map.GetLength(0)];
             x = map.GetLength(0) - 1;
             for (int i = 0; i < map.GetLength(0); i++)

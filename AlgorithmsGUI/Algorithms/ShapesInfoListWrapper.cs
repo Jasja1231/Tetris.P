@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Tetris.Algorithms
 {
-
-    class Shapes
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ShapesInfoListWrapper
 
     {
         private List<ShapeInfo> availableshapes;
@@ -26,7 +28,7 @@ namespace Tetris.Algorithms
             }
         }
         /// <summary>
-        /// Fills AvailableShapes with Shapes and their amounts taken from TileControls
+        /// Fills AvailableShapes with ShapesInfoListWrapper and their amounts taken from TileControls
         /// </summary>
         /// <param name="ControlList"></param>
         public void BuildList (List<Controls.TileControl>ControlList)
@@ -73,7 +75,7 @@ namespace Tetris.Algorithms
         }
 
 
-        public Shapes ()
+        public ShapesInfoListWrapper ()
         {
             AvailableShapes = new List<ShapeInfo>();
         }

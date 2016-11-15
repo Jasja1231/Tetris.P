@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tetris.Algorithms
 {
+    /// <summary>
+    /// Pair of Shape and its count
+    /// </summary>
     class ShapeInfo
     {
 
