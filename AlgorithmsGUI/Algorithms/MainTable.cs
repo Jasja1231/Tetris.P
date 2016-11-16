@@ -9,23 +9,32 @@ namespace Tetris.Algorithms
     class MainTable
     {
         //*********************************CLASS FIELDS****************************************/
-        public byte[,] table { get; private set; }
+        public byte[,] Table { get;  set; }
         /// <summary>
         /// Index K of Main Table.
         /// </summary>
-        public int Kth { get; private set; }
+        public int Kth { get;  set; }
         /// <summary>
         /// Width of the table
         /// </summary>
-        public int width { get; private set; }
+        public int Width { get;  set; }
         /// <summary>
         /// Height of the main table
         /// </summary>
-        public int height { get; private set; }
+        public int Height { get;  set; }
         /// <summary>
         /// ???
         /// </summary>
-        public int maxHeight { get; private set; }
+        public int MaxHeight { get;  set; }
+
+        /// <summary>
+        /// Each Main table with shape indexs (from some common tables, f.e. hashMap) not to keep copies 
+        /// of Shape tables, and then avoid deep copying list of Shapes where we can only copy integers.
+        /// TODO: Shared table of shapes is to be created in Model.
+        /// </summary>
+        public List<int> indexesOfUsedShapes { get; set;}
+
+
         //*********************************CLASS METHODS***************************************/
         public MainTable(int Kth/*,width,height*/)
         {

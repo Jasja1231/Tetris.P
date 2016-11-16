@@ -11,6 +11,9 @@ namespace Tetris.Algorithms
         public List<byte[,]> rotations;
         public System.Drawing.Color c1 { get; set; }
         public System.Drawing.Color c2 { get; set; }
+
+        public int MaxHeight { get; private set; }
+
         //*******************************CLASS METHODS*************************************/
         //create a shape class using byte array passed in as arguments (also finds rotations)
         public Shape(byte[,] map, System.Drawing.Color c1, System.Drawing.Color c2)
@@ -18,11 +21,13 @@ namespace Tetris.Algorithms
             rotations = new List<byte[,]>();
             rotations.Add((byte[,])map.Clone());
             findAllRotations();
+            MaxHeight = map.GetLength(0) > map.GetLength(1) ? map.GetLength(0) : map.GetLength(1);
             this.c1 = c1;
             this.c2 = c2;
         }
 
-
+  
+    
         //TODO: remove after stubs not neede
         public Shape() { }
         //finds 3 other rotations based on the first element from rotations list

@@ -197,8 +197,19 @@ namespace Tetris.Windows
         //on click handler for "play" button
         private void PlayClick(object sender, RoutedEventArgs e)
         {
+            if (String.Equals(this.PlayButton.Content, "Play") == true)
+            {
+                //Check if computation is started for the first time
+                if (this.model.ComputationStarted == false)
+                    this.controller.StartComputation(KSetter.SelectedValue);
+                //Or it was paused and we need to resume it
+                else
+                    this.controller.ResumePausedComputation();
+            }
+            else
+                this.controller.PauseComputation();
+
             this.PlayButton.Content = String.Equals(this.PlayButton.Content, "Play") ? "Pause" : "Play";
-            AddBitMaps();
         }
 
         private void ZoomChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

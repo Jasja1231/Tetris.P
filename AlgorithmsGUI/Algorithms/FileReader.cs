@@ -9,11 +9,12 @@ namespace Tetris.Algorithms
     class FileReader
     {
 
-        public static List <byte [,]> GetBricksFromFile (string [] FileContent)
+        public static Tuple<List <byte [,]>,int> GetBricksFromFile (string [] FileContent)
         {
 
             List<byte[,]> Bricks = new List<byte[,]>();
             string [] spacecep = new string [] {" "};
+            int tablewidth = Int32.Parse(FileContent[0].Split(spacecep,StringSplitOptions.None)[0]);
             int width, height;
             for (int i = 1; i < FileContent.Length; i++)
             {
@@ -35,7 +36,7 @@ namespace Tetris.Algorithms
                 i += height - 1;
                 Bricks.Add(arr);
             }
-                return Bricks;
+                return new Tuple<List<byte[,]>,int>(Bricks,tablewidth);
         }
     }
 }

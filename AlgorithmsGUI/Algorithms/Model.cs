@@ -22,6 +22,13 @@ namespace Tetris.Algorithms
             private set { shapes = value; }
         }
 
+        private List<MainTable> MainTablesList = new List<MainTable>();
+
+        /// <summary>
+        /// List of  valid shapes info (count and shape) with list wrapper 
+        /// </summary>
+        private ShapesInfoListWrapper ShapesInfoList = new ShapesInfoListWrapper();
+
         /// <summary>
         /// Adds a tile to a list of shapes
         /// </summary>
@@ -39,6 +46,18 @@ namespace Tetris.Algorithms
             get { return k; }
             private set { k = value; }
         }
+
+        /// <summary>
+        /// Value to show if user ever clicked START with given input.
+        /// Used f.e to keep track if we should start the computation when PLAY is clicked or it should be just resumed.
+        /// </summary>
+        public bool ComputationStarted { get; set; }
+
+        public int TableWidth { get; set; }
+        /// <summary>
+        /// The height of the heighest shape we have in our shape list
+        /// </summary>
+        public int MaxShapeHeight { get; set; }
 
 
         ///NON TESTED
@@ -73,13 +92,23 @@ namespace Tetris.Algorithms
             try {
                string[] content = System.IO.File.ReadAllLines(p);
                var Tiles = FileReader.GetBricksFromFile(content);
-               ConstructShapes(Tiles);
+               ConstructShapes(Tiles.Item1);
+               this.SetMainTableWidth(Tiles.Item2);
             }
             catch {
                 loaded = false;
             }
 
             return loaded;
+        }
+
+        /// <summary>
+        /// Reads width of the Main tables from the file into property value.
+        /// </summary>
+        /// <param name="p"></param>
+        private void SetMainTableWidth(int p)
+        {
+            this.TableWidth = p;
         }
 
 
@@ -103,8 +132,56 @@ namespace Tetris.Algorithms
 
         public void ApplyShapes(List<Controls.TileControl> list)
         {
-            ShapesInfoListWrapper s = new ShapesInfoListWrapper();
-            s.BuildList(list);
+            this.ShapesInfoList.BuildList(list);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="k"></param>
+        internal void StartComputation(int k)
+        {
+            this.MaxShapeHeight = this.GetMaxShapeHeight();
+            this.MainTablesList.Clear();
+
+            //Create k MAIN tables
+            for (int i = 0; i < k; i++) {
+                MainTable mainTable = new MainTable(i);
+                mainTable.Width = this.TableWidth;
+                //In the beginning the height of our tables is equal to the height of the talles Shapes (amount ShapesInfoListWrapper)
+                mainTable.Height = this.MaxShapeHeight;  
+                mainTable.Table = new byte[mainTable.Width,mainTable.Height];
+
+                //Add it to the list of a Main Tables
+                this.MainTablesList.Add(mainTable);
+            }
+            //MAIN LOOP OF THE ALGORITHM
+            for(int c = 0 ; c < ShapesInfoList.AvailableShapes.Count;c++)
+            {
+                //for each MAIN TABLE == from 0 until K
+                foreach(MainTable mt in this.MainTablesList)
+                {
+                    //for each shape
+                    for(int i = 0; i < ShapesInfoList.AvailableShapes.Count;i++)
+                    {
+                        Shape temp = this.ShapesInfoList.GetShapeAt(i);
+                        //CREATE THREAD to find its position and start its THREAD_WORK
+                    }
+                }
+                //Copy K best results into our MAIN TABLES
+            }
+       
+	        
+        }
+
+        private int GetMaxShapeHeight()
+        {
+            int maxValue = 0; 
+            for (int i = 0; i < ShapesInfoList.AvailableShapes.Count; i++) {
+                if (this.ShapesInfoList.GetShapeAt(i).MaxHeight > maxValue)
+                    maxValue = this.ShapesInfoList.GetShapeAt(i).MaxHeight;
+            }
+            return maxValue;
         }
     }
 }

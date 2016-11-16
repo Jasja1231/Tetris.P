@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Tetris.Algorithms
 {
     /// <summary>
-    /// 
+    /// Class that stores list of ShapeInfo (Shape and its count)
     /// </summary>
     public class ShapesInfoListWrapper
 
@@ -33,6 +33,8 @@ namespace Tetris.Algorithms
         /// <param name="ControlList"></param>
         public void BuildList (List<Controls.TileControl>ControlList)
         {
+            //clear list to have it reasigned.
+            this.AvailableShapes.Clear();
 
             foreach (Controls.TileControl tc in ControlList)
             {

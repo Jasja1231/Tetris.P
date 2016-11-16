@@ -31,5 +31,22 @@ namespace Tetris.Controllers
         {
             this.model.ApplyShapes(list);
         }
+
+
+
+        public void StartComputation(int p)
+        {
+            this.model.StartComputation(p);
+        }
+
+        public void PauseComputation()
+        {
+            throw new NotImplementedException();
+        }
+    
+        public void ResumePausedComputation()
+        {
+ 	        throw new NotImplementedException();
+        }
     }
 }
