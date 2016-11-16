@@ -13,6 +13,8 @@
         <Button Width="40" Background="WhiteSmoke" Margin="50 2 0 2" HorizontalAlignment="Left">Stop</Button>
         <Button Width="80" Background="WhiteSmoke" Margin="96 2 0 2" HorizontalAlignment="Left">Fast-forward</Button>
         <Button Width="80" Background="WhiteSmoke" Margin="400 2 0 2" HorizontalAlignment="Left" Click="TestThreads">Test threads</Button>
+        <Button Width="80" Background="WhiteSmoke" Margin="500 2 0 2" HorizontalAlignment="Left" Click="UpdateImageTest">UpdateImages</Button>
+
 
         <Controls:NumberSetter x:Name="FFStepSetter"  HorizontalAlignment="Left" Margin="180 0 0 0"></Controls:NumberSetter>
         <TextBlock HorizontalAlignment="Left" Margin="280 0 0 0" Width="10" VerticalAlignment="Center" Text="k:" Visibility="Visible"  ></TextBlock>

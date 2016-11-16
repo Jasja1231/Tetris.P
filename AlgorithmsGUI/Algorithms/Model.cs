@@ -136,7 +136,9 @@ namespace Tetris.Algorithms
         }
 
         /// <summary>
-        /// 
+        /// Starting od the computation.
+        /// Creates and adds K- MainTables to the list.
+        /// Main loops of the algorithm.
         /// </summary>
         /// <param name="k"></param>
         internal void StartComputation(int k)
