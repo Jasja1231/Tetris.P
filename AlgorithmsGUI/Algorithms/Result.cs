@@ -9,7 +9,7 @@ namespace Tetris.Algorithms
     /// <summary>
     /// Class used by thread  to return result of its' computation.
     /// </summary>
-    class Result
+    public class Result
     {
         //*********************************CLASS FIELDS****************************************/
         /// <summary>
@@ -32,6 +32,8 @@ namespace Tetris.Algorithms
         /// Estimated 'how good' our shape is positiones on Kth main table
         /// </summary>
         public int score { get; private set; }
+
+        public int rotation { get;  set; }
         //*********************************CLASS METHODS***************************************/
         public Result(Shape s, int x, int y, int Kth, int score)
         {

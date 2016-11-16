@@ -210,5 +210,26 @@ namespace Tetris.Windows
         {
             throw new NotImplementedException();
         }
+
+        private void UpdateImageTest(object sender, RoutedEventArgs e)
+        {
+            Random r = new Random();
+            List<ImageSource> list = new List<ImageSource>();
+            List<Result> results = new List<Result>();
+            foreach(UIElement el in this.WellsPanel.Children)
+            {
+                Image im = (Image)el;
+                list.Add(im.Source);
+            }
+            Result res = new Result(model.Shapes.ElementAt(r.Next (0,model.Shapes.Count-1)), r.Next(0,40), r.Next(0,300), r.Next(0,this.WellsPanel.Children.Count-1), 0);
+            res.rotation = 0;
+            results.Add(res);
+            var updated = ImageSomething.UpdateImages(results, list);
+            Image imm = new Image();
+            imm.Source = updated.ElementAt(0);
+            this.WellsPanel.Children.Add(imm);
+            int x;
+
+        }
     }
 }

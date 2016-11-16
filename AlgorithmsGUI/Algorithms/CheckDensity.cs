@@ -8,5 +8,6 @@ namespace Tetris.Algorithms
 {
     class CheckDensity
     {
+
     }
 }
