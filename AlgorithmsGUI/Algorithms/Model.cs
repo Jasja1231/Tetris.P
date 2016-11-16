@@ -8,9 +8,7 @@ namespace Tetris.Algorithms
 {
     public class Model : Tetris.ObserverDP.Subject
     {
-        public Model() { 
-        
-        }
+        public Model() {}
 
         /// <summary>
         /// All shapes loaded from file.List of tiles (shapes) without any count.
@@ -82,9 +80,6 @@ namespace Tetris.Algorithms
             return true;
         }
 
-
-
-
         public bool LoadFromFile(string p)
         {
             bool loaded = true; //status of loading from file
@@ -111,7 +106,6 @@ namespace Tetris.Algorithms
             this.TableWidth = p;
         }
 
-
         private void ConstructShapes(List<byte[,]> Tiles)
         {
             Random random = new Random();
@@ -129,10 +123,33 @@ namespace Tetris.Algorithms
             
         }
 
-
         public void ApplyShapes(List<Controls.TileControl> list)
         {
             this.ShapesInfoList.BuildList(list);
+        }
+
+
+        internal void StartIteration(int p)
+        {
+            this.MaxShapeHeight = this.GetMaxShapeHeight();
+
+            //Create k MAIN tables if they are empty
+            if (MainTablesList.Count == 0)
+            {
+                for (int i = 0; i < k; i++)
+                {
+                    MainTable mainTable = new MainTable(i);
+                    mainTable.Width = this.TableWidth;
+                    //In the beginning the height of our tables is equal to the height of the talles Shapes (amount ShapesInfoListWrapper)
+                    mainTable.Height = this.MaxShapeHeight;
+                    mainTable.Table = new byte[mainTable.Width, mainTable.Height];
+
+                    //Add it to the list of a Main Tables
+                    this.MainTablesList.Add(mainTable);
+                }
+            }
+
+            ThreadComputation.getNextIteration(p, MainTablesList, ShapesInfoList);
         }
 
         /// <summary>
@@ -145,35 +162,24 @@ namespace Tetris.Algorithms
             this.MainTablesList.Clear();
 
             //Create k MAIN tables
-            for (int i = 0; i < k; i++) {
+            for (int i = 0; i < k; i++)
+            {
                 MainTable mainTable = new MainTable(i);
                 mainTable.Width = this.TableWidth;
                 //In the beginning the height of our tables is equal to the height of the talles Shapes (amount ShapesInfoListWrapper)
-                mainTable.Height = this.MaxShapeHeight;  
-                mainTable.Table = new byte[mainTable.Width,mainTable.Height];
+                mainTable.Height = this.MaxShapeHeight;
+                mainTable.Table = new byte[mainTable.Width, mainTable.Height];
 
                 //Add it to the list of a Main Tables
                 this.MainTablesList.Add(mainTable);
             }
-            //MAIN LOOP OF THE ALGORITHM
-            for(int c = 0 ; c < ShapesInfoList.AvailableShapes.Count;c++)
-            {
-                //for each MAIN TABLE == from 0 until K
-                foreach(MainTable mt in this.MainTablesList)
-                {
-                    //for each shape
-                    for(int i = 0; i < ShapesInfoList.AvailableShapes.Count;i++)
-                    {
-                        Shape temp = this.ShapesInfoList.GetShapeAt(i);
-                        //CREATE THREAD to find its position and start its THREAD_WORK
-                    }
-                }
-                //Copy K best results into our MAIN TABLES
-            }
-       
-	        
-        }
 
+            //MAIN LOOP OF THE ALGORITHM
+            //for (int c = 0; c < ShapesInfoList.AvailableShapes.Count; c++)
+            //{
+            //    ThreadComputation.getNextIteration(2, MainTablesList, ShapesInfoList);
+            //}
+        }
         private int GetMaxShapeHeight()
         {
             int maxValue = 0; 
@@ -183,5 +189,6 @@ namespace Tetris.Algorithms
             }
             return maxValue;
         }
+
     }
 }

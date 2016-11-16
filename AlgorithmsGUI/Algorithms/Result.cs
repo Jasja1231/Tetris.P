@@ -41,5 +41,10 @@ namespace Tetris.Algorithms
             this.Kth = Kth;
             this.score = score;
         }
+
+        public static implicit operator Task<object>(Result v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

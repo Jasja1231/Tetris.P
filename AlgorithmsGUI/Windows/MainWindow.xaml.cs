@@ -115,32 +115,13 @@ namespace Tetris.Windows
 
 
         //*******************************ON CLICK HANDLERS**************************************/
+        private void FastForwardClick(object sender, RoutedEventArgs e)
+        {
+            this.controller.StartIteration(KSetter.SelectedValue);
+        }
         private void TestThreads(object sender, RoutedEventArgs e)
         {
-            //start tasks with (LongRunning) work
-            int numOfTasks = model.K;
-            Task<Result>[] tasks = new Task<Result>[numOfTasks];
-            Result[] results = new Result[numOfTasks];
-            string display = "Results\n";
-            for (int i = 0; i < numOfTasks; i++)
-            {
-                //create stubs MainTable/Shape
-                MainTable mt = new MainTable(i);
-                Shape s = new Shape();
-                tasks[i] = Task<Result>.Factory.StartNew(() =>
-                {
-                    FindGoodPlacement fpg = new FindGoodPlacement();
-                    return fpg.work(mt, s);
-                }, TaskCreationOptions.LongRunning);
-            }
-            Task.WaitAll(tasks);
-            //collect results
-            for (int i = 0; i < numOfTasks; i++)
-            {
-                results[i] = tasks[i].Result;
-                display += "MainTable=" + results[i].Kth + ":(" + results[i].x + "," + results[i].y + ")\n";
-            }
-            MessageBox.Show(display);
+            //ThreadComputation.getNextIteration(model.K);
         }
 
         //on click handler for "show tile browser" button

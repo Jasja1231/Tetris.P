@@ -48,5 +48,10 @@ namespace Tetris.Controllers
         {
  	        throw new NotImplementedException();
         }
+
+        internal void StartIteration(int p)
+        {
+            this.model.StartIteration(p);
+        }
     }
 }

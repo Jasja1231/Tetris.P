@@ -14,7 +14,7 @@ namespace Tetris.Algorithms
             Random rnd = new Random(Guid.NewGuid().GetHashCode());
             int sleeptime = rnd.Next(10000, 30000);
             Thread.Sleep(sleeptime);
-            Result r = new Result(s, rnd.Next(0,100), rnd.Next(0, 100), mt.Kth, rnd.Next(100));
+            Result r = new Result(s, rnd.Next(0,100), rnd.Next(0, 100), mt.Kth, rnd.Next(101));
             return r;
         }
     }
