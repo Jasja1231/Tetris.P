@@ -119,10 +119,6 @@ namespace Tetris.Windows
         {
             this.controller.StartIteration(KSetter.SelectedValue);
         }
-        private void TestThreads(object sender, RoutedEventArgs e)
-        {
-            //ThreadComputation.getNextIteration(model.K);
-        }
 
         //on click handler for "show tile browser" button
         private void ShowTileBrowser(object sender, RoutedEventArgs e)
