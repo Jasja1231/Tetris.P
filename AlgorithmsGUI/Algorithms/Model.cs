@@ -9,6 +9,10 @@ namespace Tetris.Algorithms
     public class Model : Tetris.ObserverDP.Subject
     {
         public Model() {}
+        /// <summary>
+        /// Class for preforming iterations and collecting results without blocking main thread
+        /// </summary>
+        private ThreadComputation threadComp = new ThreadComputation();
 
         /// <summary>
         /// All shapes loaded from file.List of tiles (shapes) without any count.
@@ -150,7 +154,7 @@ namespace Tetris.Algorithms
                 }
             }
 
-            ThreadComputation.getNextIteration(p, MainTablesList, ShapesInfoList, 1);
+            threadComp.getNextIteration(p, MainTablesList, ShapesInfoList, 1);
         }
 
         /// <summary>
@@ -177,12 +181,12 @@ namespace Tetris.Algorithms
                 this.MainTablesList.Add(mainTable);
             }
             //Last argument to getNextIteration is number of iterations to preform
-            ThreadComputation.getNextIteration(k, MainTablesList, ShapesInfoList, ShapesInfoList.AvailableShapes.Count);
+            threadComp.getNextIteration(k, MainTablesList, ShapesInfoList, ShapesInfoList.AvailableShapes.Count);
         }
 
         internal void StopComputation()
         {
-            ThreadComputation.pauseComputation();
+            threadComp.pauseComputation();
         }
         private int GetMaxShapeHeight()
         {

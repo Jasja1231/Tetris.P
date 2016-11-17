@@ -10,9 +10,10 @@ namespace Tetris.Algorithms
 {
     class ThreadComputation
     {
-        private static volatile Boolean work;
-
-        public static void getNextIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
+        //*********************************CLASS FIELDS****************************************/
+        private volatile Boolean work;
+        //*********************************CLASS METHODS***************************************/
+        public void getNextIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
         {
             //THIS WORKER THREAD SHOULD HAVE A WAY TO UPDATE GUI SO IT CAN UPDATE IT WITHOUT BLOCKING OUR ENTIRE APPLICATION
             //OR
@@ -25,12 +26,12 @@ namespace Tetris.Algorithms
             worker.Start();
         }
 
-        public static void pauseComputation()
+        public void pauseComputation()
         {
             work = false;
         }
 
-        private static List<Result> preformIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
+        private List<Result> preformIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
         {
             int iteration = 0;
             while (work && iteration < iter)
@@ -73,7 +74,7 @@ namespace Tetris.Algorithms
         }
 
         //Complexity O(n) not O(n^2) since I only find K largest :)
-        private static List<Result> SelectionSort(Task<Result>[] array, int K)
+        private List<Result> SelectionSort(Task<Result>[] array, int K)
         {
             List<Result> r = new List<Result>(K);
             int i, j, max;
