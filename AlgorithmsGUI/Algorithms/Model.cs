@@ -21,6 +21,7 @@ namespace Tetris.Algorithms
         }
 
         private List<MainTable> MainTablesList = new List<MainTable>();
+        private List<Result> bestResult = new List<Result>(10);
 
         /// <summary>
         /// List of  valid shapes info (count and shape) with list wrapper 
@@ -149,7 +150,7 @@ namespace Tetris.Algorithms
                 }
             }
 
-            ThreadComputation.getNextIteration(p, MainTablesList, ShapesInfoList);
+            ThreadComputation.getNextIteration(p, MainTablesList, ShapesInfoList, 1);
         }
 
         /// <summary>
@@ -175,12 +176,13 @@ namespace Tetris.Algorithms
                 //Add it to the list of a Main Tables
                 this.MainTablesList.Add(mainTable);
             }
+            //Last argument to getNextIteration is number of iterations to preform
+            ThreadComputation.getNextIteration(k, MainTablesList, ShapesInfoList, ShapesInfoList.AvailableShapes.Count);
+        }
 
-            //MAIN LOOP OF THE ALGORITHM
-            //for (int c = 0; c < ShapesInfoList.AvailableShapes.Count; c++)
-            //{
-            //    ThreadComputation.getNextIteration(2, MainTablesList, ShapesInfoList);
-            //}
+        internal void StopComputation()
+        {
+            ThreadComputation.pauseComputation();
         }
         private int GetMaxShapeHeight()
         {

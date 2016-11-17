@@ -10,7 +10,9 @@ namespace Tetris.Algorithms
 {
     class ThreadComputation
     {
-        public static void getNextIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil)
+        private static volatile Boolean work;
+
+        public static void getNextIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
         {
             //THIS WORKER THREAD SHOULD HAVE A WAY TO UPDATE GUI SO IT CAN UPDATE IT WITHOUT BLOCKING OUR ENTIRE APPLICATION
             //OR
@@ -18,49 +20,60 @@ namespace Tetris.Algorithms
             //OR
             //MAYBE THERE EXISTS SOME OTHER C# WAY I DONT KNOW ABOUT?
             List<Result> results = new List<Result>();
-            Thread worker = new Thread(() => { results = preformIteration(K, lmt, sil); });
+            work = true;
+            Thread worker = new Thread(() => { results = preformIteration(K, lmt, sil, iter); });
             worker.Start();
         }
 
-        private static List<Result> preformIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil)
+        public static void pauseComputation()
         {
-            //start tasks with (LongRunning) work
-            int numOfTasks = lmt.Count * sil.AvailableShapes.Count;
-
-            Task<Result>[] tasks = new Task<Result>[numOfTasks];
-            List<Result> bestResults = new List<Result>(K);
-            string display = "Best K results\n";
-
-            //for each MAIN TABLE == from 0 until K
-            for (int i = 0; i < lmt.Count; i++)
-            {
-                MainTable mt = lmt.ElementAt(i);
-                //for each shape
-                for (int j = 0; j < sil.AvailableShapes.Count; j++)
-                {
-                    Shape temp = sil.GetShapeAt(i);
-                    //CREATE THREAD to find its position and start its THREAD_WORK
-                    tasks[sil.AvailableShapes.Count * i + j] = Task<Result>.Factory.StartNew(() =>
-                    {
-                        FindGoodPlacement fpg = new FindGoodPlacement();
-                        return fpg.work(mt, temp);
-                    }, TaskCreationOptions.LongRunning);
-                }
-            }
-            //BLOCK UNTILL ALL THREADS FINNISH
-            Task.WaitAll(tasks);
-            //Copy K best results into our list of best results(MAIN TABLES?)
-            bestResults = SelectionSort(tasks, K);
-            for (int i = 0; i < K; i++)
-            {
-                display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
-                   bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
-            }
-            MessageBox.Show(display);
-            return bestResults;
+            work = false;
         }
 
-        public static List<Result> SelectionSort(Task<Result>[] array, int K)
+        private static List<Result> preformIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
+        {
+            int iteration = 0;
+            while (work && iteration < iter)
+            {
+                //start tasks with (LongRunning) work
+                int numOfTasks = lmt.Count * sil.AvailableShapes.Count;
+                Task<Result>[] tasks = new Task<Result>[numOfTasks];
+                List<Result> bestResults = new List<Result>(K);
+                FindGoodPlacement fpg = new FindGoodPlacement();
+                string display = "Best K results\n";
+
+                //for each MAIN TABLE == from 0 until K
+                for (int i = 0; i < lmt.Count; i++)
+                {
+                    MainTable mt = lmt.ElementAt(i);
+                    //for each shape
+                    for (int j = 0; j < sil.AvailableShapes.Count; j++)
+                    {
+                        Shape temp = sil.GetShapeAt(i);
+                        //CREATE THREAD to find its position and start its THREAD_WORK
+                        tasks[sil.AvailableShapes.Count * i + j] = Task<Result>.Factory.StartNew(() =>
+                        {
+                            return fpg.work(mt, temp);
+                        }, TaskCreationOptions.LongRunning);
+                    }
+                }
+                //BLOCK UNTILL ALL THREADS FINNISH
+                Task.WaitAll(tasks);
+                //Copy K best results into our list of best results(MAIN TABLES?)
+                bestResults = SelectionSort(tasks, K);
+                for (int i = 0; i < K; i++)
+                {
+                    display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
+                       bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
+                }
+                MessageBox.Show(display);
+                iter++;
+            }
+            return null;
+        }
+
+        //Complexity O(n) not O(n^2) since I only find K largest :)
+        private static List<Result> SelectionSort(Task<Result>[] array, int K)
         {
             List<Result> r = new List<Result>(K);
             int i, j, max;
