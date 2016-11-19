@@ -34,7 +34,7 @@ namespace Tetris.Algorithms
         private List<Result> preformIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
         {
             int iteration = 0;
-            while (work && iteration < iter)
+            while (work && iter > iteration)
             {
                 //start tasks with (LongRunning) work
                 int numOfTasks = lmt.Count * sil.AvailableShapes.Count;
@@ -68,7 +68,7 @@ namespace Tetris.Algorithms
                        bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
                 }
                 MessageBox.Show(display);
-                iter++;
+                iteration++;
             }
             return null;
         }
