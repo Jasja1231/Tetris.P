@@ -102,6 +102,11 @@ namespace Tetris.Algorithms
             return loaded;
         }
 
+        internal void AddBestResults(List<Result> bestResults)
+        {
+            this.bestResult = bestResults;
+        }
+
         /// <summary>
         /// Reads width of the Main tables from the file into property value.
         /// </summary>
@@ -154,7 +159,7 @@ namespace Tetris.Algorithms
                 }
             }
 
-            threadComp.getNextIteration(p, MainTablesList, ShapesInfoList, 1);
+            threadComp.getNextIteration(this, p, MainTablesList, ShapesInfoList, 1);
         }
 
         /// <summary>
@@ -181,7 +186,7 @@ namespace Tetris.Algorithms
                 this.MainTablesList.Add(mainTable);
             }
             //Last argument to getNextIteration is number of iterations to preform
-            threadComp.getNextIteration(k, MainTablesList, ShapesInfoList, ShapesInfoList.AvailableShapes.Count);
+            threadComp.getNextIteration(this, k, MainTablesList, ShapesInfoList, ShapesInfoList.AvailableShapes.Count);
         }
 
         internal void StopComputation()
