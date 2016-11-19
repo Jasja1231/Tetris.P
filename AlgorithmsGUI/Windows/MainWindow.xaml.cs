@@ -36,7 +36,7 @@ namespace Tetris.Windows
             model = alg;
             controller = control;
             controller.setView(this);
-
+            model.AddObserver(this);
             FFStepSetter.SelectedValue = 2;
             KSetter.SelectedValue = 4;
             AddBitMaps();
@@ -74,7 +74,7 @@ namespace Tetris.Windows
                     }*/
                     foreach (Shape s in model.AllLoadedShapes)
                     {
-                        this.AddTileToBitmap(ref bitmap, s, 0, 0, 0);
+                        //this.AddTileToBitmap(ref bitmap, s, 0, 0, 0);
                     }
                 }
 
@@ -117,6 +117,8 @@ namespace Tetris.Windows
         //*******************************ON CLICK HANDLERS**************************************/
         private void FastForwardClick(object sender, RoutedEventArgs e)
         {
+            this.model.K = KSetter.SelectedValue;
+            AddBitMaps();
             this.controller.StartIteration(KSetter.SelectedValue);
         }
 
@@ -205,16 +207,19 @@ namespace Tetris.Windows
         public void Update(int arg)
         {
             if (arg == 1) {
-                List<ImageSource> isl = new List<ImageSource>();
+            List<ImageSource> isl = new List<ImageSource>();
+
                 foreach (UIElement element in this.WellsPanel.Children)
                 {
-                    if (element.GetType() == typeof(System.Windows.Controls.Image)) 
+                    if (element.GetType() == typeof(System.Windows.Controls.Image))
                     {
                         Image im = (Image)element;
                         isl.Add(im.Source);
                     }
                 }
-                var newimages = ImageProcessor.UpdateImages(model, isl);
+              
+            var newimages = ImageProcessor.UpdateImages(model, isl);
+                
                 int i = 0;
                 foreach (UIElement element in this.WellsPanel.Children) 
                 {

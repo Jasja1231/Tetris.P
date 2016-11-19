@@ -9,12 +9,15 @@ namespace Tetris.Algorithms
 {
     public class Model : Tetris.ObserverDP.Subject
     {
-        public Model() {}
-
         /// <summary>
         /// Class for preforming iterations and collecting results without blocking main thread
         /// </summary>
-        private ThreadComputation threadComp = new ThreadComputation();
+        private ThreadComputation threadComp; 
+        public Model() {
+            threadComp = new ThreadComputation(this);
+        }
+
+        
 
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace Tetris.Algorithms
 
         private List<MainTable> MainTablesList = new List<MainTable>();
         public List<Result> BestResults = new List<Result>(10);/////////////////////////////////////////////////////
-
+   
        
         /// <summary>
         /// Adds a tile to a list of shapes
@@ -55,7 +58,7 @@ namespace Tetris.Algorithms
         public int K
         {
             get { return k; }
-            private set { k = value; }
+            set { k = value; }
         }
 
         /// <summary>
@@ -172,7 +175,7 @@ namespace Tetris.Algorithms
 
         internal void StartIteration(int p)
         {
-            this.k = p;
+            this.K = p;
             this.MaxShapeHeight = this.GetMaxShapeHeight();
 
             //Create k MAIN tables if they are empty
@@ -191,7 +194,6 @@ namespace Tetris.Algorithms
                     this.MainTablesList.Add(mainTable);
                 }
             }
-
             threadComp.getNextIteration(this, p, MainTablesList, 1);
         }
 
@@ -231,7 +233,7 @@ namespace Tetris.Algorithms
         private int GetMaxShapeHeight()
         {
             int maxValue = 0; 
-            for (int i = 0; i < this.RemainingShapes; i++) {
+            for (int i = 0; i < this.ShapesDatabase.Length; i++) {
                 if (ShapesDatabase[i].MaxHeight > maxValue)
                     maxValue = ShapesDatabase[i].MaxHeight;
             }
