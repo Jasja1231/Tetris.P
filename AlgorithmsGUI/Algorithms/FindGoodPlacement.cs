@@ -5,16 +5,16 @@ namespace Tetris.Algorithms
 {
     class FindGoodPlacement
     {
-        public Result dwork(MainTable mt, Shape s)
+        public Result dwork(Model m, MainTable mt, int shapeIdx)
         {
             //TODO: remove stub work, implement real density check and evalutation
             Random rnd = new Random(Guid.NewGuid().GetHashCode());
             int sleeptime = rnd.Next(5000, 10000);
             Thread.Sleep(sleeptime);
-            Result r = new Result(s, rnd.Next(0,100), rnd.Next(0, 100), mt.Kth, rnd.Next(101));
+            Result r = new Result(shapeIdx, rnd.Next(0,100), rnd.Next(0, 100), mt.Kth, rnd.Next(101));
             return r;
         }
-        public Result work(MainTable Table, Shape s)
+        public Result work(Model m, MainTable mt, int shapeIdx)
         {
             Result r = null;
             int ctr = 0;

@@ -15,7 +15,7 @@ namespace Tetris.Algorithms
         /// <summary>
         /// Shape that we are adding to Main Table
         /// </summary>
-        public Shape s { get; private set; }
+        public int shapeIdx { get; private set; }
         /// <summary>
         /// X coordinate of Kth table where we are putting shape s
         /// </summary>
@@ -35,9 +35,9 @@ namespace Tetris.Algorithms
 
         public int rotation { get;  set; }
         //*********************************CLASS METHODS***************************************/
-        public Result(Shape s, int x, int y, int Kth, int score)
+        public Result(int shapeIdx, int x, int y, int Kth, int score)
         {
-            this.s = s;
+            this.shapeIdx = shapeIdx;
             this.x = x;
             this.y = y;
             this.Kth = Kth;

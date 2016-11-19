@@ -13,7 +13,7 @@ namespace Tetris.Algorithms
         //*********************************CLASS FIELDS****************************************/
         private volatile Boolean work;
         //*********************************CLASS METHODS***************************************/
-        public void getNextIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
+        public void getNextIteration(Model m, int K, List<MainTable> lmt, int iter)
         {
             //THIS WORKER THREAD SHOULD HAVE A WAY TO UPDATE GUI SO IT CAN UPDATE IT WITHOUT BLOCKING OUR ENTIRE APPLICATION
             //OR
@@ -22,7 +22,7 @@ namespace Tetris.Algorithms
             //MAYBE THERE EXISTS SOME OTHER C# WAY I DONT KNOW ABOUT?
             List<Result> results = new List<Result>();
             work = true;
-            Thread worker = new Thread(() => { results = preformIteration(K, lmt, sil, iter); });
+            Thread worker = new Thread(() => { results = preformIteration(m, K, lmt, iter); });
             worker.Start();
         }
 
@@ -31,30 +31,31 @@ namespace Tetris.Algorithms
             work = false;
         }
 
-        private List<Result> preformIteration(int K, List<MainTable> lmt, ShapesInfoListWrapper sil, int iter)
+        private List<Result> preformIteration(Model m, int K, List<MainTable> lmt, int iter)
         {
             int iteration = 0;
+            List<Result> bestResults = new List<Result>(K); ;
             while (work && iter > iteration)
             {
                 //start tasks with (LongRunning) work
-                int numOfTasks = lmt.Count * sil.AvailableShapes.Count;
+                int nonZeroElements = m.ShapeQuantities.Count(x => x != 0);
+                int numOfTasks = lmt.Count * nonZeroElements;
                 Task<Result>[] tasks = new Task<Result>[numOfTasks];
-                List<Result> bestResults = new List<Result>(K);
                 FindGoodPlacement fpg = new FindGoodPlacement();
-                string display = "Best K results\n";
+                //string display = "Best K results\n";
 
                 //for each MAIN TABLE == from 0 until K
                 for (int i = 0; i < lmt.Count; i++)
                 {
                     MainTable mt = lmt.ElementAt(i);
-                    //for each shape
-                    for (int j = 0; j < sil.AvailableShapes.Count; j++)
+                    //for each unique! shape
+                    for (int j = 0; j < nonZeroElements; j++)
                     {
-                        Shape temp = sil.GetShapeAt(i);
+                        //Shape temp = sil.GetShapeAt(i);
                         //CREATE THREAD to find its position and start its THREAD_WORK
-                        tasks[sil.AvailableShapes.Count * i + j] = Task<Result>.Factory.StartNew(() =>
+                        tasks[nonZeroElements * i + j] = Task<Result>.Factory.StartNew(() =>
                         {
-                            return fpg.work(mt, temp);
+                            return fpg.work(m, mt, j);
                         }, TaskCreationOptions.LongRunning);
                     }
                 }
@@ -62,14 +63,16 @@ namespace Tetris.Algorithms
                 Task.WaitAll(tasks);
                 //Copy K best results into our list of best results(MAIN TABLES?)
                 bestResults = SelectionSort(tasks, K);
-                for (int i = 0; i < K; i++)
+                /*for (int i = 0; i < K; i++)
                 {
                     display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
                        bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
-                }
-                MessageBox.Show(display);
+                } 
+                MessageBox.Show(display); DEBUG */
                 iteration++;
             }
+            m.RemainingShapes--;
+            m.AddBestResults(bestResults);
             return null;
         }
 

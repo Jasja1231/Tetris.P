@@ -13,6 +13,7 @@ namespace Tetris.Algorithms
         /// <summary>
         /// Index K of Main Table.
         /// </summary>
+        public int[] Quantities;
         public int Kth { get;  set; }
         /// <summary>
         /// Width of the table
