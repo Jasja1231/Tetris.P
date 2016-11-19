@@ -49,14 +49,17 @@ namespace Tetris.Algorithms
                 {
                     MainTable mt = lmt.ElementAt(i);
                     //for each unique! shape
-                    for (int j = 0; j < nonZeroElements; j++)
+                    for (int j = 0; j < mt.Quantities.Length; j++)
                     {
                         //Shape temp = sil.GetShapeAt(i);
                         //CREATE THREAD to find its position and start its THREAD_WORK
-                        tasks[nonZeroElements * i + j] = Task<Result>.Factory.StartNew(() =>
+                        if (mt.Quantities[j] != 0)
                         {
-                            return fpg.work(m, mt, j);
-                        }, TaskCreationOptions.LongRunning);
+                            tasks[(mt.Quantities.Length-1) * i + j] = Task<Result>.Factory.StartNew(() =>
+                            {
+                                return fpg.work(m, mt, j);
+                            }, TaskCreationOptions.LongRunning);
+                        }
                     }
                 }
                 //BLOCK UNTILL ALL THREADS FINNISH

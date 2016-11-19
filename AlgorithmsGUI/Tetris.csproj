@@ -101,7 +101,6 @@
     <Compile Include="Algorithms\Result.cs" />
     <Compile Include="Algorithms\Shape.cs" />
     <Compile Include="Algorithms\ShapeInfo.cs" />
-    <Compile Include="Algorithms\ShapesInfoListWrapper.cs" />
     <Compile Include="Algorithms\Shape_Comparer.cs" />
     <Compile Include="Algorithms\ThreadComputation.cs" />
     <Compile Include="App.xaml.cs">

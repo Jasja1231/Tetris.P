@@ -214,7 +214,7 @@ namespace Tetris.Windows
                         isl.Add(im.Source);
                     }
                 }
-                var newimages = ImageProcessor.UpdateImages(model.bestResult, isl);
+                var newimages = ImageProcessor.UpdateImages(model, isl);
                 int i = 0;
                 foreach (UIElement element in this.WellsPanel.Children) 
                 {
@@ -228,7 +228,7 @@ namespace Tetris.Windows
             }
         }
 
-        private void UpdateImageTest(object sender, RoutedEventArgs e)
+      /*  private void UpdateImageTest(object sender, RoutedEventArgs e)
         {
             Random r = new Random();
             List<ImageSource> list = new List<ImageSource>();
@@ -247,6 +247,6 @@ namespace Tetris.Windows
             this.WellsPanel.Children.Add(imm);
             int x;
 
-        }
+        }*/
     }
 }

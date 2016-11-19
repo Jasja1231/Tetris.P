@@ -73,14 +73,14 @@ namespace Tetris.Algorithms
             return newbitmap;
         }
 
-        public static List<BitmapImage> UpdateImages (List<Result>results, List<ImageSource>SourceImages)
+        public static List<BitmapImage> UpdateImages (Model model, List<ImageSource>SourceImages)
         {
             var updated = new List<BitmapImage>();
-            foreach(Result result in results)
+            foreach (Result result in model.BestResults)
             {
                 Bitmap ToUpdate = BitmapImageToBitmap((BitmapImage)(SourceImages.ElementAt(result.Kth)));
                 //int newheight = ToUpdate.Height + result.s.rotations.ElementAt(result.rotation).GetLength(1);
-                int newheight = result.y + result.s.rotations.ElementAt(result.rotation).GetLength(1);
+                int newheight = result.y + model.ShapesDatabase[result.shapeIdx].rotations.ElementAt(result.rotation).GetLength(1);
                 if (newheight > ToUpdate.Height)
                 {
                     System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, 220, 220, 220);
@@ -102,7 +102,7 @@ namespace Tetris.Algorithms
                         }
                     }
                 }
-                AddTileToBitmap(ref ToUpdate, result.s, result.x, result.y, result.rotation);
+                AddTileToBitmap(ref ToUpdate, model.ShapesDatabase[result.shapeIdx], result.x, result.y, result.rotation);
                 var newsource = BitmapToBitmapSource(ToUpdate);
                 updated.Add(newsource);
             }

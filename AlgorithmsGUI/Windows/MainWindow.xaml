@@ -12,8 +12,7 @@
         <Button Width="40" Background="Orange"  Margin="4 2 0 2" HorizontalAlignment="Left" Click="PlayClick" Name="PlayButton" Content="Play"></Button>
         <Button Width="40" Background="WhiteSmoke" Margin="50 2 0 2" HorizontalAlignment="Left">Stop</Button>
         <Button Width="80" Background="WhiteSmoke" Margin="96 2 0 2" HorizontalAlignment="Left" Click="FastForwardClick">Fast-forward</Button>
-        <Button Width="80" Background="WhiteSmoke" Margin="500 2 0 2" HorizontalAlignment="Left" Click="UpdateImageTest">UpdateImages</Button>
-
+       
 
         <Controls:NumberSetter x:Name="FFStepSetter"  HorizontalAlignment="Left" Margin="180 0 0 0"></Controls:NumberSetter>
         <TextBlock HorizontalAlignment="Left" Margin="280 0 0 0" Width="10" VerticalAlignment="Center" Text="k:" Visibility="Visible"  ></TextBlock>

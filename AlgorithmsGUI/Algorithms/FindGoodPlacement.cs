@@ -31,8 +31,10 @@ namespace Tetris.Algorithms
                                 if (mt.Table[i + y, j + x] != 0) ctr++;
                             }
                         }
-                        if (ctr == 0) return r = new Result(shapeIdx, j, i, mt.Kth, 13);
-                        else ctr = 0;
+                        if (ctr == 0) 
+                            return new Result(shapeIdx, j, i, mt.Kth, 13);
+                        else 
+                            ctr = 0;
                     }
                 }
             }

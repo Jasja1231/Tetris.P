@@ -37,13 +37,9 @@ namespace Tetris.Algorithms
         public int[] ShapeQuantities {get; private set;}
 
         private List<MainTable> MainTablesList = new List<MainTable>();
-        public List<Result> bestResult = new List<Result>(10);/////////////////////////////////////////////////////
+        public List<Result> BestResults = new List<Result>(10);/////////////////////////////////////////////////////
 
-        /// <summary>
-        /// List of  valid shapes info (count and shape) with list wrapper 
-        /// </summary>
-        private ShapesInfoListWrapper ShapesInfoList = new ShapesInfoListWrapper();
-
+       
         /// <summary>
         /// Adds a tile to a list of shapes
         /// </summary>
@@ -55,7 +51,7 @@ namespace Tetris.Algorithms
         /// <summary>
         /// Backtracking parameter. The user set K variable, constant for now
         /// </summary>
-        private int k = 5;
+        private int k;
         public int K
         {
             get { return k; }
@@ -116,7 +112,7 @@ namespace Tetris.Algorithms
 
         public void AddBestResults(List<Result> bestResults)
         {
-            this.bestResult = bestResults;
+            this.BestResults = bestResults;
             this.Notify(1);
         }
 
@@ -176,6 +172,7 @@ namespace Tetris.Algorithms
 
         internal void StartIteration(int p)
         {
+            this.k = p;
             this.MaxShapeHeight = this.GetMaxShapeHeight();
 
             //Create k MAIN tables if they are empty
@@ -188,6 +185,7 @@ namespace Tetris.Algorithms
                     //In the beginning the height of our tables is equal to the height of the talles Shapes (amount ShapesInfoListWrapper)
                     mainTable.Height = this.MaxShapeHeight;
                     mainTable.Table = new byte[mainTable.Width, mainTable.Height];
+                    mainTable.Quantities = (int[])this.ShapeQuantities.Clone();
 
                     //Add it to the list of a Main Tables
                     this.MainTablesList.Add(mainTable);
@@ -205,6 +203,7 @@ namespace Tetris.Algorithms
         /// <param name="k"></param>
         internal void StartComputation(int k)
         {
+            this.k = k;
             this.MaxShapeHeight = this.GetMaxShapeHeight();
             this.MainTablesList.Clear();
 
@@ -216,6 +215,7 @@ namespace Tetris.Algorithms
                 //In the beginning the height of our tables is equal to the height of the talles Shapes (amount ShapesInfoListWrapper)
                 mainTable.Height = this.MaxShapeHeight;
                 mainTable.Table = new byte[mainTable.Width, mainTable.Height];
+                mainTable.Quantities = (int[])this.ShapeQuantities.Clone();
 
                 //Add it to the list of a Main Tables
                 this.MainTablesList.Add(mainTable);
@@ -231,9 +231,9 @@ namespace Tetris.Algorithms
         private int GetMaxShapeHeight()
         {
             int maxValue = 0; 
-            for (int i = 0; i < ShapesInfoList.AvailableShapes.Count; i++) {
-                if (this.ShapesInfoList.GetShapeAt(i).MaxHeight > maxValue)
-                    maxValue = this.ShapesInfoList.GetShapeAt(i).MaxHeight;
+            for (int i = 0; i < this.RemainingShapes; i++) {
+                if (ShapesDatabase[i].MaxHeight > maxValue)
+                    maxValue = ShapesDatabase[i].MaxHeight;
             }
             return maxValue;
         }
