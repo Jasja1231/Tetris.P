@@ -63,7 +63,7 @@ namespace Tetris.Windows
                     }
                 }
 
-                if (this.model.Shapes.Count != 0)
+                if (this.model.AllLoadedShapes.Count != 0)
                 {
                     /*//plase 50 random shapes on board
                     Random r = new Random();
@@ -72,7 +72,7 @@ namespace Tetris.Windows
                         this.AddTileToBitmap(ref bitmap, ShapesInfoListWrapper.ElementAt(r.Next(ShapesInfoListWrapper.Count - 1)),
                             r.Next(0, x - 5), r.Next(0, 75 - 5), r.Next(3), r);
                     }*/
-                    foreach (Shape s in model.Shapes)
+                    foreach (Shape s in model.AllLoadedShapes)
                     {
                         this.AddTileToBitmap(ref bitmap, s, 0, 0, 0);
                     }
@@ -123,9 +123,9 @@ namespace Tetris.Windows
         //on click handler for "show tile browser" button
         private void ShowTileBrowser(object sender, RoutedEventArgs e)
         {
-            if (model.Shapes.Count != 0)
+            if (model.AllLoadedShapes.Count != 0)
             {
-                TileBrowser TB = new TileBrowser(model.Shapes);
+                TileBrowser TB = new TileBrowser(model.AllLoadedShapes);
                 if (TB.ShowDialog() == true)
                 {
                     controller.ApplyShapes(TB.TileControls);
@@ -159,7 +159,7 @@ namespace Tetris.Windows
                     MessageBox.Show("Error occured while loading the selected file.");
                 }
                 else {
-                    TileBrowser TB = new TileBrowser(model.Shapes);
+                    TileBrowser TB = new TileBrowser(model.AllLoadedShapes);
                     if (TB.ShowDialog() == true)
                     {
                         controller.ApplyShapes(TB.TileControls);
@@ -204,7 +204,28 @@ namespace Tetris.Windows
         /// <param name="arg"></param>
         public void Update(int arg)
         {
-            throw new NotImplementedException();
+            if (arg == 1) {
+                List<ImageSource> isl = new List<ImageSource>();
+                foreach (UIElement element in this.WellsPanel.Children)
+                {
+                    if (element.GetType() == typeof(System.Windows.Controls.Image)) 
+                    {
+                        Image im = (Image)element;
+                        isl.Add(im.Source);
+                    }
+                }
+                var newimages = ImageProcessor.UpdateImages(model.bestResult, isl);
+                int i = 0;
+                foreach (UIElement element in this.WellsPanel.Children) 
+                {
+                    if (element.GetType() == typeof(System.Windows.Controls.Image))
+                    {
+                        Image im = (Image)element;
+                        im.Source = newimages.ElementAt(i);
+                        i++;
+                    }
+                }
+            }
         }
 
         private void UpdateImageTest(object sender, RoutedEventArgs e)
@@ -217,10 +238,10 @@ namespace Tetris.Windows
                 Image im = (Image)el;
                 list.Add(im.Source);
             }
-            Result res = new Result(model.Shapes.ElementAt(r.Next (0,model.Shapes.Count-1)), r.Next(0,40), r.Next(0,300), r.Next(0,this.WellsPanel.Children.Count-1), 0);
+            Result res = new Result(model.AllLoadedShapes.ElementAt(r.Next (0,model.AllLoadedShapes.Count-1)), r.Next(0,40), r.Next(0,300), r.Next(0,this.WellsPanel.Children.Count-1), 0);
             res.rotation = 0;
             results.Add(res);
-            var updated = ImageSomething.UpdateImages(results, list);
+            var updated = ImageProcessor.UpdateImages(results, list);
             Image imm = new Image();
             imm.Source = updated.ElementAt(0);
             this.WellsPanel.Children.Add(imm);

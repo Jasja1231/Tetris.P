@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace Tetris.Algorithms
 {
-    public static class ImageSomething
+    public static class ImageProcessor
     {
 
         private static BitmapImage BitmapToBitmapSource(Bitmap bitmap)
@@ -73,7 +73,6 @@ namespace Tetris.Algorithms
             return newbitmap;
         }
 
-        //TODO WHAT THE FUCK WHY 
         public static List<BitmapImage> UpdateImages (List<Result>results, List<ImageSource>SourceImages)
         {
             var updated = new List<BitmapImage>();

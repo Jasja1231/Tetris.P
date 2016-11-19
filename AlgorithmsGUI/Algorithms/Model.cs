@@ -3,29 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Tetris.Algorithms
 {
     public class Model : Tetris.ObserverDP.Subject
     {
         public Model() {}
+
         /// <summary>
         /// Class for preforming iterations and collecting results without blocking main thread
         /// </summary>
         private ThreadComputation threadComp = new ThreadComputation();
 
+
+        /// <summary>
+        /// number of all shapes left to place (NOT unique shapes)
+        /// </summary>
+        public int RemainingShapes { get; set; }
+
         /// <summary>
         /// All shapes loaded from file.List of tiles (shapes) without any count.
         /// </summary>
         private List<Shape> shapes = new List<Shape>();
-        public List<Shape> Shapes
+
+        public List<Shape> AllLoadedShapes
         {
             get { return shapes; }
             private set { shapes = value; }
         }
 
+        public Shape [] ShapesDatabase { get; private set; }
+        public int[] ShapeQuantities {get; private set;}
+
         private List<MainTable> MainTablesList = new List<MainTable>();
-        private List<Result> bestResult = new List<Result>(10);
+        public List<Result> bestResult = new List<Result>(10);/////////////////////////////////////////////////////
 
         /// <summary>
         /// List of  valid shapes info (count and shape) with list wrapper 
@@ -102,9 +114,10 @@ namespace Tetris.Algorithms
             return loaded;
         }
 
-        internal void AddBestResults(List<Result> bestResults)
+        public void AddBestResults(List<Result> bestResults)
         {
             this.bestResult = bestResults;
+            this.Notify(1);
         }
 
         /// <summary>
@@ -120,7 +133,7 @@ namespace Tetris.Algorithms
         {
             Random random = new Random();
             //clead list of previoustly loaded shapes
-            Shapes.Clear();
+            AllLoadedShapes.Clear();
             foreach (byte[,] tile in Tiles)
             {
                 int r = random.Next(100, 220);
@@ -128,14 +141,36 @@ namespace Tetris.Algorithms
                 int b = random.Next(100, 220);
 
                 //create and add colors for shapes, add shape to list.
-                Shapes.Add(new Shape(tile,System.Drawing.Color.FromArgb(0,r,g,b),System.Drawing.Color.FromArgb(0,r+10,g+10,b+10)));
+                AllLoadedShapes.Add(new Shape(tile,System.Drawing.Color.FromArgb(0,r,g,b),System.Drawing.Color.FromArgb(0,r+10,g+10,b+10)));
             }
             
         }
 
         public void ApplyShapes(List<Controls.TileControl> list)
         {
-            this.ShapesInfoList.BuildList(list);
+            int shapecount = 0;
+            this.RemainingShapes = 0;
+
+            foreach(Controls.TileControl control in list)
+            {
+                if (control.NumTiles > 0)
+                {
+                    shapecount++;
+                    this.RemainingShapes += control.NumTiles;
+                }
+            }
+            this.ShapesDatabase = new Shape[shapecount];
+            this.ShapeQuantities = new int[shapecount];
+
+            for (int i=0,k=0;i<list.Count;i++)
+            {
+                if (list.ElementAt(i).NumTiles > 0)
+                {
+                    ShapesDatabase[k] = list.ElementAt(i).Shape;
+                    ShapeQuantities[k] = list.ElementAt(i).NumTiles;
+                    k++;
+                }
+            }
         }
 
 
@@ -159,7 +194,7 @@ namespace Tetris.Algorithms
                 }
             }
 
-            threadComp.getNextIteration(this, p, MainTablesList, ShapesInfoList, 1);
+            threadComp.getNextIteration(this, p, MainTablesList, 1);
         }
 
         /// <summary>
@@ -186,7 +221,7 @@ namespace Tetris.Algorithms
                 this.MainTablesList.Add(mainTable);
             }
             //Last argument to getNextIteration is number of iterations to preform
-            threadComp.getNextIteration(this, k, MainTablesList, ShapesInfoList, ShapesInfoList.AvailableShapes.Count);
+            threadComp.getNextIteration(this, k, MainTablesList,RemainingShapes);
         }
 
         internal void StopComputation()

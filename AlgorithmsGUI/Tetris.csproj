@@ -95,7 +95,7 @@
     <Compile Include="Algorithms\FileReader.cs" />
     <Compile Include="Algorithms\FindGoodPlacement.cs" />
     <Compile Include="Algorithms\Hole.cs" />
-    <Compile Include="Algorithms\ImageSomething.cs" />
+    <Compile Include="Algorithms\ImageProcessor.cs" />
     <Compile Include="Algorithms\Model.cs" />
     <Compile Include="Algorithms\MainTable.cs" />
     <Compile Include="Algorithms\Result.cs" />

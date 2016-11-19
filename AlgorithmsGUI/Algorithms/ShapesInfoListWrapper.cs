@@ -13,6 +13,7 @@ namespace Tetris.Algorithms
 
     {
         private List<ShapeInfo> availableshapes;
+        public int TileCount { get; set; }
         public int RemainingTiles { get; set; }
 
         public List<ShapeInfo> AvailableShapes
