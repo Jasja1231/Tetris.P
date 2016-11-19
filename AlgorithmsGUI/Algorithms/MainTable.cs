@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tetris.Algorithms
 {
-    class MainTable
+    public class MainTable
     {
         //*********************************CLASS FIELDS****************************************/
         public byte[,] Table { get;  set; }
