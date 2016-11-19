@@ -18,20 +18,20 @@ namespace Tetris.Algorithms
         {
             Result r = null;
             int ctr = 0;
-            for (int i = 0; i < Table.Height; i++)
+            for (int i = 0; i < mt.Height; i++)
             {
-                for (int j = 0; j < Table.Width; j++)
+                for (int j = 0; j < mt.Width; j++)
                 {
-                    if (Table.Table[i, j] == 0)
+                    if (mt.Table[i, j] == 0)
                     {
-                        for(int y = 0; y < s.MaxHeight; y++)
+                        for(int y = 0; y < m.ShapesDatabase[shapeIdx].MaxHeight; y++)
                         {
-                            for(int x = 0; x < s.MaxHeight; x++)
+                            for(int x = 0; x < m.ShapesDatabase[shapeIdx].MaxHeight; x++)
                             {
-                                if (Table.Table[i + y, j + x] != 0) ctr++;
+                                if (mt.Table[i + y, j + x] != 0) ctr++;
                             }
                         }
-                        if (ctr == 0) return r = new Result(s, j, i, Table.Kth, 13);
+                        if (ctr == 0) return r = new Result(shapeIdx, j, i, mt.Kth, 13);
                         else ctr = 0;
                     }
                 }
