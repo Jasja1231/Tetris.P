@@ -80,7 +80,7 @@ namespace Tetris.Algorithms
                     display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
                        bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
                 } 
-                MessageBox.Show(display);
+               //MessageBox.Show(display);
                 iteration++;
             }
             args.m.RemainingShapes--;
