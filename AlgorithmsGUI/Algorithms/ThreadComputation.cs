@@ -62,7 +62,7 @@ namespace Tetris.Algorithms
                         if (mt.Quantities[j] != 0)
                         {
                             int kurwa = j;
-                            tasks[(mt.Quantities.Length * j + i) > 0 ? mt.Quantities.Length * j + i - 1 : mt.Quantities.Length * j + i] = Task<Result>.Factory.StartNew(() =>
+                            tasks[(mt.Quantities.Length * i + j)] = Task<Result>.Factory.StartNew(() =>
                             {
                                 return fpg.work(args.m, mt, kurwa);
                             }, TaskCreationOptions.LongRunning);
