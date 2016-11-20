@@ -12,8 +12,6 @@ namespace Tetris.Algorithms
     class ThreadComputation
     {
         //*********************************CLASS FIELDS****************************************/
-        private volatile Boolean work;
-        private int iterationsLeft;
         private Model m;
         private Args args;
         //*********************************CLASS METHODS***************************************/
@@ -25,7 +23,6 @@ namespace Tetris.Algorithms
         public void preformIteration( Model m, int K, List<MainTable> lmt)
         {
             //TODO: disable controls
-            work = true;
             args = new Args(m, K, lmt);
             BackgroundWorker bgWorker = new BackgroundWorker();
             bgWorker.DoWork += new DoWorkEventHandler(preformIteration);
@@ -140,11 +137,6 @@ namespace Tetris.Algorithms
                 m.AddBestResults(r);
             }
             // TODO: Enable controls?
-        }
-
-        public void pauseComputation()
-        {
-            work = false;
         }
 
         private class Args

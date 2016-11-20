@@ -14,7 +14,6 @@ namespace Tetris.Algorithms
         /// Index K of Main Table.
         /// </summary>
         public int[] Quantities;
-        private MainTable mainTable;
 
         public int Kth { get;  set; }
         /// <summary>

@@ -123,7 +123,7 @@ namespace Tetris.Windows
             if(!intiialized)
                 AddBitMaps();//DLATEGO
             intiialized = true;
-            this.controller.StartIteration(KSetter.SelectedValue);
+            this.controller.StartIteration(KSetter.SelectedValue, FFStepSetter.SelectedValue);
         }
 
         //on click handler for "show tile browser" button
@@ -190,7 +190,7 @@ namespace Tetris.Windows
                 }
                 //Or it was paused and we need to resume it
                 else
-                    this.controller.ResumePausedComputation();
+                    this.controller.StartComputation(KSetter.SelectedValue);
             }
             else
                 this.controller.PauseComputation();
@@ -267,5 +267,12 @@ namespace Tetris.Windows
             int x;
 
         }*/
+
+        private void StopClick(object sender, RoutedEventArgs e)
+        {
+            PlayButton.Content = "Play";
+            AddBitMaps();
+            this.controller.StopComputation();
+        }
     }
 }
