@@ -39,22 +39,22 @@ namespace Tetris.Controllers
 
         public void PauseComputation()
         {
-            this.model.StopComputation();
-        }
-    
-        public void ResumePausedComputation()
-        {
- 	        throw new NotImplementedException();
+            this.model.PauseComputation();
         }
 
-        internal void StartIteration(int p)
+        internal void StartIteration(int p, int iter)
         {
-            this.model.StartIteration(p);
+            this.model.StartIteration(p, iter);
         }
 
         public void sendListOfImageSources(List<System.Windows.Media.ImageSource> isl)
         {
             this.model.ReadListOfImageSources(isl);
+        }
+
+        internal void StopComputation()
+        {
+            this.model.StopComputation();
         }
     }
 }
