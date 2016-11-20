@@ -13,32 +13,33 @@ namespace Tetris.Algorithms
     {
         //*********************************CLASS FIELDS****************************************/
         private volatile Boolean work;
-        private BackgroundWorker bgWorker;
+        private int iterationsLeft;
         private Model m;
+        private Args args;
         //*********************************CLASS METHODS***************************************/
         public ThreadComputation(Model m)
         {
-            bgWorker = new BackgroundWorker();
-            bgWorker.DoWork += new DoWorkEventHandler(preformIteration);
-            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(passResult);
             this.m = m;
         }
 
-
-        public void getNextIteration(Model m, int K, List<MainTable> lmt, int iter)
+        public void preformIteration( Model m, int K, List<MainTable> lmt)
         {
+            //TODO: disable controls
             work = true;
-            Args args = new Args(m, K, lmt, iter);
+            args = new Args(m, K, lmt);
+            BackgroundWorker bgWorker = new BackgroundWorker();
+            bgWorker.DoWork += new DoWorkEventHandler(preformIteration);
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(passResult);
             bgWorker.RunWorkerAsync(args);
         }
+
         public void preformIteration(object sender, DoWorkEventArgs a)
         {
             Args args = (Args)a.Argument;
             List<Result> results = new List<Result>();
             int iteration = 0;
             List<Result> bestResults = new List<Result>(args.K);
-            while (work && args.iter > iteration)
-            {
+            
                 //start tasks with (LongRunning) work
                 int sumNonZeroElements = 0;
                 for(int i = 0; i < args.lmt.Count; i++)
@@ -82,7 +83,7 @@ namespace Tetris.Algorithms
                 //} 
                 //MessageBox.Show(display);
                 iteration++;
-            }
+            
             args.m.RemainingShapes--;
             a.Result = bestResults;
         }
@@ -138,7 +139,7 @@ namespace Tetris.Algorithms
                 List<Result> r = (List<Result>)e.Result;
                 m.AddBestResults(r);
             }
-            // Enable controls?
+            // TODO: Enable controls?
         }
 
         public void pauseComputation()
@@ -151,13 +152,11 @@ namespace Tetris.Algorithms
             public Model m;
             public int K;
             public List<MainTable> lmt;
-            public int iter;
-            public Args(Model m, int K, List<MainTable> lmt, int iter)
+            public Args(Model m, int K, List<MainTable> lmt)
             {
                 this.m = m;
                 this.K = K;
                 this.lmt = lmt;
-                this.iter = iter;
             }
         }
     }

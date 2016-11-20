@@ -13,6 +13,9 @@ namespace Tetris.Algorithms
         {
             threadComp = new ThreadComputation(this);
         }
+
+        private volatile bool playing;
+
         /// <summary>
         /// Class for preforming iterations and collecting results without blocking main thread
         /// </summary>
@@ -127,6 +130,9 @@ namespace Tetris.Algorithms
                 mtlTmp.Add(MainTablesList.ElementAt(r.Kth).UpdateWithResult(r, this));
             }
             this.MainTablesList = mtlTmp;
+            //TODO: is we are "playing" then preform next iterations
+            if (playing) threadComp.preformIteration(this, this.k, MainTablesList);
+
             this.Notify(1);
              //serialize
             Serializer.Serialize(this.MainTablesList, ImageSources);
@@ -207,10 +213,7 @@ namespace Tetris.Algorithms
                     this.MainTablesList.Add(mainTable);
                 }
             }
-
-         
-
-            threadComp.getNextIteration(this, p, MainTablesList, 1);
+            threadComp.preformIteration(this, p, MainTablesList);
         }
 
         /// <summary>
@@ -222,6 +225,7 @@ namespace Tetris.Algorithms
         internal void StartComputation(int k)
         {
             this.k = k;
+            playing = true;
             this.MaxShapeHeight = this.GetMaxShapeHeight();
             this.MainTablesList.Clear();
 
@@ -239,12 +243,12 @@ namespace Tetris.Algorithms
                 this.MainTablesList.Add(mainTable);
             }
             //Last argument to getNextIteration is number of iterations to preform
-            threadComp.getNextIteration(this, k, MainTablesList, RemainingShapes);
+            threadComp.preformIteration(this, k, MainTablesList);
         }
 
         internal void StopComputation()
         {
-            threadComp.pauseComputation();
+            playing = false;
         }
 
         private int GetMaxShapeHeight()
@@ -256,7 +260,6 @@ namespace Tetris.Algorithms
             }
             return maxValue;
         }
-
 
         internal void ReadListOfImageSources(List<ImageSource> isl)
         {
