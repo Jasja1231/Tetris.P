@@ -19,6 +19,11 @@ namespace Tetris.Algorithms
         private ThreadComputation threadComp; 
 
         /// <summary>
+        /// Last displayed image sources.
+        /// </summary>
+        public List<ImageSource> ImageSources { get; set; }
+
+        /// <summary>
         /// number of all shapes left to place (NOT unique shapes)
         /// </summary>
         public int RemainingShapes { get; set; }
@@ -123,6 +128,8 @@ namespace Tetris.Algorithms
             }
             this.MainTablesList = mtlTmp;
             this.Notify(1);
+             //serialize
+            Serializer.Serialize(this.MainTablesList, ImageSources);
         }
 
         /// <summary>
@@ -200,6 +207,9 @@ namespace Tetris.Algorithms
                     this.MainTablesList.Add(mainTable);
                 }
             }
+
+         
+
             threadComp.getNextIteration(this, p, MainTablesList, 1);
         }
 
@@ -245,6 +255,12 @@ namespace Tetris.Algorithms
                     maxValue = ShapesDatabase[i].MaxHeight;
             }
             return maxValue;
+        }
+
+
+        internal void ReadListOfImageSources(List<ImageSource> isl)
+        {
+            this.ImageSources = isl;
         }
 
         public T[,] ResizeArray<T>(T[,] original, int x, int y)
