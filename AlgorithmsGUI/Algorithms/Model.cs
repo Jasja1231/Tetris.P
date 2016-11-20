@@ -114,6 +114,14 @@ namespace Tetris.Algorithms
         public void AddBestResults(List<Result> bestResults)
         {
             this.BestResults = bestResults;
+            var mtlTmp = new List<MainTable>(this.K);
+            //update maintables
+            for (int i = 0; i < this.K; i++)
+            {
+                Result r = bestResults.ElementAt(i);
+                mtlTmp.Add(MainTablesList.ElementAt(r.Kth).UpdateWithResult(r, this));
+            }
+            this.MainTablesList = mtlTmp;
             this.Notify(1);
         }
 
@@ -221,13 +229,14 @@ namespace Tetris.Algorithms
                 this.MainTablesList.Add(mainTable);
             }
             //Last argument to getNextIteration is number of iterations to preform
-            threadComp.getNextIteration(this, k, MainTablesList,RemainingShapes);
+            threadComp.getNextIteration(this, k, MainTablesList, RemainingShapes);
         }
 
         internal void StopComputation()
         {
             threadComp.pauseComputation();
         }
+
         private int GetMaxShapeHeight()
         {
             int maxValue = 0; 
@@ -236,6 +245,17 @@ namespace Tetris.Algorithms
                     maxValue = ShapesDatabase[i].MaxHeight;
             }
             return maxValue;
+        }
+
+        public T[,] ResizeArray<T>(T[,] original, int x, int y)
+        {
+            T[,] newArray = new T[x, y];
+            int minX = Math.Min(original.GetLength(0), newArray.GetLength(0));
+            int minY = Math.Min(original.GetLength(1), newArray.GetLength(1));
+
+            for (int i = 0; i < minY; ++i)
+                Array.Copy(original, i * original.GetLength(0), newArray, i * newArray.GetLength(0), minX);
+            return newArray;
         }
 
     }

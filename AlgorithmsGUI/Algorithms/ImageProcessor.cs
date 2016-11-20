@@ -27,7 +27,6 @@ namespace Tetris.Algorithms
                 bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapimage.EndInit();
             }
-
             return bitmapimage;
         }
 

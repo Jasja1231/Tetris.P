@@ -15,7 +15,6 @@ namespace Tetris.Algorithms
         private volatile Boolean work;
         private BackgroundWorker bgWorker;
         private Model m;
-        private Model model;
         //*********************************CLASS METHODS***************************************/
         public ThreadComputation(Model m)
         {
@@ -31,9 +30,6 @@ namespace Tetris.Algorithms
             work = true;
             Args args = new Args(m, K, lmt, iter);
             bgWorker.RunWorkerAsync(args);
-            /*List<Result> results = new List<Result>();
-            Thread worker = new Thread(() => { results = preformIteration(m, K, lmt, iter); });
-            worker.Start();*/
         }
         public void preformIteration(object sender, DoWorkEventArgs a)
         {
@@ -44,13 +40,19 @@ namespace Tetris.Algorithms
             while (work && args.iter > iteration)
             {
                 //start tasks with (LongRunning) work
-                int nonZeroElements = args.m.ShapeQuantities.Count(x => x != 0);
-                int numOfTasks = args.lmt.Count * nonZeroElements;
-                Task<Result>[] tasks = new Task<Result>[numOfTasks];
+                int sumNonZeroElements = 0;
+                for(int i = 0; i < args.lmt.Count; i++)
+                {
+                    MainTable mt = args.lmt.ElementAt(i);
+                    sumNonZeroElements += mt.Quantities.Count(x => x != 0);
+                }
+                //int numOfTasks = args.lmt.Count * sumNonZeroElements;
+                Task<Result>[] tasks = new Task<Result>[sumNonZeroElements];
                 FindGoodPlacement fpg = new FindGoodPlacement();
-                //string display = "Best K results\n";
+                string display = "Best K results\n";
 
                 //for each MAIN TABLE == from 0 until K
+                int taskIdx = 0;
                 for (int i = 0; i < args.lmt.Count; i++)
                 {
                     MainTable mt = args.lmt.ElementAt(i);
@@ -62,7 +64,7 @@ namespace Tetris.Algorithms
                         if (mt.Quantities[j] != 0)
                         {
                             int kurwa = j;
-                            tasks[(mt.Quantities.Length * i + j)] = Task<Result>.Factory.StartNew(() =>
+                            tasks[taskIdx++] = Task<Result>.Factory.StartNew(() =>
                             {
                                 return fpg.work(args.m, mt, kurwa);
                             }, TaskCreationOptions.LongRunning);
@@ -73,12 +75,12 @@ namespace Tetris.Algorithms
                 Task.WaitAll(tasks);
                 //Copy K best results into our list of best results(MAIN TABLES?)
                 bestResults = SelectionSort(tasks, args.K);
-                /*for (int i = 0; i < K; i++)
+                for (int i = 0; i < args.K; i++)
                 {
                     display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
                        bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
                 } 
-                MessageBox.Show(display); DEBUG */
+                MessageBox.Show(display);
                 iteration++;
             }
             args.m.RemainingShapes--;

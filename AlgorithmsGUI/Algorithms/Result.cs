@@ -35,13 +35,14 @@ namespace Tetris.Algorithms
 
         public int rotation { get;  set; }
         //*********************************CLASS METHODS***************************************/
-        public Result(int shapeIdx, int x, int y, int Kth, int score)
+        public Result(int shapeIdx, int x, int y, int Kth, int score, int rotation)
         {
             this.shapeIdx = shapeIdx;
             this.x = x;
             this.y = y;
             this.Kth = Kth;
             this.score = score;
+            this.rotation = rotation;
         }
 
         public static implicit operator Task<object>(Result v)

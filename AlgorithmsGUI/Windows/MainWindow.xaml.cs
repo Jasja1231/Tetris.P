@@ -28,6 +28,8 @@ namespace Tetris.Windows
 
         Controller controller;
 
+        private bool intiialized = false;
+
         //*********************************CLASS METHODS***************************************/
         public MainWindow(Model alg, Controller control)
         {
@@ -118,7 +120,9 @@ namespace Tetris.Windows
         private void FastForwardClick(object sender, RoutedEventArgs e)
         {
             this.model.K = KSetter.SelectedValue;
-            AddBitMaps();
+            if(!intiialized)
+                AddBitMaps();//DLATEGO
+            intiialized = true;
             this.controller.StartIteration(KSetter.SelectedValue);
         }
 
@@ -180,7 +184,10 @@ namespace Tetris.Windows
             {
                 //Check if computation is started for the first time
                 if (this.model.ComputationStarted == false)
+                {
                     this.controller.StartComputation(KSetter.SelectedValue);
+                    AddBitMaps();//DLATEGO
+                }
                 //Or it was paused and we need to resume it
                 else
                     this.controller.ResumePausedComputation();
