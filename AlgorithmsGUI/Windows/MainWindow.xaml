@@ -10,9 +10,9 @@
         </Grid.RowDefinitions>
         <Border Grid.Row="1" BorderThickness="0 2 0 0" BorderBrush="DarkGray" ></Border>
         <Button Width="40" Background="Orange"  Margin="4 2 0 2" HorizontalAlignment="Left" Click="PlayClick" Name="PlayButton" Content="Play"></Button>
-        <Button Width="40" Background="WhiteSmoke" Margin="50 2 0 2" HorizontalAlignment="Left">Stop</Button>
+        <Button Width="40" Background="WhiteSmoke" Margin="50,2,0,0" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Click="StopClick">Stop</Button>
         <Button Width="80" Background="WhiteSmoke" Margin="96 2 0 2" HorizontalAlignment="Left" Click="FastForwardClick">Fast-forward</Button>
-       
+
 
         <Controls:NumberSetter x:Name="FFStepSetter"  HorizontalAlignment="Left" Margin="180 0 0 0"></Controls:NumberSetter>
         <TextBlock HorizontalAlignment="Left" Margin="280 0 0 0" Width="10" VerticalAlignment="Center" Text="k:" Visibility="Visible"  ></TextBlock>
@@ -27,14 +27,14 @@
         </Menu>
         <Slider HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 70 0" Width="100" ValueChanged="ZoomChanged"/>
         <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Visible" >
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Name="WellsPanel">
-            <StackPanel.Resources>
-                <Style TargetType="Image">
-                    <Setter Property="Margin" Value="15 15 15 15"></Setter>
-                    <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor" />
-                    <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
-                </Style>
-            </StackPanel.Resources>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Name="WellsPanel">
+                <StackPanel.Resources>
+                    <Style TargetType="Image">
+                        <Setter Property="Margin" Value="15 15 15 15"></Setter>
+                        <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor" />
+                        <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+                    </Style>
+                </StackPanel.Resources>
                 <StackPanel.LayoutTransform>
                     <ScaleTransform ScaleX="1" ScaleY="1"
                             CenterX="0.5" CenterY="0.5" />

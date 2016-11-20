@@ -39,17 +39,12 @@ namespace Tetris.Controllers
 
         public void PauseComputation()
         {
-            this.model.StopComputation();
-        }
-    
-        public void ResumePausedComputation()
-        {
- 	        throw new NotImplementedException();
+            this.model.PauseComputation();
         }
 
-        internal void StartIteration(int p)
+        internal void StartIteration(int p, int iter)
         {
-            this.model.StartIteration(p);
+            this.model.StartIteration(p, iter);
         }
 
         public void sendListOfImageSources(List<System.Windows.Media.ImageSource> isl)
@@ -57,9 +52,15 @@ namespace Tetris.Controllers
             this.model.ReadListOfImageSources(isl);
         }
 
+
         public bool SerializeTo(string pathToSerializeInto)
         {
             return this.model.SerializeTo(pathToSerializeInto);
+        }
+
+        internal void StopComputation()
+        {
+            this.model.StopComputation();
         }
     }
 }

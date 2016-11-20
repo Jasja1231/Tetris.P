@@ -17,26 +17,29 @@ namespace Tetris.Algorithms
         public Result work(Model m, MainTable mt, int shapeIdx)
         {
             Result r = null;
-            int ctr = 0, control = 0;
-
-            for (int i = 0; i < mt.Height; i++)
+            int ctr = 0;
+            CheckDensity cd = new CheckDensity();
+            byte[,] tempTable = ResizeArray(mt.Table, mt.Width, (mt.Height + m.ShapesDatabase[shapeIdx].MaxHeight));
+            for (int i = 0; i < tempTable.GetLength(1); i++)
             {
-                for (int j = 0; j < mt.Width; j++)
+                for (int j = 0; j < tempTable.GetLength(0); j++)
                 {
-                    if (mt.Table[j, i] == 0)
+                    if (tempTable[j, i] == 0)
                     {
-
-                        for (int y = 0; y < m.ShapesDatabase[shapeIdx].MaxHeight; y++)
+                        if ((m.ShapesDatabase[shapeIdx].MaxHeight + j) <= (tempTable.GetLength(0)))
                         {
-                            for (int x = 0; x < m.ShapesDatabase[shapeIdx].MaxHeight; x++)
+                            for (int y = 0; y < m.ShapesDatabase[shapeIdx].MaxHeight; y++)
                             {
-                                if (mt.Table[j + x, i + y] != 0) ctr++;
+                                for (int x = 0; x < m.ShapesDatabase[shapeIdx].MaxHeight; x++)
+                                {
+                                        if (tempTable[j + x, i + y] != 0) ctr++;
+                                }
                             }
+                            if (ctr == 0)
+                                return new Result(shapeIdx, j, i, mt.Kth, Convert.ToInt32((100 * cd.checkDensity(mt))), bestRotation(shapeIdx, m));
+                            else
+                                ctr = 0;
                         }
-                        if (ctr == 0)
-                            return new Result(shapeIdx, j, i, mt.Kth, 13, bestRotation(shapeIdx, m));
-                        else
-                            ctr = 0;
                     }
                 }
             }
@@ -65,6 +68,16 @@ namespace Tetris.Algorithms
                 }
             }
             return rot + 2;
+        }
+        private T[,] ResizeArray<T>(T[,] original, int rows, int cols)
+        {
+            var newArray = new T[rows, cols];
+            int minRows = Math.Min(rows, original.GetLength(0));
+            int minCols = Math.Min(cols, original.GetLength(1));
+            for (int i = 0; i < minRows; i++)
+                for (int j = 0; j < minCols; j++)
+                    newArray[i, j] = original[i, j];
+            return newArray;
         }
     }
 }

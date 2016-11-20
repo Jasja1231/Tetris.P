@@ -14,7 +14,6 @@ namespace Tetris.Algorithms
         /// Index K of Main Table.
         /// </summary>
         public int[] Quantities;
-        private MainTable mainTable;
 
         public int Kth { get;  set; }
         /// <summary>
@@ -47,12 +46,12 @@ namespace Tetris.Algorithms
             if (newHeight > this.Height)
             {
                 //create bigger array
-                mt.Table = m.ResizeArray(this.Table, Width, newHeight);
-                mt.Height = newHeight;
+                mt.Table = ResizeArray(this.Table, Width, newHeight);
+                mt.Height = newHeight*12;
             }
             else
             {
-                mt.Table = m.ResizeArray(this.Table, Width, Height);
+                mt.Table = ResizeArray(this.Table, Width, Height);
                 mt.Height = this.Height;
             }
             //decrease used shape quantity
@@ -76,6 +75,16 @@ namespace Tetris.Algorithms
                     mt.Table[j, i] = table[j2, i2] == 1 ?  (byte)1: (byte)0;
                 }
             }
+        }
+        public T[,] ResizeArray<T>(T[,] original, int x, int y)
+        {
+            T[,] newArray = new T[x, y];
+            int minX = Math.Min(original.GetLength(0), newArray.GetLength(0));
+            int minY = Math.Min(original.GetLength(1), newArray.GetLength(1));
+
+            for (int i = 0; i < minY; ++i)
+                Array.Copy(original, i * original.GetLength(0), newArray, i * newArray.GetLength(0), minX);
+            return newArray;
         }
     }
 }

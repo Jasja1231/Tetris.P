@@ -13,6 +13,10 @@ namespace Tetris.Algorithms
         {
             threadComp = new ThreadComputation(this);
         }
+
+        private volatile bool playing;
+        private int iterLeft;
+
         /// <summary>
         /// Class for preforming iterations and collecting results without blocking main thread
         /// </summary>
@@ -44,7 +48,6 @@ namespace Tetris.Algorithms
 
         private List<MainTable> MainTablesList = new List<MainTable>();
         public List<Result> BestResults = new List<Result>(10);/////////////////////////////////////////////////////
-
 
         /// <summary>
         /// Adds a tile to a list of shapes
@@ -121,6 +124,13 @@ namespace Tetris.Algorithms
 
         public void AddBestResults(List<Result> bestResults)
         {
+            //check if reset was pressed
+            if (ComputationStarted == false)
+            {
+                MainTablesList.Clear();
+                return;
+            }
+            
             this.BestResults = bestResults;
             var mtlTmp = new List<MainTable>(this.K);
             //update maintables
@@ -130,6 +140,17 @@ namespace Tetris.Algorithms
                 mtlTmp.Add(MainTablesList.ElementAt(r.Kth).UpdateWithResult(r, this));
             }
             this.MainTablesList = mtlTmp;
+            //if we are "playing" then preform next iterations, or we still have some iterations to do
+            if (playing && RemainingShapes > 0)
+            {
+                threadComp.preformIteration(this, this.k, MainTablesList);
+            }
+            else if (iterLeft > 1)
+            {
+                iterLeft--;
+                threadComp.preformIteration(this, this.k, MainTablesList);
+            }
+
             this.Notify(1);
             //serialize
             Serializer.Serialize(this.MainTablesList, ImageSources);
@@ -161,6 +182,26 @@ namespace Tetris.Algorithms
 
         }
 
+        private void InitializeMainTableList()
+        {
+            //Create k MAIN tables if they are empty
+            if (MainTablesList.Count == 0)
+            {
+                for (int i = 0; i < k; i++)
+                {
+                    MainTable mainTable = new MainTable(i);
+                    mainTable.Width = this.TableWidth;
+                    //In the beginning the height of our tables is equal to the height of the talles Shapes (amount ShapesInfoListWrapper)
+                    mainTable.Height = this.MaxShapeHeight;
+                    mainTable.Table = new byte[mainTable.Width, mainTable.Height];
+                    mainTable.Quantities = (int[])this.ShapeQuantities.Clone();
+
+                    //Add it to the list of a Main Tables
+                    this.MainTablesList.Add(mainTable);
+                }
+            }
+        }
+
         public void ApplyShapes(List<Controls.TileControl> list)
         {
             int shapecount = 0;
@@ -188,32 +229,14 @@ namespace Tetris.Algorithms
             }
         }
 
-
-        internal void StartIteration(int p)
+        internal void StartIteration(int p, int iter)
         {
             this.K = p;
+            this.iterLeft = iter;
             this.MaxShapeHeight = this.GetMaxShapeHeight();
-
-            //Create k MAIN tables if they are empty
-            if (MainTablesList.Count == 0)
-            {
-                for (int i = 0; i < k; i++)
-                {
-                    MainTable mainTable = new MainTable(i);
-                    mainTable.Width = this.TableWidth;
-                    //In the beginning the height of our tables is equal to the height of the talles Shapes (amount ShapesInfoListWrapper)
-                    mainTable.Height = this.MaxShapeHeight;
-                    mainTable.Table = new byte[mainTable.Width, mainTable.Height];
-                    mainTable.Quantities = (int[])this.ShapeQuantities.Clone();
-
-                    //Add it to the list of a Main Tables
-                    this.MainTablesList.Add(mainTable);
-                }
-            }
-
-
-
-            threadComp.getNextIteration(this, p, MainTablesList, 1);
+            this.ComputationStarted = true;
+            InitializeMainTableList();
+            threadComp.preformIteration(this, p, MainTablesList);
         }
 
         /// <summary>
@@ -225,29 +248,17 @@ namespace Tetris.Algorithms
         internal void StartComputation(int k)
         {
             this.k = k;
+            playing = true;
             this.MaxShapeHeight = this.GetMaxShapeHeight();
-            this.MainTablesList.Clear();
-
-            //Create k MAIN tables
-            for (int i = 0; i < k; i++)
-            {
-                MainTable mainTable = new MainTable(i);
-                mainTable.Width = this.TableWidth;
-                //In the beginning the height of our tables is equal to the height of the talles Shapes (amount ShapesInfoListWrapper)
-                mainTable.Height = this.MaxShapeHeight;
-                mainTable.Table = new byte[mainTable.Width, mainTable.Height];
-                mainTable.Quantities = (int[])this.ShapeQuantities.Clone();
-
-                //Add it to the list of a Main Tables
-                this.MainTablesList.Add(mainTable);
-            }
+            this.ComputationStarted = true;
+            InitializeMainTableList();
             //Last argument to getNextIteration is number of iterations to preform
-            threadComp.getNextIteration(this, k, MainTablesList, RemainingShapes);
+            threadComp.preformIteration(this, k, MainTablesList);
         }
 
-        internal void StopComputation()
+        internal void PauseComputation()
         {
-            threadComp.pauseComputation();
+            playing = false;
         }
 
         private int GetMaxShapeHeight()
@@ -260,7 +271,6 @@ namespace Tetris.Algorithms
             }
             return maxValue;
         }
-
 
         internal void ReadListOfImageSources(List<ImageSource> isl)
         {
@@ -279,6 +289,7 @@ namespace Tetris.Algorithms
         }
 
 
+
         public bool SerializeTo(string pathToSerializeInto)
         {
             try
@@ -291,6 +302,11 @@ namespace Tetris.Algorithms
             }
 
             return true;
+	} //???????????????
+
+        public void StopComputation()
+        {
+            this.ComputationStarted = false;
         }
     }
 

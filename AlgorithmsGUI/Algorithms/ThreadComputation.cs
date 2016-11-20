@@ -12,33 +12,31 @@ namespace Tetris.Algorithms
     class ThreadComputation
     {
         //*********************************CLASS FIELDS****************************************/
-        private volatile Boolean work;
-        private BackgroundWorker bgWorker;
         private Model m;
+        private Args args;
         //*********************************CLASS METHODS***************************************/
         public ThreadComputation(Model m)
         {
-            bgWorker = new BackgroundWorker();
-            bgWorker.DoWork += new DoWorkEventHandler(preformIteration);
-            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(passResult);
             this.m = m;
         }
 
-
-        public void getNextIteration(Model m, int K, List<MainTable> lmt, int iter)
+        public void preformIteration( Model m, int K, List<MainTable> lmt)
         {
-            work = true;
-            Args args = new Args(m, K, lmt, iter);
+            //TODO: disable controls
+            args = new Args(m, K, lmt);
+            BackgroundWorker bgWorker = new BackgroundWorker();
+            bgWorker.DoWork += new DoWorkEventHandler(preformIteration);
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(passResult);
             bgWorker.RunWorkerAsync(args);
         }
+
         public void preformIteration(object sender, DoWorkEventArgs a)
         {
             Args args = (Args)a.Argument;
             List<Result> results = new List<Result>();
             int iteration = 0;
             List<Result> bestResults = new List<Result>(args.K);
-            while (work && args.iter > iteration)
-            {
+            
                 //start tasks with (LongRunning) work
                 int sumNonZeroElements = 0;
                 for(int i = 0; i < args.lmt.Count; i++)
@@ -49,7 +47,7 @@ namespace Tetris.Algorithms
                 //int numOfTasks = args.lmt.Count * sumNonZeroElements;
                 Task<Result>[] tasks = new Task<Result>[sumNonZeroElements];
                 FindGoodPlacement fpg = new FindGoodPlacement();
-                string display = "Best K results\n";
+                //string display = "Best K results\n";
 
                 //for each MAIN TABLE == from 0 until K
                 int taskIdx = 0;
@@ -75,14 +73,14 @@ namespace Tetris.Algorithms
                 Task.WaitAll(tasks);
                 //Copy K best results into our list of best results(MAIN TABLES?)
                 bestResults = SelectionSort(tasks, args.K);
-                for (int i = 0; i < args.K; i++)
-                {
-                    display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
-                       bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
-                } 
-               //MessageBox.Show(display);
+                //for (int i = 0; i < args.K; i++)
+                //{
+                //    display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
+                //       bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
+                //} 
+                //MessageBox.Show(display);
                 iteration++;
-            }
+            
             args.m.RemainingShapes--;
             a.Result = bestResults;
         }
@@ -138,12 +136,7 @@ namespace Tetris.Algorithms
                 List<Result> r = (List<Result>)e.Result;
                 m.AddBestResults(r);
             }
-            // Enable controls?
-        }
-
-        public void pauseComputation()
-        {
-            work = false;
+            // TODO: Enable controls?
         }
 
         private class Args
@@ -151,13 +144,11 @@ namespace Tetris.Algorithms
             public Model m;
             public int K;
             public List<MainTable> lmt;
-            public int iter;
-            public Args(Model m, int K, List<MainTable> lmt, int iter)
+            public Args(Model m, int K, List<MainTable> lmt)
             {
                 this.m = m;
                 this.K = K;
                 this.lmt = lmt;
-                this.iter = iter;
             }
         }
     }
