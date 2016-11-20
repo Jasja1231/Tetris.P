@@ -26,7 +26,7 @@ namespace Tetris.Algorithms
                 {
                     if (tempTable[j, i] == 0)
                     {
-                        if ((m.ShapesDatabase[shapeIdx].MaxHeight + j) <= (tempTable.GetLength(0) - 1))
+                        if ((m.ShapesDatabase[shapeIdx].MaxHeight + j) <= (tempTable.GetLength(0)))
                         {
                             for (int y = 0; y < m.ShapesDatabase[shapeIdx].MaxHeight; y++)
                             {
