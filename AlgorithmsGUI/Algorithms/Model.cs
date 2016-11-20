@@ -9,13 +9,14 @@ namespace Tetris.Algorithms
 {
     public class Model : Tetris.ObserverDP.Subject
     {
+        public Model()
+        {
+            threadComp = new ThreadComputation(this);
+        }
         /// <summary>
         /// Class for preforming iterations and collecting results without blocking main thread
         /// </summary>
         private ThreadComputation threadComp; 
-        public Model() {
-            threadComp = new ThreadComputation(this);
-        }
 
         /// <summary>
         /// Last displayed image sources.
