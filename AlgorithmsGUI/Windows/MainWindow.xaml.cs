@@ -145,6 +145,33 @@ namespace Tetris.Windows
 
 
         /// <summary>
+        /// Serialize from clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SerializeInto(object sender, RoutedEventArgs e)
+        {
+            var theDialog = new System.Windows.Forms.FolderBrowserDialog();
+            System.Windows.Forms.DialogResult result = theDialog.ShowDialog();
+
+            //OpenFileDialog theDialog = new OpenFileDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                //ask controller to serialize from given file
+                bool loaded = this.controller.SerializeTo(theDialog.SelectedPath);
+
+                if (loaded == false)
+                {
+                    MessageBox.Show("Error occured while serializing into the selected directory.");
+                }
+                else
+                {
+                  
+                }
+            }
+        }
+
+        /// <summary>
         ///On click handler for "load file" button that asks controller to load from selected file.
         ///Creates and opens TileBrowser
         /// </summary>
@@ -152,7 +179,6 @@ namespace Tetris.Windows
         /// <param name="e"></param>
         private void LoadFile(object sender, RoutedEventArgs e)
         {
-            //List<byte[,]> Tiles;
             OpenFileDialog theDialog = new OpenFileDialog();
             theDialog.Title = "Open file";
             if (theDialog.ShowDialog() == true)
@@ -176,6 +202,7 @@ namespace Tetris.Windows
             
 
         }
+
 
         //on click handler for "play" button
         private void PlayClick(object sender, RoutedEventArgs e)
@@ -224,9 +251,7 @@ namespace Tetris.Windows
                         isl.Add(im.Source);
                     }
                 }
-              
-                //send model list of image sources 
-                this.controller.sendListOfImageSources(isl);
+
             var newimages = ImageProcessor.UpdateImages(model, isl);
                 
                 int i = 0;
@@ -239,6 +264,20 @@ namespace Tetris.Windows
                         i++;
                     }
                 }
+
+                //send new bitmaps to Model for serialzation
+                isl.Clear();
+                foreach (UIElement element in this.WellsPanel.Children)
+                {
+                    if (element.GetType() == typeof(System.Windows.Controls.Image))
+                    {
+                        Image im = (Image)element;
+                        isl.Add(im.Source);
+                    }
+                }
+
+                //send model list of image sources 
+                this.controller.sendListOfImageSources(isl);
             }
         }
 
@@ -246,6 +285,9 @@ namespace Tetris.Windows
         {
 
         }
+
+        
+
 
       /*  private void UpdateImageTest(object sender, RoutedEventArgs e)
         {

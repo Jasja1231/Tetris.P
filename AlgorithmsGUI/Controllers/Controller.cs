@@ -56,5 +56,10 @@ namespace Tetris.Controllers
         {
             this.model.ReadListOfImageSources(isl);
         }
+
+        public bool SerializeTo(string pathToSerializeInto)
+        {
+            return this.model.SerializeTo(pathToSerializeInto);
+        }
     }
 }

@@ -20,7 +20,7 @@
         <Menu Width="auto" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 20 0" TextBlock.TextAlignment="Center">
             <MenuItem Header="Tools" VerticalAlignment="Center">
                 <MenuItem Header="Load File" Click="LoadFile"></MenuItem>
-                <MenuItem Header="Serialize"></MenuItem>
+                <MenuItem Header="Serialize" Click="SerializeInto"></MenuItem>
                 <MenuItem Header="Deserialize"></MenuItem>
                 <MenuItem Header="Show Tile Browser" Click="ShowTileBrowser"></MenuItem>
             </MenuItem>

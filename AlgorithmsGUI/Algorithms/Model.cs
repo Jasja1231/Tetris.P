@@ -16,7 +16,7 @@ namespace Tetris.Algorithms
         /// <summary>
         /// Class for preforming iterations and collecting results without blocking main thread
         /// </summary>
-        private ThreadComputation threadComp; 
+        private ThreadComputation threadComp;
 
         /// <summary>
         /// Last displayed image sources.
@@ -39,18 +39,19 @@ namespace Tetris.Algorithms
             private set { shapes = value; }
         }
 
-        public Shape [] ShapesDatabase { get; private set; }
-        public int[] ShapeQuantities {get; private set;}
+        public Shape[] ShapesDatabase { get; private set; }
+        public int[] ShapeQuantities { get; private set; }
 
         private List<MainTable> MainTablesList = new List<MainTable>();
         public List<Result> BestResults = new List<Result>(10);/////////////////////////////////////////////////////
-   
-       
+
+
         /// <summary>
         /// Adds a tile to a list of shapes
         /// </summary>
         /// <param name="s">Shape to be added</param>
-        public void AddShapeToList(Shape s){
+        public void AddShapeToList(Shape s)
+        {
             this.shapes.Add(s);
         }
 
@@ -86,11 +87,11 @@ namespace Tetris.Algorithms
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public bool IsTilePlacementValid (byte[,]Map, byte[,]Tile, int x, int y)
+        public bool IsTilePlacementValid(byte[,] Map, byte[,] Tile, int x, int y)
         {
-            for (int i = x, i2 = 0; i <= x + Tile.GetLength(0) -1; i++, i2++)
+            for (int i = x, i2 = 0; i <= x + Tile.GetLength(0) - 1; i++, i2++)
             {
-                for (int j = Map.GetLength(1) - 1 - y, j2 = Tile.GetLength(1) -1; j >= Map.GetLength(1) - 1 - y - Tile.GetLength(1) -1; j--, j2--)
+                for (int j = Map.GetLength(1) - 1 - y, j2 = Tile.GetLength(1) - 1; j >= Map.GetLength(1) - 1 - y - Tile.GetLength(1) - 1; j--, j2--)
                 {
                     if (Map[i, j] + Tile[i2, j2] > 1)
                         return false;
@@ -103,13 +104,15 @@ namespace Tetris.Algorithms
         {
             bool loaded = true; //status of loading from file
 
-            try {
-               string[] content = System.IO.File.ReadAllLines(p);
-               var Tiles = FileReader.GetBricksFromFile(content);
-               ConstructShapes(Tiles.Item1);
-               this.SetMainTableWidth(Tiles.Item2);
+            try
+            {
+                string[] content = System.IO.File.ReadAllLines(p);
+                var Tiles = FileReader.GetBricksFromFile(content);
+                ConstructShapes(Tiles.Item1);
+                this.SetMainTableWidth(Tiles.Item2);
             }
-            catch {
+            catch
+            {
                 loaded = false;
             }
 
@@ -128,7 +131,7 @@ namespace Tetris.Algorithms
             }
             this.MainTablesList = mtlTmp;
             this.Notify(1);
-             //serialize
+            //serialize
             Serializer.Serialize(this.MainTablesList, ImageSources);
         }
 
@@ -153,9 +156,9 @@ namespace Tetris.Algorithms
                 int b = random.Next(100, 220);
 
                 //create and add colors for shapes, add shape to list.
-                AllLoadedShapes.Add(new Shape(tile,System.Drawing.Color.FromArgb(0,r,g,b),System.Drawing.Color.FromArgb(0,r+10,g+10,b+10)));
+                AllLoadedShapes.Add(new Shape(tile, System.Drawing.Color.FromArgb(0, r, g, b), System.Drawing.Color.FromArgb(0, r + 10, g + 10, b + 10)));
             }
-            
+
         }
 
         public void ApplyShapes(List<Controls.TileControl> list)
@@ -163,7 +166,7 @@ namespace Tetris.Algorithms
             int shapecount = 0;
             this.RemainingShapes = 0;
 
-            foreach(Controls.TileControl control in list)
+            foreach (Controls.TileControl control in list)
             {
                 if (control.NumTiles > 0)
                 {
@@ -174,7 +177,7 @@ namespace Tetris.Algorithms
             this.ShapesDatabase = new Shape[shapecount];
             this.ShapeQuantities = new int[shapecount];
 
-            for (int i=0,k=0;i<list.Count;i++)
+            for (int i = 0, k = 0; i < list.Count; i++)
             {
                 if (list.ElementAt(i).NumTiles > 0)
                 {
@@ -208,7 +211,7 @@ namespace Tetris.Algorithms
                 }
             }
 
-         
+
 
             threadComp.getNextIteration(this, p, MainTablesList, 1);
         }
@@ -249,8 +252,9 @@ namespace Tetris.Algorithms
 
         private int GetMaxShapeHeight()
         {
-            int maxValue = 0; 
-            for (int i = 0; i < this.ShapesDatabase.Length; i++) {
+            int maxValue = 0;
+            for (int i = 0; i < this.ShapesDatabase.Length; i++)
+            {
                 if (ShapesDatabase[i].MaxHeight > maxValue)
                     maxValue = ShapesDatabase[i].MaxHeight;
             }
@@ -274,5 +278,20 @@ namespace Tetris.Algorithms
             return newArray;
         }
 
+
+        public bool SerializeTo(string pathToSerializeInto)
+        {
+            try
+            {
+                Serializer.Serialize(pathToSerializeInto, this.MainTablesList, this.BestResults, this.ShapesDatabase);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
+
 }
