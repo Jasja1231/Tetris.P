@@ -51,5 +51,10 @@ namespace Tetris.Controllers
         {
             this.model.StartIteration(p);
         }
+
+        public void sendListOfImageSources(List<System.Windows.Media.ImageSource> isl)
+        {
+            this.model.ReadListOfImageSources(isl);
+        }
     }
 }

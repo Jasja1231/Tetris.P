@@ -17,8 +17,10 @@ namespace Tetris.Algorithms
             threadComp = new ThreadComputation(this);
         }
 
-        
-
+        /// <summary>
+        /// Last displayed image sources.
+        /// </summary>
+        public List<ImageSource> ImageSources { get; set; }
 
         /// <summary>
         /// number of all shapes left to place (NOT unique shapes)
@@ -117,6 +119,8 @@ namespace Tetris.Algorithms
         {
             this.BestResults = bestResults;
             this.Notify(1);
+             //serialize
+            Serializer.Serialize(this.MainTablesList, ImageSources);
         }
 
         /// <summary>
@@ -194,6 +198,9 @@ namespace Tetris.Algorithms
                     this.MainTablesList.Add(mainTable);
                 }
             }
+
+         
+
             threadComp.getNextIteration(this, p, MainTablesList, 1);
         }
 
@@ -240,5 +247,12 @@ namespace Tetris.Algorithms
             return maxValue;
         }
 
+
+        internal void ReadListOfImageSources(List<ImageSource> isl)
+        {
+            this.ImageSources = isl;
+        }
+
+       
     }
 }

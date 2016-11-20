@@ -218,6 +218,8 @@ namespace Tetris.Windows
                     }
                 }
               
+                //send model list of image sources 
+                this.controller.sendListOfImageSources(isl);
             var newimages = ImageProcessor.UpdateImages(model, isl);
                 
                 int i = 0;
@@ -231,6 +233,11 @@ namespace Tetris.Windows
                     }
                 }
             }
+        }
+
+        private void KSetter_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
 
       /*  private void UpdateImageTest(object sender, RoutedEventArgs e)
