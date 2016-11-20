@@ -47,7 +47,7 @@ namespace Tetris.Algorithms
             {
                 //create bigger array
                 mt.Table = ResizeArray(this.Table, Width, newHeight);
-                mt.Height = newHeight*12;
+                mt.Height = newHeight*40;
             }
             else
             {
