@@ -21,7 +21,7 @@
             <MenuItem Header="Tools" VerticalAlignment="Center">
                 <MenuItem Header="Load File" Click="LoadFile"></MenuItem>
                 <MenuItem Header="Serialize" Click="SerializeInto"></MenuItem>
-                <MenuItem Header="Deserialize"></MenuItem>
+                <MenuItem Header="Deserialize" Click="DeserializeFrom"></MenuItem>
                 <MenuItem Header="Show Tile Browser" Click="ShowTileBrowser"></MenuItem>
             </MenuItem>
         </Menu>

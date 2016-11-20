@@ -153,7 +153,7 @@ namespace Tetris.Algorithms
 
             this.Notify(1);
             //serialize
-            Serializer.Serialize(this.MainTablesList, ImageSources);
+            Serializer.Serialize(this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
         }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace Tetris.Algorithms
         {
             try
             {
-                Serializer.Serialize(pathToSerializeInto, this.MainTablesList, this.BestResults, this.ShapesDatabase);
+                Serializer.Serialize(pathToSerializeInto,this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
             }
             catch
             {
@@ -302,12 +302,33 @@ namespace Tetris.Algorithms
             }
 
             return true;
-	} //???????????????
+	   }
+
+        public bool DeserializeFrom(string dirPath)
+        {
+           // try
+            {
+                Serializer.Deserialize(dirPath, this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
+                this.Notify(1);
+            }
+           // catch
+            {
+                //return false;
+            }
+
+            return true;
+        }
+
 
         public void StopComputation()
         {
             this.ComputationStarted = false;
         }
+
+
+
+
+       
     }
 
 }

@@ -62,5 +62,10 @@ namespace Tetris.Controllers
         {
             this.model.StopComputation();
         }
+
+        public bool DeserializeFrom(string dirPath)
+        {
+            return this.model.DeserializeFrom(dirPath);
+        }
     }
 }

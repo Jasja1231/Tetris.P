@@ -70,7 +70,7 @@ namespace Tetris.Algorithms
                  }
                  else if (obj is string)
                  {
-                     filepath = filepath + (string)obj + Path.PathSeparator;
+                     filepath = filepath + (string)obj + Path.DirectorySeparatorChar;
                  }
              }
          }
@@ -90,14 +90,15 @@ namespace Tetris.Algorithms
              {
                  if (o[i] is string)
                  {
-                     filepath = filepath + (string)o[i] + Path.PathSeparator;
+                     filepath = filepath + (string)o[i] + Path.DirectorySeparatorChar;
                  }
                  else if (o[i] is List<MainTable>)
                  {
                      //Read file content to deserialize into list of main tables 
                      
                      string fileContent = System.IO.File.ReadAllText(filepath + "mainTablesListJSON");
-                     o[i] = (List<MainTable>)JsonConvert.DeserializeObject(fileContent);
+                     var cast = (List<MainTable>)JsonConvert.DeserializeObject(fileContent);
+                     o[i] = cast;
                      List<MainTable> mt = (List<MainTable>)o[i];
                      bitmapCount = mt.Count();
 

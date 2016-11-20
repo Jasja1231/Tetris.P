@@ -171,6 +171,28 @@ namespace Tetris.Windows
             }
         }
 
+        private void DeserializeFrom(object sender, RoutedEventArgs e)
+        {
+            var theDialog = new System.Windows.Forms.FolderBrowserDialog();
+            System.Windows.Forms.DialogResult result = theDialog.ShowDialog();
+
+            //OpenFileDialog theDialog = new OpenFileDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                //ask controller to serialize from given file
+                bool loaded = this.controller.DeserializeFrom(theDialog.SelectedPath);
+
+                if (loaded == false)
+                {
+                    MessageBox.Show("Error occured while deserializing from the selected directory.");
+                }
+                else
+                {
+
+                }
+            }
+        }
+
         /// <summary>
         ///On click handler for "load file" button that asks controller to load from selected file.
         ///Creates and opens TileBrowser
@@ -316,5 +338,7 @@ namespace Tetris.Windows
             AddBitMaps();
             this.controller.StopComputation();
         }
+
+       
     }
 }
