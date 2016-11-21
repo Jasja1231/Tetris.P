@@ -169,9 +169,10 @@ namespace Tetris.Algorithms
                     Console.Out.WriteLine(" ");
                 }
                 Console.Out.WriteLine("===========================================");
-
-
             }
+            Console.Out.WriteLine("===========================================");
+            Console.Out.WriteLine("NEXT ITER");
+            Console.Out.WriteLine("===========================================");
             //serialize
             Serializer.Serialize(this,this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
         }

@@ -17,7 +17,7 @@ namespace Tetris.Algorithms
                 {
                     for (int rotation = 0; rotation < shape.rotations.Count; rotation++)
                     {
-                        if (x+shape.rotations[rotation].GetLength(0) < mt.Table.GetLength(0) 
+                        if (x+shape.rotations[rotation].GetLength(0) <= mt.Table.GetLength(0) 
                             && overlap2(mt.Table, shape.rotations[rotation], x, y) >= 0 )
                         {
                             //no overlap
@@ -48,9 +48,17 @@ namespace Tetris.Algorithms
             {
                 for (int j = x, j2 = 0; j2 < shape.GetLength(0); j++, j2++)
                 {
-                    //table[j, i] = table[j2, i2] == 1 ? (byte)1 : (byte)0;
-                    if (table[j, i] == (byte) 1 && shape[j2, i2] == (byte) 1)
-                        return -1;
+                    //y go out of range ?
+                    if (i < table.GetLength(1))
+                    {
+                        if (table[j, i] == (byte) 1 && shape[j2, i2] == (byte) 1)
+                            return -1;
+                    }
+                    else
+                    {
+                        // went out or range into empty part of table
+                    }
+
                 }
             }
             return 0;
@@ -96,6 +104,7 @@ namespace Tetris.Algorithms
             }
             return r;
         }
+
         public int bestRotation(int shapeIdx, Model m)
         {
             int rot = 0;
@@ -120,16 +129,18 @@ namespace Tetris.Algorithms
             }
             return rot + 2;
         }
-        private T[,] ResizeArray<T>(T[,] original, int rows, int cols)
+        private T[,] ResizeArray<T>(T[,] original, int x, int y)
         {
-            var newArray = new T[rows, cols];
-            int minRows = Math.Min(rows, original.GetLength(0));
-            int minCols = Math.Min(cols, original.GetLength(1));
-            for (int i = 0; i < minRows; i++)
-                for (int j = 0; j < minCols; j++)
+            var newArray = new T[x, y];
+            int minX = Math.Min(x, original.GetLength(0));
+            int minY = Math.Min(y, original.GetLength(1));
+            for (int i = 0; i < minX; i++)
+                for (int j = 0; j < minY; j++)
                     newArray[i, j] = original[i, j];
             return newArray;
         }
+
+
         private Point overlap(byte[,] main, byte[,] shape, int x, int y)
         {
             Point temp = new Point(x, y);

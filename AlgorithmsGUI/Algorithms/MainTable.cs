@@ -41,17 +41,17 @@ namespace Tetris.Algorithms
         {
             MainTable mt = new MainTable(r.Kth);
             mt.Quantities = new int[this.Quantities.Length];
-            mt.Width = this.Width;
+            mt.Width = this.Table.GetLength(0);
             int newHeight = r.y + m.ShapesDatabase[r.shapeIdx].rotations.ElementAt(r.rotation).GetLength(1);
             if (newHeight > this.Height)
             {
                 //create bigger array
-                mt.Table = ResizeArray(this.Table, Width, newHeight);
+                mt.Table = ResizeArray(this.Table, mt.Width, newHeight);
                 mt.Height = newHeight;
             }
             else
             {
-                mt.Table = ResizeArray(this.Table, Width, Height);
+                mt.Table = ResizeArray(this.Table, mt.Width, Height);
                 mt.Height = this.Height;
             }
             //decrease used shape quantity
@@ -92,14 +92,14 @@ namespace Tetris.Algorithms
                 }
             }
         }
-        public T[,] ResizeArray<T>(T[,] original, int x, int y)
+        private T[,] ResizeArray<T>(T[,] original, int rows, int cols)
         {
-            T[,] newArray = new T[x, y];
-            int minX = Math.Min(original.GetLength(0), newArray.GetLength(0));
-            int minY = Math.Min(original.GetLength(1), newArray.GetLength(1));
-
-            for (int i = 0; i < minY; ++i)
-                Array.Copy(original, i * original.GetLength(0), newArray, i * newArray.GetLength(0), minX);
+            var newArray = new T[rows, cols];
+            int minRows = original.GetLength(0);
+            int minCols = original.GetLength(1);
+            for (int i = 0; i < minCols; i++)
+                for (int j = 0; j < minRows ; j++)
+                    newArray[j, i] = original[j, i];
             return newArray;
         }
     }
