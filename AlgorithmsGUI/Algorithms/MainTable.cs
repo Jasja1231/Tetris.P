@@ -72,7 +72,7 @@ namespace Tetris.Algorithms
             {
                 for (int j = r.x, j2 = 0; j2 < table.GetLength(0); j++, j2++)
                 {
-                    mt.Table[j, i] = table[j2, i2] == 1 ?  (byte)1: (byte)0;
+                    mt.Table[j, i] = table[j2, i2] == 1 ?  (byte)1: mt.Table[j,i];
                 }
             }
         }

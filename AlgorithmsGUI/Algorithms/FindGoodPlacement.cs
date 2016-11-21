@@ -17,54 +17,36 @@ namespace Tetris.Algorithms
 		}
 		public Result work(Model m, MainTable mt, int shapeIdx)
 		{
-			Result r = null;
-			int ctr = 0;
-			int tresh = 0;
-			Point p = new Point();
 			CheckDensity cd = new CheckDensity();
-			byte[,] tempTable = ResizeArray(mt.Table, mt.Width, (mt.Height + m.ShapesDatabase[shapeIdx].MaxHeight));
-			for (int i = 0; i < tempTable.GetLength(1) - m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(1); i++)
-			{
-				for (int j = 0; j < tempTable.GetLength(0) - m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(0); j++)
-				{
-					//if (tempTable[j, i] == 0)
-					//{
-					//    if ((m.ShapesDatabase[shapeIdx].MaxHeight + j) < (tempTable.GetLength(0)))
-					//    {
-					//        for (int y = 0; y < m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(1); y++)
-					//        {
-					//            for (int x = 0; x < m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(0); x++)
-					//            {
-					//                if (tempTable[j + x, i + y] + m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)][x,y] > 1) ctr++;
-					//            }
-					//        }
-					//        if (ctr == 0)
-					//        {
-					//            //p = overlap(tempTable, m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)], j, i);
-					//            return new Result(shapeIdx, Convert.ToInt32(p.X), Convert.ToInt32(p.Y), mt.Kth, Convert.ToInt32((100 * cd.checkDensity(mt))), bestRotation(shapeIdx, m));
-					//        }
-					//        ctr = 0;
-					//    }
-					//}
-					if (!overlap(tempTable, m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)], j, i))
-					{
-						for ( int y = 0; y < ( m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(1)); y++)
-						{
-							for (int x = 0; x < ( m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(0)); x++)
-							{
-								tempTable[j + x, i + y] = m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)][x, y];
-							}
-
-						}
-						return new Result(shapeIdx, j, i, mt.Kth, Convert.ToInt32((100 * cd.checkDensity(tempTable))), bestRotation(shapeIdx, m));
-					}
-				}
-				//if(i > 2)
-				//{
-				//    //tresh++; ;
-				//}
-			}
-			return r;
+			byte[,] tempTable = ResizeArray(mt.Table, mt.Width, mt.Height);
+            while (true)
+            {
+            for (int rot = 0; rot < 4; rot++)
+                {
+                    for (int i = 0; i < tempTable.GetLength(1); i++)
+                    {
+                        if(i == tempTable.GetLength(1)- m.ShapesDatabase[shapeIdx].rotations[rot].GetLength(1))
+                        {
+                            tempTable = ResizeArray(mt.Table, mt.Width, (mt.Height + m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(1)));
+                        }
+                        for (int j = 0; j < tempTable.GetLength(0) - m.ShapesDatabase[shapeIdx].rotations[rot].GetLength(0); j++)
+                        {
+                            if (!overlap(tempTable, m.ShapesDatabase[shapeIdx].rotations[rot], j, i))
+                            {
+                                for (int y = 0; y < (m.ShapesDatabase[shapeIdx].rotations[rot].GetLength(1)); y++)
+                                {
+                                    for (int x = 0; x < (m.ShapesDatabase[shapeIdx].rotations[rot].GetLength(0)); x++)
+                                    {
+                                        tempTable[j + x, i + y] = m.ShapesDatabase[shapeIdx].rotations[rot][x, y];
+                                    }
+                                }
+                                return new Result(shapeIdx, j, i, mt.Kth, Convert.ToInt32((100 * cd.checkDensity(tempTable))), rot);
+                            }
+                        }
+                    }
+                }
+                tempTable = ResizeArray(mt.Table, mt.Width, (mt.Height + m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(1)));
+            }
 		}
 		public int bestRotation(int shapeIdx, Model m)
 		{
