@@ -8,13 +8,13 @@ namespace Tetris.Algorithms
 {
     class CheckDensity
     {
-        public double checkDensity(MainTable Table)
+        public double checkDensity(byte[,] Table)
         {
             int ctr = 0;
-            foreach(byte bt in Table.Table) {
+            foreach(byte bt in Table) {
                 ctr += Convert.ToInt32(bt);
                 }
-            return ctr/(Table.Height * Table.Width);
+            return ctr/(Table.GetLength(1) * Table.GetLength(0));
         }
         public double Evaluate(MainTable Table)
         {
