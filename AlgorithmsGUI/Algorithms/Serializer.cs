@@ -10,125 +10,116 @@ using System;
 using System.Windows.Media;
  using Newtonsoft.Json;
 using System.IO;
+using System.Drawing;
 
 namespace Tetris.Algorithms
- {
-     class Serializer
-     { 
-         /// <summary>
-         /// 
-         /// </summary>
-         /// <param name="o">Set of Objects.</param>
-         public static void Serialize(params Object[] o) 
-         {
-             int bitmapCount = -1;
-             string dupa;
-             string filepath = "";
-             foreach (Object obj in o) 
-             {               
-                 //if it is an image just save it to file
-                 if (obj is List<ImageSource>)
-                 {
-                     foreach(ImageSource img in (List<ImageSource>)obj)
-                     {
-                         bitmapCount += 1;
-                         BitmapImage bi = (BitmapImage)img;
+{
+    class Serializer
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o">Set of Objects.</param>
+        public static void Serialize(Model m, params Object[] o)
+        {
+            int bitmapCount = -1;
+            string filepath = "";
 
-                         BitmapEncoder encoder = new PngBitmapEncoder();
-                         encoder.Frames.Add(BitmapFrame.Create(bi));
+            foreach (Object obj in o)
+                if (obj is string)
+                {
+                    filepath = filepath + (string)obj + Path.DirectorySeparatorChar;
+                }
 
-                         string fileName = bitmapCount.ToString() + "K.png";
-                         using (var fileStream = new System.IO.FileStream(filepath + fileName, System.IO.FileMode.Create))
-                         {
-                             encoder.Save(fileStream);
-                         }
-                     }
-                 }
-                 //if it is a model
-                 else if (obj is Model) {
-                     dupa = JsonConvert.SerializeObject((Model)obj);     
-                     //write to file
-                     System.IO.File.WriteAllText(filepath+"modelJSON",dupa);
-                 }
-                 else if (obj is List<Result>) 
-                 {
-                     dupa = JsonConvert.SerializeObject((List<Result>)obj);
-                     //write to file
-                     System.IO.File.WriteAllText(filepath + "bestResultsListJSON", dupa);
-                 }
-                 else if (obj is Shape[])
-                 {
-                     dupa = JsonConvert.SerializeObject((Shape[])obj);
-                     //write to file
-                     System.IO.File.WriteAllText(filepath + "shapesDatabaseListJSON", dupa);
-                 }
-                 else if (obj is List<MainTable>)
-                 {
-                     dupa = JsonConvert.SerializeObject((List<MainTable>)obj);
-                     //write to file
-                     System.IO.File.WriteAllText(filepath + "mainTablesListJSON", dupa);
-                 }
-                 else if (obj is string)
-                 {
-                     filepath = filepath + (string)obj + Path.DirectorySeparatorChar;
-                 }
-             }
-         }
+            string dupa = JsonConvert.SerializeObject(m);
+            //write to file
+            System.IO.File.WriteAllText(filepath + "modelJSON", dupa);
 
-         /// <summary>
-         /// Deserializes MainWindow list from provided path. If Non parameters are givern
-         /// </summary>
-         /// <param name="o">takes objects that you want to deserialize into and filepath.
-         /// Order of parameters matter : list pf main tables shoud be put before list of bitmaps.</param>
-         public static void Deserialize(params Object[] o)
-         {
-             string filepath = "";
-             int bitmapCount = 0;
-             List<ImageSource> tempimgS = new List<ImageSource>();
-             //for (Object obj in o)
-             for (int i = 0; i < o.Count();i++ )
-             {
-                 if (o[i] is string)
-                 {
-                     filepath = filepath + (string)o[i] + Path.DirectorySeparatorChar;
-                 }
-                 else if (o[i] is List<MainTable>)
-                 {
-                     //Read file content to deserialize into list of main tables 
-                     
-                     string fileContent = System.IO.File.ReadAllText(filepath + "mainTablesListJSON");
-                     var cast = (List<MainTable>)JsonConvert.DeserializeObject(fileContent);
-                     o[i] = cast;
-                     List<MainTable> mt = (List<MainTable>)o[i];
-                     bitmapCount = mt.Count();
+            //Serialize Bitmaps 
+            foreach (ImageSource img in m.ImageSources)
+            {
+                bitmapCount += 1;
+                BitmapImage bi = (BitmapImage)img;
 
-                     //read bitmaps - CHECK IF NOT bitmapCount is k or k+1
-                     for (int k = 0; k < bitmapCount; k++)
-                     {
-                         BitmapImage bitmap = new BitmapImage(new Uri(filepath + k.ToString() + "K.png"));
-                         ImageSourceConverter c = new ImageSourceConverter();
-                         ImageSource ims = (ImageSource)c.ConvertFrom(bitmap);
-                         tempimgS.Add(ims);
-                     }
-                 }
-                 else if (o[i] is List<Result>)
-                 {
-                     string fileContent = System.IO.File.ReadAllText(filepath + "bestResultsListJSON");
-                     o[i] = (List<Result>)JsonConvert.DeserializeObject(fileContent);
-                 }
-                 else if (o[i] is Shape[])
-                 {
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bi));
 
-                     string fileContent = System.IO.File.ReadAllText(filepath + "shapesDatabaseListJSON");
-                     o[i] = (Shape[])JsonConvert.DeserializeObject(fileContent);
-                 }
-                 else if (o[i] is List<ImageSource>)
-                 {
-                     List<ImageSource> imgS = (List<ImageSource>)o[i];
-                     imgS.Clear();
-                     imgS = tempimgS;
-                 }
-             }
-         }
-     }
- }
+                string fileName = bitmapCount.ToString() + "K.png";
+                using (var fileStream = new System.IO.FileStream(filepath + fileName, System.IO.FileMode.Create))
+                {
+                    encoder.Save(fileStream);
+                }
+            }
+
+            //Serialize MainTables
+            string mainTablesJSON = JsonConvert.SerializeObject(m.MainTablesList);
+            //write to file
+            System.IO.File.WriteAllText(filepath + "mainTablesListJSON", mainTablesJSON);
+
+            //Seriaize Remaining shapes
+            string remainingJSON = JsonConvert.SerializeObject(m.MainTablesList);
+            //write to file
+            System.IO.File.WriteAllText(filepath + "remainingShapesJSON", mainTablesJSON);
+
+            //Serialise Best Results
+            string bestResJSON = JsonConvert.SerializeObject(m.BestResults);
+            //write to file
+            System.IO.File.WriteAllText(filepath + "bestResultsListJSON", bestResJSON);
+
+
+            //Serialize Shapes Database
+            string shapeDataJSON = JsonConvert.SerializeObject(m.ShapesDatabase);
+            //write to file
+            System.IO.File.WriteAllText(filepath + "shapesDatabaseListJSON", shapeDataJSON);
+
+        }
+
+
+
+
+        /// <summary>
+        /// Deserializes MainWindow list from provided path. If Non parameters are givern
+        /// </summary>
+        /// <param name="o">takes objects that you want to deserialize into and filepath.
+        /// Order of parameters matter : list pf main tables shoud be put before list of bitmaps.</param>
+        public static void Deserialize(Model m, params Object[] o)
+        {
+            string filepath = "";
+            foreach (Object obj in o)
+                if (obj is string)
+                {
+                    filepath = filepath + (string)obj + Path.DirectorySeparatorChar;
+                }
+
+            // deserialize  main tables list
+            string fileContent = System.IO.File.ReadAllText(filepath + "mainTablesListJSON");
+            m.MainTablesList = JsonConvert.DeserializeObject<List<MainTable>>(fileContent);
+
+            //deserialize Image sources
+            int bitMapCount = m.MainTablesList.Count;
+            m.ImageSources.Clear();
+            //read bitmaps - CHECK IF NOT bitmapCount is k or k+1
+            for (int k = 0; k < bitMapCount; k++)
+            {
+                BitmapImage bitmap = new BitmapImage(new Uri(filepath + k.ToString() + "K.png"));
+                ImageSourceConverter c = new ImageSourceConverter();
+                ImageSource ims = (ImageSource)bitmap;
+                m.ImageSources.Add(ims);
+            }
+
+
+            //deseriaize Remaining shapes
+            string remainingJSON = System.IO.File.ReadAllText(filepath + "remainingShapesJSON");  /// deserialize int from string txt 
+            m.RemainingShapes = JsonConvert.DeserializeObject<int>(remainingJSON);
+
+            //Deserilize Best Results
+            string bestResJSON = System.IO.File.ReadAllText(filepath + "bestResultsListJSON");
+            m.BestResults = JsonConvert.DeserializeObject<List<Result>>(bestResJSON);
+
+            //deserialize Shapes Database
+            string shapeDataJSON = System.IO.File.ReadAllText(filepath + "shapesDatabaseListJSON");
+            m.ShapesDatabase = JsonConvert.DeserializeObject<Shape[]>(shapeDataJSON);
+
+        }
+    }
+}

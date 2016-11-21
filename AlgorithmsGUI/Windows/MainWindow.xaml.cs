@@ -48,12 +48,11 @@ namespace Tetris.Windows
         {
             System.Drawing.Bitmap bitmap;
             this.WellsPanel.Children.Clear();
-            int x = 50;
             
             for (int k = 0; k < model.K; k++)
             {
                 Image im = new Image();
-                bitmap = new System.Drawing.Bitmap(x, 75);
+                bitmap = new System.Drawing.Bitmap(model.TableWidth, 75);
                 System.Drawing.Color c1 = System.Drawing.Color.FromArgb(0, 220, 220, 220);
                 System.Drawing.Color c2 = System.Drawing.Color.FromArgb(0, 230, 230, 230);
 
@@ -300,6 +299,17 @@ namespace Tetris.Windows
 
                 //send model list of image sources 
                 this.controller.sendListOfImageSources(isl);
+            }
+            //When deserializing 
+            else if (arg == 2)
+            {
+                int i=0;
+                AddBitMaps();
+                foreach (UIElement el in this.WellsPanel.Children)
+                {
+                    Image im = (Image)el;
+                    im.Source = model.ImageSources.ElementAt(i++);
+                }
             }
         }
 
