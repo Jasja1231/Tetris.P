@@ -83,6 +83,7 @@ namespace Tetris.Algorithms
             
             args.m.RemainingShapes--;
             a.Result = bestResults;
+
         }
 
         //Complexity O(n) not O(n^2) since I only find K largest :)

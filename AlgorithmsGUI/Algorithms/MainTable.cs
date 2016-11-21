@@ -47,7 +47,7 @@ namespace Tetris.Algorithms
             {
                 //create bigger array
                 mt.Table = ResizeArray(this.Table, Width, newHeight);
-                mt.Height = newHeight*40;
+                mt.Height = newHeight;
             }
             else
             {
@@ -61,7 +61,23 @@ namespace Tetris.Algorithms
             return mt;
         }
 
+
         private void AddShapeToTable(MainTable mt, Shape s, Result r)
+        {
+            byte[,] table = s.rotations.ElementAt(r.rotation);
+            //i = iterator for main table y's
+            //j = iterator for main table x's
+            //i2 = iterator for shape y's
+            //j2 = iterator for shape x's
+            for (int i = r.y, i2 = s.rotations[r.rotation].GetLength(1) - 1; i2 >= 0; i++, i2--)
+            {
+                for (int j = r.x, j2 = 0; j2 < s.rotations[r.rotation].GetLength(0); j++, j2++)
+                {
+                    mt.Table[j, i] = table[j2, i2] == 1 ? (byte)1 :mt.Table[j,i];
+                }
+            }
+        }
+        private void DUMMYddShapeToTable(MainTable mt, Shape s, Result r)
         {
             byte[,] table = s.rotations.ElementAt(r.rotation);
             //i = iterator for main table y's

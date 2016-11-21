@@ -4,114 +4,174 @@ using System.Windows;
 
 namespace Tetris.Algorithms
 {
-	class FindGoodPlacement
-	{
-		public Result dwork(Model m, MainTable mt, int shapeIdx)
-		{
-			//TODO: remove stub work, implement real density check and evalutation
-			Random rnd = new Random(Guid.NewGuid().GetHashCode());
-			int sleeptime = rnd.Next(5000, 10000);
-			Thread.Sleep(sleeptime);
-			Result r = new Result(shapeIdx, rnd.Next(0, 100), rnd.Next(0, 100), mt.Kth, rnd.Next(101), 2);
-			return r;
-		}
-		public Result work(Model m, MainTable mt, int shapeIdx)
-		{
-			CheckDensity cd = new CheckDensity();
-			byte[,] tempTable = ResizeArray(mt.Table, mt.Width, mt.Height);
-            while (true)
+    class FindGoodPlacement
+    {
+        public Result work(Model m, MainTable mt, int shapeIdx)
+        {
+            Result r = null;
+            Shape shape = m.ShapesDatabase[shapeIdx];
+
+            for(int y = 0; y < mt.Table.GetLength(1); y++)
             {
-            for (int rot = 0; rot < 4; rot++)
+                for(int x = 0; x < mt.Table.GetLength(0); x++)
                 {
-                    for (int i = 0; i < tempTable.GetLength(1); i++)
+                    for (int rotation = 0; rotation < shape.rotations.Count; rotation++)
                     {
-                        if(i == tempTable.GetLength(1)- m.ShapesDatabase[shapeIdx].rotations[rot].GetLength(1))
+                        if (x+shape.rotations[rotation].GetLength(0) < mt.Table.GetLength(0) 
+                            && overlap2(mt.Table, shape.rotations[rotation], x, y) >= 0 )
                         {
-                            tempTable = ResizeArray(mt.Table, mt.Width, (mt.Height + m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(1)));
+                            //no overlap
+                            return new Result(shapeIdx, x, y, mt.Kth, 50, rotation);
                         }
-                        for (int j = 0; j < tempTable.GetLength(0) - m.ShapesDatabase[shapeIdx].rotations[rot].GetLength(0); j++)
+                    }
+                }
+            }
+            //SHOULD NEVER HAPPEN!!!
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="shape"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>-1 is overlap happens</returns>
+        public int overlap2(byte[,] table, byte[,]shape, int x, int y)
+        {
+            //i = iterator for main table y's
+            //j = iterator for main table x's
+            //i2 = iterator for shape y's
+            //j2 = iterator for shape x's
+            for (int i = y, i2 = shape.GetLength(1)-1; i2 >= 0; i++, i2--)
+            {
+                for (int j = x, j2 = 0; j2 < shape.GetLength(0); j++, j2++)
+                {
+                    //table[j, i] = table[j2, i2] == 1 ? (byte)1 : (byte)0;
+                    if (table[j, i] == (byte) 1 && shape[j2, i2] == (byte) 1)
+                        return -1;
+                }
+            }
+            return 0;
+        }
+
+        public Result Dummywork(Model m, MainTable mt, int shapeIdx)
+        {
+            Result r = null;
+            int ctr = 0;
+            int tresh = 0;
+            Point p = new Point();
+            CheckDensity cd = new CheckDensity();
+            byte[,] tempTable = ResizeArray(mt.Table, mt.Width, (mt.Height + m.ShapesDatabase[shapeIdx].MaxHeight));
+            for (int i = tresh; i < tempTable.GetLength(1); i++)
+            {
+                for (int j = 0; j < tempTable.GetLength(0); j++)
+                {
+                    if (tempTable[j, i] == 0)
+                    {
+                        if ((m.ShapesDatabase[shapeIdx].MaxHeight + j) <= (tempTable.GetLength(0)))
                         {
-                            if (!overlap(tempTable, m.ShapesDatabase[shapeIdx].rotations[rot], j, i))
+                            for (int y = 0; y < m.ShapesDatabase[shapeIdx].MaxHeight; y++)
                             {
-                                for (int y = 0; y < (m.ShapesDatabase[shapeIdx].rotations[rot].GetLength(1)); y++)
+                                for (int x = 0; x < m.ShapesDatabase[shapeIdx].MaxHeight; x++)
                                 {
-                                    for (int x = 0; x < (m.ShapesDatabase[shapeIdx].rotations[rot].GetLength(0)); x++)
-                                    {
-                                        tempTable[j + x, i + y] = m.ShapesDatabase[shapeIdx].rotations[rot][x, y];
-                                    }
+                                    if (tempTable[j + x, i + y] != 0) ctr++;
                                 }
-                                return new Result(shapeIdx, j, i, mt.Kth, Convert.ToInt32((100 * cd.checkDensity(tempTable))), rot);
+                            }
+                            /*if (ctr == 0)
+                            {
+                                p = overlap(tempTable, m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)], j, i);
+                                return new Result(shapeIdx, Convert.ToInt32(p.X), Convert.ToInt32(p.Y), mt.Kth, Convert.ToInt32((100 * cd.checkDensity(mt))), bestRotation(shapeIdx, m));
+                            }
+                            else
+                                ctr = 0;*/
+                        }
+                    }
+                }
+                if(i > 2)
+                {
+                    tresh++; ;
+                }
+            }
+            return r;
+        }
+        public int bestRotation(int shapeIdx, Model m)
+        {
+            int rot = 0;
+            int longestX = 0, ctr = 0;
+            int control = m.ShapesDatabase[shapeIdx].rotations[0].GetLength(0) > m.ShapesDatabase[shapeIdx].rotations[0].GetLength(1) ? 0 : 1;
+
+            for (int rotations_iterator = control; rotations_iterator < (4 - control); rotations_iterator += 2)
+            {
+                for (int i = 0; i < m.ShapesDatabase[shapeIdx].rotations[rotations_iterator].GetLength(0); i++)
+                {
+                    if (m.ShapesDatabase[shapeIdx].rotations[rotations_iterator][i, 0] == 1)
+                    {
+                        ctr++;
+                    }
+                }
+                if (ctr > longestX)
+                {
+                    longestX = ctr;
+                    rot = rotations_iterator;
+                    ctr = 0;
+                }
+            }
+            return rot + 2;
+        }
+        private T[,] ResizeArray<T>(T[,] original, int rows, int cols)
+        {
+            var newArray = new T[rows, cols];
+            int minRows = Math.Min(rows, original.GetLength(0));
+            int minCols = Math.Min(cols, original.GetLength(1));
+            for (int i = 0; i < minRows; i++)
+                for (int j = 0; j < minCols; j++)
+                    newArray[i, j] = original[i, j];
+            return newArray;
+        }
+        private Point overlap(byte[,] main, byte[,] shape, int x, int y)
+        {
+            Point temp = new Point(x, y);
+            for (int i = y - shape.GetLength(1); i < y ; i++)
+            {
+                for (int j = x - shape.GetLength(0); j < x; j++)
+                {
+                    int ctr = 0;
+                    if (j <= main.GetLength(0) && j >= 0 && i >= 0 ) {
+                        
+                        for (int k = 0; k < shape.GetLength(1); k++)
+                        {
+                            for (int l = 0; l < shape.GetLength(0); l++)
+                            {
+                                if (Convert.ToInt32(shape[l, k]) + Convert.ToInt32(main[j + l, i + k]) == 2)
+                                {
+                                    ctr++;
+                                }
+                            }
+                        }
+                        if (ctr == 0 && (temp.Y < y))
+                        {
+                            y = Convert.ToInt32(temp.Y);
+                            if(temp.X < x)
+                            {
+                                x = Convert.ToInt32(temp.X);
                             }
                         }
                     }
                 }
-                tempTable = ResizeArray(mt.Table, mt.Width, (mt.Height + m.ShapesDatabase[shapeIdx].rotations[bestRotation(shapeIdx, m)].GetLength(1)));
             }
-		}
-		public int bestRotation(int shapeIdx, Model m)
-		{
-			int rot = 0;
-			int longestX = 0, ctr = 0;
-			int control = m.ShapesDatabase[shapeIdx].rotations[0].GetLength(0) > m.ShapesDatabase[shapeIdx].rotations[0].GetLength(1) ? 0 : 1;
+            return new Point(x,y) ;
+        }
 
-			for (int rotations_iterator = control; rotations_iterator < (4 - control); rotations_iterator += 2)
-			{
-				for (int i = 0; i < m.ShapesDatabase[shapeIdx].rotations[rotations_iterator].GetLength(0); i++)
-				{
-					if (m.ShapesDatabase[shapeIdx].rotations[rotations_iterator][i, 0] == 1)
-					{
-						ctr++;
-					}
-				}
-				if (ctr > longestX)
-				{
-					longestX = ctr;
-					rot = rotations_iterator;
-					ctr = 0;
-				}
-			}
-			return rot + 2;
-		}
-		private T[,] ResizeArray<T>(T[,] original, int rows, int cols)
-		{
-			var newArray = new T[rows, cols];
-			int minRows = Math.Min(rows, original.GetLength(0));
-			int minCols = Math.Min(cols, original.GetLength(1));
-			for (int i = 0; i < minRows; i++)
-				for (int j = 0; j < minCols; j++)
-					newArray[i, j] = original[i, j];
-			return newArray;
-		}
-		private bool overlap(byte[,] main, byte[,] shape, int x, int y)
-		{
-			int ctr = 0;
-			if ((x+shape.GetLength(0)) <= main.GetLength(0) && (y + shape.GetLength(1)) <= main.GetLength(1)) {	
-				for (int k = 0; k < shape.GetLength(1); k++)
-				{
-					for (int l = 0; l < shape.GetLength(0); l++)
-					{
-						if (shape[l, k] + main[x + l, y + k] > 1)
-						{
-							ctr++;
-						}
-					}
-				}
-				if (ctr == 0)
-				{
-					return false;
-				}	
-			}
-			return true;
-		}
-
-		private int cntArray(byte[,] shape)
-		{
-			int ct = 0;
-			foreach (byte b in shape)
-			{
-				ct += Convert.ToInt32(b);
-			}
-			return ct;
-		}
-	}
+        private int cntArray(byte[,] shape)
+        {
+            int ct = 0;
+            foreach (byte b in shape)
+            {
+                ct += Convert.ToInt32(b);
+            }
+            return ct;
+        }
+    }
 }

@@ -118,6 +118,7 @@ namespace Tetris.Windows
         //*******************************ON CLICK HANDLERS**************************************/
         private void FastForwardClick(object sender, RoutedEventArgs e)
         {
+            
             this.model.K = KSetter.SelectedValue;
             if(!intiialized)
                 AddBitMaps();//DLATEGO
@@ -224,10 +225,11 @@ namespace Tetris.Windows
 
         }
 
-
+       
         //on click handler for "play" button
         private void PlayClick(object sender, RoutedEventArgs e)
         {
+
             if (String.Equals(this.PlayButton.Content, "Play") == true)
             {
                 //Check if computation is started for the first time
