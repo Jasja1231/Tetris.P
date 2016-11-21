@@ -57,9 +57,9 @@ namespace Tetris.Algorithms
             System.IO.File.WriteAllText(filepath + "mainTablesListJSON", mainTablesJSON);
 
             //Seriaize Remaining shapes
-            string remainingJSON = JsonConvert.SerializeObject(m.MainTablesList);
+            string remainingJSON = m.RemainingShapes.ToString();//JsonConvert.SerializeObject(m.MainTablesList);
             //write to file
-            System.IO.File.WriteAllText(filepath + "remainingShapesJSON", mainTablesJSON);
+            System.IO.File.WriteAllText(filepath + "remainingShapesJSON", remainingJSON);
 
             //Serialise Best Results
             string bestResJSON = JsonConvert.SerializeObject(m.BestResults);
@@ -110,7 +110,7 @@ namespace Tetris.Algorithms
 
             //deseriaize Remaining shapes
             string remainingJSON = System.IO.File.ReadAllText(filepath + "remainingShapesJSON");  /// deserialize int from string txt 
-            m.RemainingShapes = JsonConvert.DeserializeObject<int>(remainingJSON);
+            m.RemainingShapes = Int32.Parse(remainingJSON);//JsonConvert.DeserializeObject<int>(remainingJSON);
 
             //Deserilize Best Results
             string bestResJSON = System.IO.File.ReadAllText(filepath + "bestResultsListJSON");
