@@ -72,9 +72,10 @@ namespace Tetris.Algorithms
             return newbitmap;
         }
 
-        public static List<BitmapImage> UpdateImages (Model model, List<ImageSource>SourceImages)
+        public static BitmapImage[] UpdateImages (Model model, List<ImageSource>SourceImages)
         {
-            var updated = new List<BitmapImage>();
+            var updated = new BitmapImage[model.K];
+            int weLookAtImage = 0;
             foreach (Result result in model.BestResults)
             {
                 Bitmap ToUpdate = BitmapImageToBitmap((BitmapImage)(SourceImages.ElementAt(result.Kth)));
@@ -103,7 +104,8 @@ namespace Tetris.Algorithms
                 }
                 AddTileToBitmap(ref ToUpdate, model.ShapesDatabase[result.shapeIdx], result.x, result.y, result.rotation);
                 var newsource = BitmapToBitmapSource(ToUpdate);
-                updated.Add(newsource);
+                updated[weLookAtImage] =newsource;
+                weLookAtImage++;
             }
             return updated;
         }

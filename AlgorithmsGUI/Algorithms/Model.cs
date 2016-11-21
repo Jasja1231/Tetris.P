@@ -138,9 +138,13 @@ namespace Tetris.Algorithms
             for (int i = 0; i < this.K; i++)
             {
                 Result r = bestResults.ElementAt(i);
-                mtlTmp.Add(MainTablesList.ElementAt(r.Kth).UpdateWithResult(r, this));
+                var newtable = (MainTablesList.ElementAt(r.Kth).UpdateWithResult(r, this));
+                newtable.Kth = i;
+                mtlTmp.Add(newtable);
+
             }
             this.MainTablesList = mtlTmp;
+
             //if we are "playing" then preform next iterations, or we still have some iterations to do
             if (playing && RemainingShapes > 0)
             {
@@ -153,6 +157,21 @@ namespace Tetris.Algorithms
             }
 
             this.Notify(1);
+            foreach (MainTable saaaaaaaa in this.MainTablesList)
+            {
+                Console.Out.WriteLine("MAIN TABLE" + saaaaaaaa.Kth.ToString());
+                for (int y = saaaaaaaa.Table.GetLength(1) - 1; y >= 0; y--)
+                {
+                    for (int x = 0; x < saaaaaaaa.Table.GetLength(0); x++)
+                    {
+                        Console.Out.Write(saaaaaaaa.Table[x, y].ToString() + " ");
+                    }
+                    Console.Out.WriteLine(" ");
+                }
+                Console.Out.WriteLine("===========================================");
+
+
+            }
             //serialize
             Serializer.Serialize(this,this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
         }
