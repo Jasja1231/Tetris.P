@@ -25,7 +25,7 @@ namespace Tetris.Algorithms
         /// <summary>
         /// Last displayed image sources.
         /// </summary>
-        public List<ImageSource> ImageSources { get; set; }
+        public List<ImageSource> ImageSources = new List<ImageSource>();
 
         /// <summary>
         /// number of all shapes left to place (NOT unique shapes)
@@ -43,10 +43,11 @@ namespace Tetris.Algorithms
             private set { shapes = value; }
         }
 
-        public Shape[] ShapesDatabase { get; private set; }
+        public Shape[] ShapesDatabase { get;  set; }
         public int[] ShapeQuantities { get; private set; }
 
-        private List<MainTable> MainTablesList = new List<MainTable>();
+        public List<MainTable> MainTablesList = new List<MainTable>();
+  
         public List<Result> BestResults = new List<Result>(10);/////////////////////////////////////////////////////
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace Tetris.Algorithms
 
             this.Notify(1);
             //serialize
-            Serializer.Serialize(this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
+            Serializer.Serialize(this,this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
         }
 
         /// <summary>
@@ -294,7 +295,7 @@ namespace Tetris.Algorithms
         {
             try
             {
-                Serializer.Serialize(pathToSerializeInto,this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
+                Serializer.Serialize(this,pathToSerializeInto, this, this.MainTablesList, this.ImageSources/*, this.BestResults, this.ShapesDatabase*/); 
             }
             catch
             {
@@ -308,8 +309,11 @@ namespace Tetris.Algorithms
         {
            // try
             {
-                Serializer.Deserialize(dirPath, this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
-                this.Notify(1);
+                Serializer.Deserialize(this , dirPath /*,this.ImageSources,  this.MainTablesList, this.BestResults, this.ShapesDatabase*/);
+                this.K = this.MainTablesList.Count();
+                this.TableWidth = this.MainTablesList.ElementAt(0).Width;
+                // tell giu that we have deserialized data
+                this.Notify(2); 
             }
            // catch
             {
