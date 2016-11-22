@@ -13,8 +13,8 @@ namespace Tetris.Algorithms
             int numberOfShapeTiles = CountTiles(shape);
             double ShapeDensity = numberOfShapeTiles/shape.rotations[0].Length;
 
-
-            for (int y = 0; y < mt.Table.GetLength(1); y++)
+            //<= because we want to iterate over height of table which doesn't exits yet!
+            for (int y = 0; y <= mt.Table.GetLength(1); y++)
             {
                 for(int x = 0; x < mt.Table.GetLength(0); x++)
                 {
