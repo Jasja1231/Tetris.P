@@ -204,9 +204,26 @@ namespace Tetris.Algorithms
             AllLoadedShapes.Clear();
             foreach (byte[,] tile in Tiles)
             {
-                int r = random.Next(100, 220);
-                int g = random.Next(100, 220);
-                int b = random.Next(100, 220);
+                int darker = random.Next(0, 2);
+                int r = 100, g = 100, b = 100;
+                if (darker == 0)
+                {
+                    r = random.Next(10, 100);
+                    g = random.Next(40, 240);
+                    b = random.Next(40, 240);
+                }
+                else if (darker == 1)
+                {
+                    g = random.Next(10, 100);
+                    r = random.Next(40, 240);
+                    b = random.Next(40, 240);
+                }
+                else if (darker == 2)
+                {
+                    b = random.Next(10, 100);
+                    g = random.Next(40, 240);
+                    r = random.Next(40, 240);
+                }
 
                 //create and add colors for shapes, add shape to list.
                 AllLoadedShapes.Add(new Shape(tile, System.Drawing.Color.FromArgb(0, r, g, b), System.Drawing.Color.FromArgb(0, r + 10, g + 10, b + 10)));

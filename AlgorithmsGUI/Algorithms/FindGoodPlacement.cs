@@ -77,7 +77,7 @@ namespace Tetris.Algorithms
             double densityScore = boundingBoxDensity + shapeDensity; /*before + shapedensity after*/;//w zakresie jednego bouding boxa
 
 
-            return (double)(yScore + neighbourScore + boundingBoxDensity)/3.0;
+            return (double)(yScore + 2*neighbourScore + boundingBoxDensity)/4.0;
         }
 
         private int CountTiles(Shape shape)

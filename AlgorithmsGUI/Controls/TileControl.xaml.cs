@@ -50,6 +50,19 @@ namespace Tetris.Controls
                 IsValid = false;
             }
         }
+        public void Increment()
+        {
+            this.NumTiles++;
+            this.TilesAmountBox.Text = this.NumTiles.ToString();
+        }
+
+        public void Decrement()
+        {
+            this.NumTiles--;
+            if (this.NumTiles < 0)
+                this.NumTiles = 0;
+            this.TilesAmountBox.Text = this.NumTiles.ToString();
+        }
 
         private void AdjustControlForInvalidTile(string message)
         {

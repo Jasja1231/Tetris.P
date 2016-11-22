@@ -25,7 +25,6 @@
                 <MenuItem Header="Show Tile Browser" Click="ShowTileBrowser"></MenuItem>
             </MenuItem>
         </Menu>
-        <Slider HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 70 0" Width="100" ValueChanged="ZoomChanged"/>
         <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Visible" >
             <StackPanel Orientation="Horizontal" Grid.Row="1" Name="WellsPanel">
                 <StackPanel.Resources>

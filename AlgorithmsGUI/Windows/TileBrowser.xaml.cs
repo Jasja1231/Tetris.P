@@ -78,5 +78,27 @@ namespace Tetris.Windows
             this.TilesPanel.Columns = (int)(this.ActualWidth / 230);
 
         }
+        private void DecrementTiles(object sender, RoutedEventArgs e)
+        {
+            foreach (UIElement el in this.TilesPanel.Children)
+            {
+                TileControl tc = (TileControl)el;
+                if (tc.IsValid)
+                {
+                    tc.Decrement();
+                }
+            }
+        }
+        private void IncrementTiles(object sender, RoutedEventArgs e)
+        {
+            foreach (UIElement el in this.TilesPanel.Children)
+            {
+                TileControl tc = (TileControl)el;
+                if (tc.IsValid)
+                {
+                    tc.Increment();
+                }
+            }
+        }
     }
 }

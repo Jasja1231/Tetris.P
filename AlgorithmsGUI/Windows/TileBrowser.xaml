@@ -19,5 +19,7 @@
         </ScrollViewer>
         <Button Grid.Row="1" HorizontalAlignment="Right" Content="Apply" Background="WhiteSmoke" Width="50" Margin="0 5 5 0" Click="ApplyClick"></Button>
         <Button Grid.Row="1" HorizontalAlignment="Right" Content="Cancel" Background="WhiteSmoke" Width="50" Margin="0 5 65 0" Click="CancelClick"></Button>
+        <RepeatButton Grid.Row="1" HorizontalAlignment="Right" Content="+" Background="WhiteSmoke" Width="50" Margin="0 5 125 0" Click="IncrementTiles"></RepeatButton>
+        <RepeatButton Grid.Row="1" HorizontalAlignment="Right" Content="-" Background="WhiteSmoke" Width="50" Margin="0 5 180 0" Click="DecrementTiles"></RepeatButton>
     </Grid>
 </Window>
