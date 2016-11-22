@@ -7,7 +7,7 @@
              d:DesignHeight="30" d:DesignWidth="90" Width="90">
     <Grid>
         <TextBlock Name="ValueBlock" MinWidth="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0 0 0"></TextBlock>
-        <Button Name="MinusButton" Width="30" HorizontalAlignment="Right" Margin="0 2 35 2" Click="MinusClick" Background="WhiteSmoke">-</Button>
-        <Button Name="PlusButton" Width="30" HorizontalAlignment="Right" Click="PlusClick" Margin="0 2 0 2" Background="WhiteSmoke">+</Button>
+        <RepeatButton Name="MinusButton" Width="30" HorizontalAlignment="Right" Margin="0 2 35 2" Click="MinusClick" Background="WhiteSmoke">-</RepeatButton>
+        <RepeatButton Name="PlusButton" Width="30" HorizontalAlignment="Right" Click="PlusClick" Margin="0 2 0 2" Background="WhiteSmoke">+</RepeatButton>
     </Grid>
 </UserControl>

@@ -13,7 +13,7 @@
         <Image Name="TileImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform"  RenderOptions.BitmapScalingMode = "NearestNeighbor"></Image>
         <TextBlock Name="TilesAmountBox" Grid.Row="1" VerticalAlignment="Center" MinWidth="20" Text="1" Width="auto" TextAlignment="Center" HorizontalAlignment="Center"></TextBlock>
         <Label Content="Tiles" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Name="TileLabel"/>
-        <Button Name="PlusButton" Content="+" HorizontalAlignment="Right" MinWidth="30" Width="auto" Grid.Row="1"  Margin="0 2 2 2" Background="WhiteSmoke" Click="PlusClick"></Button>
-        <Button Name="MinusButton" Content="-" HorizontalAlignment="Right" Margin="0 2 34 2" MinWidth="30" Width="auto" Grid.Row="1" Background="WhiteSmoke" Click="MinusClick"></Button>
+        <RepeatButton Name="PlusButton" Content="+" HorizontalAlignment="Right" MinWidth="30" Width="auto" Grid.Row="1"  Margin="0 2 2 2" Background="WhiteSmoke" Click="PlusClick"></RepeatButton>
+        <RepeatButton Name="MinusButton" Content="-" HorizontalAlignment="Right" Margin="0 2 34 2" MinWidth="30" Width="auto" Grid.Row="1" Background="WhiteSmoke" Click="MinusClick"></RepeatButton>
     </Grid>
 </UserControl>

@@ -15,23 +15,23 @@ namespace Tetris.Algorithms
         /// <summary>
         /// Shape that we are adding to Main Table
         /// </summary>
-        public int shapeIdx { get; private set; }
+        public int shapeIdx { get;  set; }
         /// <summary>
         /// X coordinate of Kth table where we are putting shape s
         /// </summary>
-        public int x { get; private set; }
+        public int x { get;  set; }
         /// <summary>
         /// Y coordinate of Kth table where we are putting shape s
         /// </summary>
-        public int y { get; private set; }
+        public int y { get;  set; }
         /// <summary>
         /// Index of main table we are adding our shape into 
         /// </summary>
-        public int Kth { get; private set; }
+        public int Kth { get;  set; }
         /// <summary>
         /// Estimated 'how good' our shape is positiones on Kth main table
         /// </summary>
-        public int score { get; private set; }
+        public int score { get;  set; }
 
         public int rotation { get;  set; }
         //*********************************CLASS METHODS***************************************/
