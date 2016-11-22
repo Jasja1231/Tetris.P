@@ -77,21 +77,7 @@ namespace Tetris.Algorithms
                 }
             }
         }
-        private void DUMMYddShapeToTable(MainTable mt, Shape s, Result r)
-        {
-            byte[,] table = s.rotations.ElementAt(r.rotation);
-            //i = iterator for main table y's
-            //j = iterator for main table x's
-            //i2 = iterator for shape y's
-            //j2 = iterator for shape x's
-            for (int i = r.y + table.GetLength(1)-1, i2 = 0; i2 < table.GetLength(1); i-- , i2++)
-            {
-                for (int j = r.x, j2 = 0; j2 < table.GetLength(0); j++, j2++)
-                {
-                    mt.Table[j, i] = table[j2, i2] == 1 ?  (byte)1: mt.Table[j,i];
-                }
-            }
-        }
+
         private T[,] ResizeArray<T>(T[,] original, int rows, int cols)
         {
             var newArray = new T[rows, cols];

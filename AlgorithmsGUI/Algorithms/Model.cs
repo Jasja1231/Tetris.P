@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Tetris.Algorithms
@@ -145,18 +144,29 @@ namespace Tetris.Algorithms
             }
             this.MainTablesList = mtlTmp;
 
+            //NOTIFY GUI RESULTS ARE READY
+            this.Notify(1);
+
             //if we are "playing" then preform next iterations, or we still have some iterations to do
             if (playing && RemainingShapes > 0)
             {
                 threadComp.preformIteration(this, this.k, MainTablesList);
             }
-            else if (iterLeft > 1)
+            else if (RemainingShapes > 0 && iterLeft > 1)
             {
                 iterLeft--;
                 threadComp.preformIteration(this, this.k, MainTablesList);
             }
+            else if (RemainingShapes <= 0)
+            {
+                MessageBox.Show("==========================\nNo more shapes\n(^_^）o自自o（^_^ ）\nCheers mate!\n==========================");
+            }
+            else
+            {
+                MessageBox.Show("==========================\nWaiting for more input! (｡◕‿◕｡)\n==========================");
+            }
 
-            this.Notify(1);
+            /******DEBUG***********************************************************
             foreach (MainTable saaaaaaaa in this.MainTablesList)
             {
                 Console.Out.WriteLine("MAIN TABLE" + saaaaaaaa.Kth.ToString());
@@ -172,7 +182,8 @@ namespace Tetris.Algorithms
             }
             Console.Out.WriteLine("===========================================");
             Console.Out.WriteLine("NEXT ITER");
-            Console.Out.WriteLine("===========================================");
+            Console.Out.WriteLine("===========================================");****/
+
             //serialize
             Serializer.Serialize(this,this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
         }
@@ -183,7 +194,7 @@ namespace Tetris.Algorithms
         /// <param name="p"></param>
         private void SetMainTableWidth(int p)
         {
-            this.TableWidth = p;
+            TableWidth = p;
         }
 
         private void ConstructShapes(List<byte[,]> Tiles)

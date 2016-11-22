@@ -33,53 +33,50 @@ namespace Tetris.Algorithms
         public void preformIteration(object sender, DoWorkEventArgs a)
         {
             Args args = (Args)a.Argument;
-            List<Result> results = new List<Result>();
-            int iteration = 0;
             List<Result> bestResults = new List<Result>(args.K);
             
-                //start tasks with (LongRunning) work
-                int sumNonZeroElements = 0;
-                for(int i = 0; i < args.lmt.Count; i++)
-                {
-                    MainTable mt = args.lmt.ElementAt(i);
-                    sumNonZeroElements += mt.Quantities.Count(x => x != 0);
-                }
-                //int numOfTasks = args.lmt.Count * sumNonZeroElements;
-                Task<Result>[] tasks = new Task<Result>[sumNonZeroElements];
-                FindGoodPlacement fpg = new FindGoodPlacement();
-                //string display = "Best K results\n";
+            //start tasks with (LongRunning) work
+            int sumNonZeroElements = 0;
+            for(int i = 0; i < args.lmt.Count; i++)
+            {
+                MainTable mt = args.lmt.ElementAt(i);
+                sumNonZeroElements += mt.Quantities.Count(x => x != 0);
+            }
+            //int numOfTasks = args.lmt.Count * sumNonZeroElements;
+            Task<Result>[] tasks = new Task<Result>[sumNonZeroElements];
+            FindGoodPlacement fpg = new FindGoodPlacement();
+            //string display = "Best K results\n";
 
-                //for each MAIN TABLE == from 0 until K
-                int taskIdx = 0;
-                for (int i = 0; i < args.lmt.Count; i++)
+            //for each MAIN TABLE == from 0 until K
+            int taskIdx = 0;
+            for (int i = 0; i < args.lmt.Count; i++)
+            {
+                MainTable mt = args.lmt.ElementAt(i);
+                //for each unique! shape
+                for (int j = 0; j < mt.Quantities.Length; j++)
                 {
-                    MainTable mt = args.lmt.ElementAt(i);
-                    //for each unique! shape
-                    for (int j = 0; j < mt.Quantities.Length; j++)
+                    //Shape temp = sil.GetShapeAt(i);
+                    //CREATE THREAD to find its position and start its THREAD_WORK
+                    if (mt.Quantities[j] != 0)
                     {
-                        //Shape temp = sil.GetShapeAt(i);
-                        //CREATE THREAD to find its position and start its THREAD_WORK
-                        if (mt.Quantities[j] != 0)
+                        int kurwa = j;
+                        tasks[taskIdx++] = Task<Result>.Factory.StartNew(() =>
                         {
-                            int kurwa = j;
-                            tasks[taskIdx++] = Task<Result>.Factory.StartNew(() =>
-                            {
-                                return fpg.work(args.m, mt, kurwa);
-                            }, TaskCreationOptions.LongRunning);
-                        }
+                            return fpg.work(args.m, mt, kurwa);
+                        }, TaskCreationOptions.LongRunning);
                     }
                 }
-                //BLOCK UNTILL ALL THREADS FINNISH
-                Task.WaitAll(tasks);
-                //Copy K best results into our list of best results(MAIN TABLES?)
-                bestResults = SelectionSort(tasks, args.K);
-                //for (int i = 0; i < args.K; i++)
-                //{
-                //    display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
-                //       bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
-                //} 
-                //MessageBox.Show(display);
-                iteration++;
+            }
+            //BLOCK UNTILL ALL THREADS FINNISH
+            Task.WaitAll(tasks);
+            //Copy K best results into our list of best results(MAIN TABLES?)
+            bestResults = SelectionSort(tasks, args.K);
+            //for (int i = 0; i < args.K; i++)
+            //{
+            //    display += "MainTable=" + bestResults.ElementAt(i).Kth + ":(" + bestResults.ElementAt(i).x + "," +
+            //       bestResults.ElementAt(i).y + "), score=" + bestResults.ElementAt(i).score + "\n";
+            //} 
+            //MessageBox.Show(display);
             
             args.m.RemainingShapes--;
             a.Result = bestResults;
