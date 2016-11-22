@@ -159,7 +159,32 @@ namespace Tetris.Algorithms
             }
             else if (RemainingShapes <= 0)
             {
-                MessageBox.Show("==========================\nNo more shapes\n(^_^）o自自o（^_^ ）\nCheers mate!\n==========================");
+                List<double> Densities = new List<double>();
+                
+                foreach(MainTable mt in MainTablesList)
+                {
+                    int count = 0;
+                    for (int i=0;i<mt.Table.GetLength(0);i++)
+                    {
+                        for (int j=0;j<mt.Table.GetLength(1);j++)
+                        {
+                            if (mt.Table[i, j] == 1)
+                                count++;
+                        }
+                    }
+                    Densities.Add((double)count / mt.Table.Length);
+                }
+                string summary = "\nSummary:\n";
+                int counter = 0;
+                foreach (double score in Densities)
+                {
+                    summary += "K=" + counter.ToString() + " density= " + score + "\n";
+                    counter++;
+                }
+
+
+                
+                MessageBox.Show("==========================\nNo more shapes\n(^_^）o自自o（^_^ ）\nCheers mate!\n==========================" + summary);
             }
             else
             {
