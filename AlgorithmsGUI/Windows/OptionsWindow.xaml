@@ -1,0 +1,25 @@
+﻿<Window x:Class="Tetris.Windows.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:Controls="clr-namespace:Tetris.Controls"
+        Title="OptionsWindow" Height="150" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Button Background="WhiteSmoke" Content="OK" Grid.Row="3" Grid.Column="1" Click="OKClick" Width="75" Height="25" HorizontalAlignment="Right" Margin="0 0 25 0"></Button>
+        <Label>Y positon weight</Label>
+        <Label Grid.Row="1">Local density weight</Label>
+        <Label Grid.Row="2">Adjacent tiles weight</Label>
+        <Controls:NumberSetter x:Name="YSetter" Grid.Column="1" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+        <Controls:NumberSetter x:Name="DensSetter" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+        <Controls:NumberSetter x:Name="NeighSetter" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+    </Grid>
+</Window>

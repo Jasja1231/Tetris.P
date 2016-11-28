@@ -21,11 +21,14 @@ namespace Tetris.Controls
     public partial class NumberSetter : UserControl 
     {
         private int selectedvalue;
+
+        public int MinValue { get; set; }
         public int SelectedValue { get { return selectedvalue; } set { selectedvalue = value; this.ValueBlock.Text = selectedvalue.ToString(); } }
 
         public NumberSetter()
         {
             InitializeComponent();
+            MinValue = 1;
         }
 
         private void PlusClick(object sender, RoutedEventArgs e)
@@ -38,8 +41,8 @@ namespace Tetris.Controls
         private void MinusClick(object sender, RoutedEventArgs e)
         {
             SelectedValue--;
-            if (SelectedValue <1)
-                SelectedValue = 1;
+            if (SelectedValue <MinValue)
+                SelectedValue = MinValue;
             this.ValueBlock.Text = SelectedValue.ToString();
         }
 

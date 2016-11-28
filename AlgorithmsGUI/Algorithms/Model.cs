@@ -11,6 +11,10 @@ namespace Tetris.Algorithms
         public Model()
         {
             threadComp = new ThreadComputation(this);
+            BoxDensityWeight = 10;
+            YPositionWeight = 12;
+            NeighborWeight = 20;
+            WeightDivisor = 10 + 12 + 20;
         }
 
         private volatile bool playing;
@@ -21,6 +25,12 @@ namespace Tetris.Algorithms
         /// </summary>
         private ThreadComputation threadComp;
 
+        public int BoxDensityWeight { get; private set; }
+        public int YPositionWeight { get; private set; }
+        public int NeighborWeight { get; private set; }
+
+        public int WeightDivisor { get; private set; }
+        
         /// <summary>
         /// Last displayed image sources.
         /// </summary>
@@ -405,7 +415,17 @@ namespace Tetris.Algorithms
 
 
 
-       
+
+
+        internal void UpdateWeights(int YPositionWeight, int BoxDensityWeight, int NeighborWeight)
+        {
+            this.YPositionWeight = YPositionWeight;
+            this.BoxDensityWeight = BoxDensityWeight;
+            this.NeighborWeight = NeighborWeight;
+            this.WeightDivisor = this.YPositionWeight + this.BoxDensityWeight + this.NeighborWeight;
+            if (!(this.WeightDivisor > 0))
+                this.WeightDivisor = 1;
+        }
     }
 
 }

@@ -23,6 +23,7 @@
                 <MenuItem Header="Serialize" Click="SerializeInto"></MenuItem>
                 <MenuItem Header="Deserialize" Click="DeserializeFrom"></MenuItem>
                 <MenuItem Header="Show Tile Browser" Click="ShowTileBrowser"></MenuItem>
+                <MenuItem Header="Show Algorithm Options" Click="ShowOptions"></MenuItem>
             </MenuItem>
         </Menu>
         <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Visible" >

@@ -349,6 +349,15 @@ namespace Tetris.Windows
             this.controller.StopComputation();
         }
 
+        private void ShowOptions(object sender, RoutedEventArgs e)
+        {
+            OptionsWindow OW = new OptionsWindow(model.YPositionWeight,model.BoxDensityWeight, model.NeighborWeight);
+            if (OW.ShowDialog() == true)
+            {
+                model.UpdateWeights(OW.YPositionWeight, OW.BoxDensityWeight, OW.NeighborWeight);
+            }
+        }
+    
        
     }
 }

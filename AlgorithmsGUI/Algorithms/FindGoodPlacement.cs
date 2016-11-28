@@ -28,7 +28,7 @@ namespace Tetris.Algorithms
                                 //no Overlap
                                 //int density =  GetDensity(x, y, shape.rotations[rotation], mt.Table);
                                 double shapePositionScore = GetScore(tuple, numberOfShapeTiles, ShapeDensity, y, mt.Table.GetLength(1),
-                                    shape.rotations[rotation].GetLength(0) * shape.rotations[rotation].GetLength(1));
+                                    shape.rotations[rotation].GetLength(0) * shape.rotations[rotation].GetLength(1),m.YPositionWeight,m.NeighborWeight,m.BoxDensityWeight,m.WeightDivisor);
 
                                 int newScore = (int)(shapePositionScore * 100); // GetOveralScore();
 
@@ -48,11 +48,7 @@ namespace Tetris.Algorithms
             return r;
         }
 
-        
-        private int GetDensity(int i, int i1, byte[,] shapeRotation, byte[,] mtTable)
-        {
-            throw new NotImplementedException();
-        }
+  
 
         /// <summary>
         /// Returns a score of shpae placement.
@@ -62,7 +58,7 @@ namespace Tetris.Algorithms
         /// <param name="numberOfShapeTiles"></param>
         /// <param name="shapeDensity"></param>
         /// <returns></returns>
-        private double GetScore(Tuple<bool, int, int> tuple, int numberOfShapeTiles, double shapeDensity,int y,int maxTableHeight, int boundingboxsize)
+        private double GetScore(Tuple<bool, int, int> tuple, int numberOfShapeTiles, double shapeDensity,int y,int maxTableHeight, int boundingboxsize, int yweight, int neighweight, int boxweight, int divisor)
         {
             //Height shape score  1 == GOOD
             double yScore = 1.0 - (y/(double)maxTableHeight);
@@ -77,7 +73,7 @@ namespace Tetris.Algorithms
             double densityScore = boundingBoxDensity + shapeDensity; /*before + shapedensity after*/;//w zakresie jednego bouding boxa
 
 
-            return (double)(1.2*yScore + 2*neighbourScore + boundingBoxDensity)/4.2;
+            return (double)(yweight*yScore + neighweight*neighbourScore + boxweight*boundingBoxDensity)/divisor;
         }
 
         private int CountTiles(Shape shape)
