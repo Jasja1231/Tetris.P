@@ -38,8 +38,8 @@ namespace Tetris.Controls
         private void MinusClick(object sender, RoutedEventArgs e)
         {
             SelectedValue--;
-            if (SelectedValue < 0)
-                SelectedValue = 0;
+            if (SelectedValue <1)
+                SelectedValue = 1;
             this.ValueBlock.Text = SelectedValue.ToString();
         }
 

@@ -22,7 +22,7 @@ namespace Tetris.Windows
         private void SortTilesByValidity()
         {
             this.TilesPanel.Children.Clear();
-            TileControls = TileControls.OrderBy(x => x.IsDuplicate).ThenBy(y => y.IsValid).ToList();
+            TileControls = TileControls.OrderBy(x => x.IsDuplicate).ThenByDescending(y => y.IsValid).ToList();
         }
         public TileBrowser(List<byte[,]> Tiles, /*ref*/ List<Shape> Shapes)
         {
@@ -37,6 +37,7 @@ namespace Tetris.Windows
         }
 
 
+
         public TileBrowser(/*ref*/List<Shape> Shapes)
         {
             InitializeComponent();
@@ -48,6 +49,7 @@ namespace Tetris.Windows
                 TileControls.Add(t);
             }
 
+            ShapeValidator.MarkDuplicates(TileControls);
             SortTilesByValidity();
 
             foreach (TileControl tc in TileControls)

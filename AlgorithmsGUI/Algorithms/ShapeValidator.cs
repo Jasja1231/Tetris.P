@@ -90,5 +90,41 @@ namespace Tetris.Algorithms
             }
         }
 
+        public static bool AreEqual(Shape s1, Shape s2)
+        {
+            byte[,] map = s2.rotations.ElementAt(0);
+            foreach (byte[,] rotation in s1.rotations)
+            {
+                int checker = 0;
+                if (rotation.GetLength(1) == map.GetLength(1) && rotation.GetLength(0) == map.GetLength(0))
+                {
+                    for (int y = 0; y < map.GetLength(1); y++)
+                    {
+                        for (int x = 0; x < map.GetLength(0); x++)
+                        {
+                            if (rotation[x, y] != map[x, y]) break;
+                            else if (rotation[x, y] == map[x, y]) checker++;
+                        }
+                    }
+                    if (checker == (rotation.GetLength(0) * rotation.GetLength(1))) return true;
+                }
+            }
+            return false;
+        }
+
+        public static void MarkDuplicates(List<Controls.TileControl> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = i + 1; j < list.Count; j++)
+                {
+                    if (ShapeValidator.AreEqual(list.ElementAt(i).Shape, list.ElementAt(j).Shape))
+                    {
+                        list.ElementAt(j).MarkAsDuplicate();
+                    }
+                }
+            }
+        }
+
     }
 }

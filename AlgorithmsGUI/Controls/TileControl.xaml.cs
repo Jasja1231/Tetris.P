@@ -68,11 +68,11 @@ namespace Tetris.Controls
         {
             this.TileLabel.Content = message;
             this.TilesAmountBox.Text = "0";
-            this.TilesAmountBox.Foreground = System.Windows.Media.Brushes.OrangeRed;
+            this.TilesAmountBox.Foreground = System.Windows.Media.Brushes.Orange;
             this.PlusButton.Visibility = Visibility.Hidden;
             this.MinusButton.Visibility = System.Windows.Visibility.Hidden;
-            this.TileLabel.Foreground = System.Windows.Media.Brushes.OrangeRed;
-            this.BorderBrush = System.Windows.Media.Brushes.OrangeRed;
+            this.TileLabel.Foreground = System.Windows.Media.Brushes.Orange;
+            this.BorderBrush = System.Windows.Media.Brushes.Orange;
         }
         public TileControl(byte[,] TileArray, ref List<Algorithms.Shape> Shapes, System.Drawing.Color Col)
         {
@@ -98,11 +98,12 @@ namespace Tetris.Controls
         public void MarkAsDuplicate ()
         {
             AdjustControlForInvalidTile("Duplicate");
-            this.TilesAmountBox.Foreground = System.Windows.Media.Brushes.Yellow;
-            this.TileLabel.Foreground = System.Windows.Media.Brushes.Yellow;
-            this.BorderBrush = System.Windows.Media.Brushes.Yellow;
+            this.TilesAmountBox.Foreground = System.Windows.Media.Brushes.Red;
+            this.TileLabel.Foreground = System.Windows.Media.Brushes.Red;
+            this.BorderBrush = System.Windows.Media.Brushes.Red;
             this.NumTiles = 0;
             IsDuplicate = true;
+            IsValid = false;
         }
 
         BitmapImage BitmapToImageSource(System.Drawing.Bitmap bitmap)
