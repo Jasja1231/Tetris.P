@@ -15,12 +15,12 @@ namespace Tetris.Algorithms
         private Model m;
         private Args args;
         //*********************************CLASS METHODS***************************************/
-        public ThreadComputation(Model m)
+        internal ThreadComputation(Model m)
         {
             this.m = m;
         }
 
-        public void preformIteration( Model m, int K, List<MainTable> lmt)
+        internal void preformIteration( Model m, int K, List<MainTable> lmt)
         {
             //TODO: disable controls
             args = new Args(m, K, lmt);
@@ -30,7 +30,7 @@ namespace Tetris.Algorithms
             bgWorker.RunWorkerAsync(args);
         }
 
-        public void preformIteration(object sender, DoWorkEventArgs a)
+        internal void preformIteration(object sender, DoWorkEventArgs a)
         {
             Args args = (Args)a.Argument;
             List<Result> bestResults = new List<Result>(args.K);
