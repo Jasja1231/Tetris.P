@@ -311,6 +311,11 @@ namespace Tetris.Windows
                     im.Source = model.ImageSources.ElementAt(i++);
                 }
             }
+            //when computation is finised change pause button to play
+            else if (arg == 3)
+            {
+                PlayButton.Content = "Play";
+            }
         }
 
         private void KSetter_Loaded(object sender, RoutedEventArgs e)
