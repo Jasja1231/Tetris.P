@@ -176,15 +176,17 @@ namespace Tetris.Algorithms
                 }
                 string summary = "\nSummary:\n";
                 int counter = 0;
+
                 foreach (double score in Densities)
                 {
                     summary += "K=" + counter.ToString() + " density= " + score + "\n";
                     counter++;
                 }
-
-
-                
                 MessageBox.Show("==========================\nNo more shapes\n(^_^）o自自o（^_^ ）\nCheers mate!\n==========================" + summary);
+                //computation is finished
+                MainTablesList.Clear();
+                StopComputation();
+                Notify(3);
             }
             else
             {
@@ -363,7 +365,6 @@ namespace Tetris.Algorithms
         }
 
 
-
         public bool SerializeTo(string pathToSerializeInto)
         {
             try
@@ -402,10 +403,6 @@ namespace Tetris.Algorithms
             this.ComputationStarted = false;
         }
 
-
-
-
-       
     }
 
 }
