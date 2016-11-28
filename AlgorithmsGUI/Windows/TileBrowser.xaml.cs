@@ -42,7 +42,7 @@ namespace Tetris.Windows
         {
             InitializeComponent();
             Random r = new Random();
-
+            TileControls.Clear();
             foreach (Shape s in Shapes)
             {
                 TileControl t = new TileControl(s);
