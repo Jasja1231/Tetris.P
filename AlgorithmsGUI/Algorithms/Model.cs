@@ -72,15 +72,6 @@ namespace Tetris.Algorithms
         public List<Result> BestResults = new List<Result>(10);/////////////////////////////////////////////////////
 
         /// <summary>
-        /// Adds a tile to a list of shapes
-        /// </summary>
-        /// <param name="s">Shape to be added</param>
-        public void AddShapeToList(Shape s)
-        {
-            this.shapes.Add(s);
-        }
-
-        /// <summary>
         /// Backtracking parameter. The user set K variable, constant for now
         /// </summary>
         private int k;
@@ -121,7 +112,7 @@ namespace Tetris.Algorithms
             return loaded;
         }
 
-        public void AddBestResults(List<Result> bestResults)
+        internal void AddBestResults(List<Result> bestResults)
         {
             //check if reset was pressed
             if (ComputationStarted == false)
@@ -281,7 +272,7 @@ namespace Tetris.Algorithms
             }
         }
 
-        public void ApplyShapes(List<Controls.TileControl> list)
+        internal void ApplyShapes(List<Controls.TileControl> list)
         {
             int shapecount = 0;
             this.RemainingShapes = 0;

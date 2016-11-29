@@ -15,7 +15,7 @@ namespace Tetris.Algorithms
         private Model m;
         private Args args;
         //*********************************CLASS METHODS***************************************/
-        internal ThreadComputation(Model m)
+        public ThreadComputation(Model m)
         {
             this.m = m;
         }
