@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Tetris.Algorithms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tetris;
 
 namespace TetrisUnitTests
 {
