@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -30,7 +31,8 @@ namespace Tetris.Algorithms
         public int NeighborWeight { get; private set; }
 
         public int WeightDivisor { get; private set; }
-        
+
+        private Stopwatch StopWatch = new Stopwatch();
         /// <summary>
         /// Last displayed image sources.
         /// </summary>
@@ -170,7 +172,8 @@ namespace Tetris.Algorithms
             else if (RemainingShapes <= 0)
             {
                 List<double> Densities = new List<double>();
-                
+                StopWatch.Stop();
+
                 foreach(MainTable mt in MainTablesList)
                 {
                     int count = 0;
@@ -192,6 +195,7 @@ namespace Tetris.Algorithms
                     summary += "K=" + counter.ToString() + " density= " + score + "\n";
                     counter++;
                 }
+                summary += StopWatch.Elapsed.Minutes.ToString() + " minutes " +  StopWatch.Elapsed.Seconds.ToString() +"."+StopWatch.Elapsed.Milliseconds +" seconds\n";
                 MessageBox.Show("==========================\nNo more shapes\n(^_^）o自自o（^_^ ）\nCheers mate!\n==========================" + summary);
                 //computation is finished
                 MainTablesList.Clear();
@@ -339,12 +343,14 @@ namespace Tetris.Algorithms
             this.ComputationStarted = true;
             InitializeMainTableList();
             //Last argument to getNextIteration is number of iterations to preform
+            StopWatch.Start();
             threadComp.preformIteration(this, k, MainTablesList);
         }
 
         internal void PauseComputation()
         {
             playing = false;
+            StopWatch.Stop();
         }
 
         private int GetMaxShapeHeight()
@@ -411,6 +417,7 @@ namespace Tetris.Algorithms
         public void StopComputation()
         {
             this.ComputationStarted = false;
+            this.StopWatch.Reset();
         }
 
 
