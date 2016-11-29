@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tetris.Algorithms
 {
-    class FileReader
+   public class FileReader
     {
 
         public static Tuple<List <byte [,]>,int> GetBricksFromFile (string [] FileContent)

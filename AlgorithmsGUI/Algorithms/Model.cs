@@ -18,7 +18,14 @@ namespace Tetris.Algorithms
             WeightDivisor = 10 + 12 + 20;
         }
 
+        /// <summary>
+        /// Tells us if computation is in playing state, i.e. we are making iterations while there
+        /// are shapes to place
+        /// </summary>
         private volatile bool playing;
+        /// <summary>
+        /// We use this variable to fast forward iterLeft amount of iterations
+        /// </summary>
         private int iterLeft;
 
         /// <summary>
@@ -34,6 +41,9 @@ namespace Tetris.Algorithms
         public int NeighborWeight { get; private set; }
         public int WeightDivisor { get; private set; }
 
+        /// <summary>
+        /// Variable to count the time of algorithm
+        /// </summary>
         private Stopwatch StopWatch = new Stopwatch();
         /// <summary>
         /// Last displayed image sources.
@@ -64,15 +74,6 @@ namespace Tetris.Algorithms
         public List<Result> BestResults = new List<Result>(10);
 
         /// <summary>
-        /// Adds a tile to a list of shapes
-        /// </summary>
-        /// <param name="s">Shape to be added</param>
-        public void AddShapeToList(Shape s)
-        {
-            this.shapes.Add(s);
-        }
-
-        /// <summary>
         /// Backtracking parameter. The user set K variable, constant for now
         /// </summary>
         private int k;
@@ -94,8 +95,6 @@ namespace Tetris.Algorithms
         /// </summary>
         public int MaxShapeHeight { get; set; }
 
-
-        ///NON TESTED
         /// <summary>
         /// 
         /// </summary>
@@ -146,7 +145,7 @@ namespace Tetris.Algorithms
         /// results to current best results, notifies GUI about new data set change.
         /// </summary>
         /// <param name="bestResults">List of best results from treads</param>
-        public void AddBestResults(List<Result> bestResults)
+        internal void AddBestResults(List<Result> bestResults)
         {
             //check if reset was pressed
             if (ComputationStarted == false)
@@ -276,6 +275,7 @@ namespace Tetris.Algorithms
 
         /// <summary>
         /// Initialisation of Main table list 
+        /// If we dont have any main tables, initialize them
         /// </summary>
         private void InitializeMainTableList()
         {
@@ -296,7 +296,7 @@ namespace Tetris.Algorithms
                 }
             }
         }
-
+        
         /// <summary>
         ///  Assigns new tile list to corresponding fields. 
         ///  Resets correcponding values.
@@ -398,6 +398,7 @@ namespace Tetris.Algorithms
             this.ImageSources = isl;
         }
 
+
         public T[,] ResizeArray<T>(T[,] original, int x, int y)
         {
             T[,] newArray = new T[x, y];
@@ -455,14 +456,16 @@ namespace Tetris.Algorithms
             return true;
         }
 
+
         /// <summary>
         /// Stops computation.
         /// </summary>
-        public void StopComputation()
+        internal void StopComputation()
         {
             this.ComputationStarted = false;
             this.StopWatch.Reset();
         }
+
 
 
         /// <summary>

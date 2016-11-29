@@ -44,11 +44,8 @@ namespace Tetris.Algorithms
                     }
                 }
             }
-
             return r;
         }
-
-  
 
         /// <summary>
         /// Returns a score of shpae placement.
@@ -101,7 +98,7 @@ namespace Tetris.Algorithms
         /// Tuple<bool,int,int> - is there an Overlap, number of tiles of main table in the region,
         /// number of tiles adjacent to the shape's edges
         /// </returns>
-        public Tuple<bool,int,int> Overlap(byte[,] table, byte[,]shape, int x, int y)
+        private Tuple<bool,int,int> Overlap(byte[,] table, byte[,]shape, int x, int y)
         {
             //i = iterator for main table y's
             //j = iterator for main table x's

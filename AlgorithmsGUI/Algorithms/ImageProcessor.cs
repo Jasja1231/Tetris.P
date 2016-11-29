@@ -72,7 +72,7 @@ namespace Tetris.Algorithms
             return newbitmap;
         }
 
-        public static BitmapImage[] UpdateImages (Model model, List<ImageSource>SourceImages)
+        internal static BitmapImage[] UpdateImages (Model model, List<ImageSource>SourceImages)
         {
             var updated = new BitmapImage[model.K];
             int weLookAtImage = 0;
@@ -98,7 +98,6 @@ namespace Tetris.Algorithms
                                 ToUpdate.SetPixel(j, i, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? c1 : c2);
                             else
                                 ToUpdate.SetPixel(j, i, ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) ? c2 : c1);
-
                         }
                     }
                 }

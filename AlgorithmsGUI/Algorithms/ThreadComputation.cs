@@ -9,18 +9,18 @@ using System.Windows;
 
 namespace Tetris.Algorithms
 {
-    class ThreadComputation
+    public class ThreadComputation
     {
         //*********************************CLASS FIELDS****************************************/
         private Model m;
         private Args args;
         //*********************************CLASS METHODS***************************************/
-        internal ThreadComputation(Model m)
+        public ThreadComputation(Model m)
         {
             this.m = m;
         }
 
-        internal void preformIteration( Model m, int K, List<MainTable> lmt)
+        public void preformIteration( Model m, int K, List<MainTable> lmt)
         {
             //TODO: disable controls
             args = new Args(m, K, lmt);
