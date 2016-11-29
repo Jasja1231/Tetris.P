@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Tetris.Algorithms
 {
-    class ThreadComputation
+    public class ThreadComputation
     {
         //*********************************CLASS FIELDS****************************************/
         private Model m;
@@ -20,7 +20,7 @@ namespace Tetris.Algorithms
             this.m = m;
         }
 
-        internal void preformIteration( Model m, int K, List<MainTable> lmt)
+        public void preformIteration( Model m, int K, List<MainTable> lmt)
         {
             //TODO: disable controls
             args = new Args(m, K, lmt);

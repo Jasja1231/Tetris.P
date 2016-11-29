@@ -44,7 +44,6 @@ namespace Tetris.Algorithms
                     }
                 }
             }
-
             return r;
         }
 
