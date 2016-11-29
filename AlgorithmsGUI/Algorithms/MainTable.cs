@@ -9,28 +9,28 @@ namespace Tetris.Algorithms
     public class MainTable
     {
         //*********************************CLASS FIELDS****************************************/
-        public byte[,] Table { get;  set; }
+        internal byte[,] Table { get;  set; }
         /// <summary>
         /// Index K of Main Table.
         /// </summary>
-        public int[] Quantities;
+        internal int[] Quantities;
 
-        public int Kth { get;  set; }
+        internal int Kth { get;  set; }
         /// <summary>
         /// Width of the table
         /// </summary>
-        public int Width { get;  set; }
+        internal int Width { get;  set; }
         /// <summary>
         /// Height of the main table
         /// </summary>
-        public int Height { get;  set; }
+        internal int Height { get;  set; }
         /// <summary>
         /// ???
         /// </summary>
-        public int MaxHeight { get;  set; }
+        internal int MaxHeight { get;  set; }
 
         //*********************************CLASS METHODS***************************************/
-        public MainTable(int Kth/*,width,height*/)
+        internal MainTable(int Kth/*,width,height*/)
         {
             this.Kth = Kth;
             //Create table [][] in here

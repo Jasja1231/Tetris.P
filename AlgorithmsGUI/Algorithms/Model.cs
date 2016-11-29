@@ -18,7 +18,14 @@ namespace Tetris.Algorithms
             WeightDivisor = 10 + 12 + 20;
         }
 
+        /// <summary>
+        /// Tells us if computation is in playing state, i.e. we are making iterations while there
+        /// are shapes to place
+        /// </summary>
         private volatile bool playing;
+        /// <summary>
+        /// We use this variable to fast forward iterLeft amount of iterations
+        /// </summary>
         private int iterLeft;
 
         /// <summary>
@@ -32,6 +39,9 @@ namespace Tetris.Algorithms
 
         public int WeightDivisor { get; private set; }
 
+        /// <summary>
+        /// Variable to count the time of algorithm
+        /// </summary>
         private Stopwatch StopWatch = new Stopwatch();
         /// <summary>
         /// Last displayed image sources.
@@ -91,29 +101,6 @@ namespace Tetris.Algorithms
         /// The height of the heighest shape we have in our shape list
         /// </summary>
         public int MaxShapeHeight { get; set; }
-
-
-        ///NON TESTED
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Map"></param>
-        /// <param name="Tile"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public bool IsTilePlacementValid(byte[,] Map, byte[,] Tile, int x, int y)
-        {
-            for (int i = x, i2 = 0; i <= x + Tile.GetLength(0) - 1; i++, i2++)
-            {
-                for (int j = Map.GetLength(1) - 1 - y, j2 = Tile.GetLength(1) - 1; j >= Map.GetLength(1) - 1 - y - Tile.GetLength(1) - 1; j--, j2--)
-                {
-                    if (Map[i, j] + Tile[i2, j2] > 1)
-                        return false;
-                }
-            }
-            return true;
-        }
 
         public bool LoadFromFile(string p)
         {
@@ -271,7 +258,9 @@ namespace Tetris.Algorithms
             }
 
         }
-
+        /// <summary>
+        /// If we dont have any main tables, initialize them
+        /// </summary>
         private void InitializeMainTableList()
         {
             //Create k MAIN tables if they are empty
@@ -369,18 +358,6 @@ namespace Tetris.Algorithms
             this.ImageSources = isl;
         }
 
-        public T[,] ResizeArray<T>(T[,] original, int x, int y)
-        {
-            T[,] newArray = new T[x, y];
-            int minX = Math.Min(original.GetLength(0), newArray.GetLength(0));
-            int minY = Math.Min(original.GetLength(1), newArray.GetLength(1));
-
-            for (int i = 0; i < minY; ++i)
-                Array.Copy(original, i * original.GetLength(0), newArray, i * newArray.GetLength(0), minX);
-            return newArray;
-        }
-
-
         public bool SerializeTo(string pathToSerializeInto)
         {
             try
@@ -413,15 +390,11 @@ namespace Tetris.Algorithms
             return true;
         }
 
-
-        public void StopComputation()
+        internal void StopComputation()
         {
             this.ComputationStarted = false;
             this.StopWatch.Reset();
         }
-
-
-
 
         internal void UpdateWeights(int YPositionWeight, int BoxDensityWeight, int NeighborWeight)
         {
