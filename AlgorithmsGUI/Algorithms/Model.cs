@@ -22,7 +22,7 @@ namespace Tetris.Algorithms
         /// Tells us if computation is in playing state, i.e. we are making iterations while there
         /// are shapes to place
         /// </summary>
-        private volatile bool playing;
+        public volatile bool playing;
         /// <summary>
         /// We use this variable to fast forward iterLeft amount of iterations
         /// </summary>
@@ -44,7 +44,7 @@ namespace Tetris.Algorithms
         /// <summary>
         /// Variable to count the time of algorithm
         /// </summary>
-        private Stopwatch StopWatch = new Stopwatch();
+        public Stopwatch StopWatch = new Stopwatch();
         /// <summary>
         /// Last displayed image sources.
         /// </summary>
@@ -96,27 +96,6 @@ namespace Tetris.Algorithms
         /// The height of the heighest shape we have in our shape list
         /// </summary>
         public int MaxShapeHeight { get; set; }
-
-        /// <summary>
-        /// Check if shape does not overlap any tile in preexisting map
-        /// </summary>
-        /// <param name="Map"></param>
-        /// <param name="Tile"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public bool IsTilePlacementValid(byte[,] Map, byte[,] Tile, int x, int y)
-        {
-            for (int i = x, i2 = 0; i <= x + Tile.GetLength(0) - 1; i++, i2++)
-            {
-                for (int j = Map.GetLength(1) - 1 - y, j2 = Tile.GetLength(1) - 1; j >= Map.GetLength(1) - 1 - y - Tile.GetLength(1) - 1; j--, j2--)
-                {
-                    if (Map[i, j] + Tile[i2, j2] > 1)
-                        return false;
-                }
-            }
-            return true;
-        }
 
         /// <summary>
         /// Loads content from file.
@@ -242,7 +221,7 @@ namespace Tetris.Algorithms
         /// Creates and add colors for shapes, add shape to list.
         /// </summary>
         /// <param name="Tiles"></param>
-        private void ConstructShapes(List<byte[,]> Tiles)
+        public void ConstructShapes(List<byte[,]> Tiles)
         {
             Random random = new Random();
             //clead list of previoustly loaded shapes
@@ -305,7 +284,7 @@ namespace Tetris.Algorithms
         ///  Resets correcponding values.
         /// </summary>
         /// <param name="list"></param>
-        internal void ApplyShapes(List<Controls.TileControl> list)
+        public void ApplyShapes(List<Controls.TileControl> list)
         {
             int shapecount = 0;
             this.RemainingShapes = 0;
@@ -354,7 +333,7 @@ namespace Tetris.Algorithms
         /// Main loops of the algorithm.
         /// </summary>
         /// <param name="k"></param>
-        internal void StartComputation(int k)
+        public void StartComputation(int k)
         {
             this.k = k;
             playing = true;
@@ -370,7 +349,7 @@ namespace Tetris.Algorithms
         /// Pauses computatiosn.
         /// Pauses algorithm stopwatch.
         /// </summary>
-        internal void PauseComputation()
+        public void PauseComputation()
         {
             playing = false;
             StopWatch.Stop();
@@ -451,7 +430,7 @@ namespace Tetris.Algorithms
         /// <summary>
         /// Stops computation.
         /// </summary>
-        internal void StopComputation()
+        public void StopComputation()
         {
             this.ComputationStarted = false;
             this.StopWatch.Reset();
@@ -465,7 +444,7 @@ namespace Tetris.Algorithms
         /// <param name="YPositionWeight">weight for y score</param>
         /// <param name="BoxDensityWeight">weight for loacl density score</param>
         /// <param name="NeighborWeight">weight for how mny neightbours are around</param>
-        internal void UpdateWeights(int YPositionWeight, int BoxDensityWeight, int NeighborWeight)
+        public void UpdateWeights(int YPositionWeight, int BoxDensityWeight, int NeighborWeight)
         {
             this.YPositionWeight = YPositionWeight;
             this.BoxDensityWeight = BoxDensityWeight;

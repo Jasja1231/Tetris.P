@@ -79,19 +79,5 @@ namespace Tetris.Algorithms
             }
             rotations.Add(outputMatrix);
         }
-        //concatenate shape to StringBuilder in proper txt format
-        public void printToString(StringBuilder sb)
-        {
-            byte[,] map = rotations.ElementAt(0);
-            sb.Append(map.GetLength(0).ToString()).Append(" ").Append(map.GetLength(1).ToString()).Append("\n");
-            for (int y = 0; y < map.GetLength(1); y++)
-            {
-                for (int x = 0; x < map.GetLength(0); x++)
-                {
-                    sb.Append(map[x, y].ToString()).Append(" ");
-                }
-                sb.Append("\n");
-            }
-        }
     }
 }

@@ -59,10 +59,10 @@ namespace Tetris.Algorithms
                     //CREATE THREAD to find its position and start its THREAD_WORK
                     if (mt.Quantities[j] != 0)
                     {
-                        int kurwa = j;
+                        int shapeIdx = j;
                         tasks[taskIdx++] = Task<Result>.Factory.StartNew(() =>
                         {
-                            return fpg.work(args.m, mt, kurwa);
+                            return fpg.work(args.m, mt, shapeIdx);
                         }, TaskCreationOptions.LongRunning);
                     }
                 }

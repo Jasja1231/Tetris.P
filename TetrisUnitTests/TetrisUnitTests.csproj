@@ -57,6 +57,7 @@
     <Compile Include="ShapeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadWorkTest.cs" />
+    <Compile Include="ModelTests.cs" />
     <Compile Include="ValidatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
