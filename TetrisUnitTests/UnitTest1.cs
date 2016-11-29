@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tetris;
 
 namespace TetrisUnitTests
 {
@@ -9,7 +10,6 @@ namespace TetrisUnitTests
         [TestMethod]
         public void TestMethod1()
         {
-           // Assert.
         }
     }
 }

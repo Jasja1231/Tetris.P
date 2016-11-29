@@ -10,7 +10,6 @@ namespace Tetris.Algorithms
     public class Hole
     {
         public int MaxHeight { get; private set; }
-
         public Point coords { get; private set; }
         public Hole(byte[,] map, Point point)
         {
