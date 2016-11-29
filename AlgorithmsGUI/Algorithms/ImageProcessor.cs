@@ -90,9 +90,9 @@ namespace Tetris.Algorithms
                     int oldheight = ToUpdate.Height;
                     ToUpdate = CopytToExtendedBitmap(ToUpdate, ToUpdate.Width, newheight);
 
-                    bool darkerodd = (ToUpdate.Height - oldheight) + 1 % 2 != 0 ? true : false;
+                    bool darkerodd = (ToUpdate.Height - oldheight)  % 2 != 0 ? false : true;
 
-                    for (int i=ToUpdate.Height - oldheight;i>=0;i--)
+                    for (int i=ToUpdate.Height - oldheight -1;i>=0;i--)
                     {
                         for (int j=0;j<ToUpdate.Width;j++)
                         {
