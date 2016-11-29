@@ -14,6 +14,7 @@ namespace Tetris.Algorithms
             List<byte[,]> Bricks = new List<byte[,]>();
             string [] spacecep = new string [] {" "};
             int tablewidth = Int32.Parse(FileContent[0].Split(spacecep,StringSplitOptions.None)[0]);
+
             int width, height;
             for (int i = 1; i < FileContent.Length; i++)
             {
