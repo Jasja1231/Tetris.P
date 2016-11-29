@@ -20,8 +20,6 @@ namespace TetrisUnitTests
             Assert.AreEqual(0, ShapeValidator.isTileValid(Valid));
             Assert.AreEqual(1, ShapeValidator.isTileValid(Hole));
             Assert.AreEqual(2, ShapeValidator.isTileValid(Disconnected));
-
-
         }
     }
 }

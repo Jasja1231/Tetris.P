@@ -64,20 +64,6 @@ namespace Tetris.Windows
                     }
                 }
 
-                if (this.model.AllLoadedShapes.Count != 0)
-                {
-                    /*//plase 50 random shapes on board
-                    Random r = new Random();
-                    for (int i = 0; i < 50; i++)
-                    {
-                        this.AddTileToBitmap(ref bitmap, ShapesInfoListWrapper.ElementAt(r.Next(ShapesInfoListWrapper.Count - 1)),
-                            r.Next(0, x - 5), r.Next(0, 75 - 5), r.Next(3), r);
-                    }*/
-                    foreach (Shape s in model.AllLoadedShapes)
-                    {
-                        //this.AddTileToBitmap(ref bitmap, s, 0, 0, 0);
-                    }
-                }
 
                 BitmapImage bitmapimage = new BitmapImage();
                 using (MemoryStream memory = new MemoryStream())
@@ -234,7 +220,8 @@ namespace Tetris.Windows
                 if (this.model.ComputationStarted == false)
                 {
                     this.controller.StartComputation(KSetter.SelectedValue);
-                    AddBitMaps();//DLATEGO
+                    if(model.ComputationStarted == false)
+                        AddBitMaps();//DLATEGO
                 }
                 //Or it was paused and we need to resume it
                 else
@@ -310,6 +297,7 @@ namespace Tetris.Windows
                     Image im = (Image)el;
                     im.Source = model.ImageSources.ElementAt(i++);
                 }
+                
             }
             //when computation is finised change pause button to play
             else if (arg == 3)
@@ -317,35 +305,6 @@ namespace Tetris.Windows
                 PlayButton.Content = "Play";
             }
         }
-
-        private void KSetter_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        
-
-
-      /*  private void UpdateImageTest(object sender, RoutedEventArgs e)
-        {
-            Random r = new Random();
-            List<ImageSource> list = new List<ImageSource>();
-            List<Result> results = new List<Result>();
-            foreach(UIElement el in this.WellsPanel.Children)
-            {
-                Image im = (Image)el;
-                list.Add(im.Source);
-            }
-            Result res = new Result(model.AllLoadedShapes.ElementAt(r.Next (0,model.AllLoadedShapes.Count-1)), r.Next(0,40), r.Next(0,300), r.Next(0,this.WellsPanel.Children.Count-1), 0);
-            res.rotation = 0;
-            results.Add(res);
-            var updated = ImageProcessor.UpdateImages(results, list);
-            Image imm = new Image();
-            imm.Source = updated.ElementAt(0);
-            this.WellsPanel.Children.Add(imm);
-            int x;
-
-        }*/
 
         private void StopClick(object sender, RoutedEventArgs e)
         {

@@ -26,10 +26,12 @@ namespace Tetris.Algorithms
         /// </summary>
         private ThreadComputation threadComp;
 
+        /// <summary>
+        /// Variables for weights
+        /// </summary>
         public int BoxDensityWeight { get; private set; }
         public int YPositionWeight { get; private set; }
         public int NeighborWeight { get; private set; }
-
         public int WeightDivisor { get; private set; }
 
         private Stopwatch StopWatch = new Stopwatch();
@@ -59,7 +61,7 @@ namespace Tetris.Algorithms
 
         public List<MainTable> MainTablesList = new List<MainTable>();
   
-        public List<Result> BestResults = new List<Result>(10);/////////////////////////////////////////////////////
+        public List<Result> BestResults = new List<Result>(10);
 
         /// <summary>
         /// Adds a tile to a list of shapes
@@ -115,6 +117,11 @@ namespace Tetris.Algorithms
             return true;
         }
 
+        /// <summary>
+        /// Loads  from file.
+        /// </summary>
+        /// <param name="p">file path</param>
+        /// <returns>Boolean value representing if file loaded succesffully.</returns>
         public bool LoadFromFile(string p)
         {
             bool loaded = true; //status of loading from file
@@ -134,6 +141,11 @@ namespace Tetris.Algorithms
             return loaded;
         }
 
+        /// <summary>
+        /// After thread computations are finshed this functions adds  k best
+        /// results to current best results, notifies GUI about new data set change.
+        /// </summary>
+        /// <param name="bestResults">List of best results from treads</param>
         public void AddBestResults(List<Result> bestResults)
         {
             //check if reset was pressed
@@ -206,27 +218,11 @@ namespace Tetris.Algorithms
             {
                 MessageBox.Show("==========================\nWaiting for more input! (｡◕‿◕｡)\n==========================");
             }
-
-            /******DEBUG***********************************************************
-            foreach (MainTable saaaaaaaa in this.MainTablesList)
-            {
-                Console.Out.WriteLine("MAIN TABLE" + saaaaaaaa.Kth.ToString());
-                for (int y = saaaaaaaa.Table.GetLength(1) - 1; y >= 0; y--)
-                {
-                    for (int x = 0; x < saaaaaaaa.Table.GetLength(0); x++)
-                    {
-                        Console.Out.Write(saaaaaaaa.Table[x, y].ToString() + " ");
-                    }
-                    Console.Out.WriteLine(" ");
-                }
-                Console.Out.WriteLine("===========================================");
-            }
-            Console.Out.WriteLine("===========================================");
-            Console.Out.WriteLine("NEXT ITER");
-            Console.Out.WriteLine("===========================================");****/
-
-            //serialize
-            Serializer.Serialize(this,this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
+            
+            
+            //serialize automatically after 100 iterations
+            if(this.RemainingShapes%100 == 0)
+             Serializer.Serialize(this,this.ImageSources, this.MainTablesList, this.BestResults, this.ShapesDatabase);
         }
 
         /// <summary>
@@ -238,6 +234,12 @@ namespace Tetris.Algorithms
             TableWidth = p;
         }
 
+
+
+        /// <summary>
+        /// Creates and add colors for shapes, add shape to list.
+        /// </summary>
+        /// <param name="Tiles"></param>
         private void ConstructShapes(List<byte[,]> Tiles)
         {
             Random random = new Random();
@@ -272,6 +274,9 @@ namespace Tetris.Algorithms
 
         }
 
+        /// <summary>
+        /// Initialisation of Main table list 
+        /// </summary>
         private void InitializeMainTableList()
         {
             //Create k MAIN tables if they are empty
@@ -292,7 +297,12 @@ namespace Tetris.Algorithms
             }
         }
 
-        public void ApplyShapes(List<Controls.TileControl> list)
+        /// <summary>
+        ///  Assigns new tile list to corresponding fields. 
+        ///  Resets correcponding values.
+        /// </summary>
+        /// <param name="list"></param>
+        internal void ApplyShapes(List<Controls.TileControl> list)
         {
             int shapecount = 0;
             this.RemainingShapes = 0;
@@ -319,6 +329,11 @@ namespace Tetris.Algorithms
             }
         }
 
+        /// <summary>
+        /// Start thread iteration for  main tables
+        /// </summary>
+        /// <param name="p">backtracking parameter</param>
+        /// <param name="iter">iterations left to perform</param>
         internal void StartIteration(int p, int iter)
         {
             this.K = p;
@@ -328,6 +343,7 @@ namespace Tetris.Algorithms
             InitializeMainTableList();
             threadComp.preformIteration(this, p, MainTablesList);
         }
+
 
         /// <summary>
         /// Starting od the computation.
@@ -347,12 +363,20 @@ namespace Tetris.Algorithms
             threadComp.preformIteration(this, k, MainTablesList);
         }
 
+        /// <summary>
+        /// Pauses computatiosn.
+        /// Pauses algorithm stopwatch.
+        /// </summary>
         internal void PauseComputation()
         {
             playing = false;
             StopWatch.Stop();
         }
 
+        /// <summary>
+        /// Finds heightest shape.
+        /// </summary>
+        /// <returns>int representing maximal shape width. </returns>
         private int GetMaxShapeHeight()
         {
             int maxValue = 0;
@@ -364,6 +388,11 @@ namespace Tetris.Algorithms
             return maxValue;
         }
 
+        /// <summary>
+        /// Reasigned image sources lists.
+        /// Needed for serialization/deserialization.
+        /// </summary>
+        /// <param name="isl"></param>
         internal void ReadListOfImageSources(List<ImageSource> isl)
         {
             this.ImageSources = isl;
@@ -380,12 +409,17 @@ namespace Tetris.Algorithms
             return newArray;
         }
 
-
+        /// <summary>
+        /// Serializes material : main tables list , imagesources into file with given path.
+        /// </summary>
+        /// <param name="pathToSerializeInto">path to file where user desided to store
+        /// serialized material.</param>
+        /// <returns>Boolean value representing success/failure of the operation.</returns>
         public bool SerializeTo(string pathToSerializeInto)
         {
             try
             {
-                Serializer.Serialize(this,pathToSerializeInto, this, this.MainTablesList, this.ImageSources/*, this.BestResults, this.ShapesDatabase*/); 
+                Serializer.Serialize(this,pathToSerializeInto, this.MainTablesList, this.ImageSources); 
             }
             catch
             {
@@ -395,25 +429,35 @@ namespace Tetris.Algorithms
             return true;
 	   }
 
+
+        /// <summary>
+        /// Deserializes material : main tables list , imagesources from file with given path.
+        /// </summary>
+        /// <param name="pathToSerializeInto">path to file where user desided to store
+        /// serialized material.</param>
+        /// <returns>Boolean value representing success/failure of the operation.</returns>
         public bool DeserializeFrom(string dirPath)
         {
-           // try
+           try
             {
-                Serializer.Deserialize(this , dirPath /*,this.ImageSources,  this.MainTablesList, this.BestResults, this.ShapesDatabase*/);
+                Serializer.Deserialize(this , dirPath);
                 this.K = this.MainTablesList.Count();
                 this.TableWidth = this.MainTablesList.ElementAt(0).Width;
+                this.ComputationStarted = true;
                 // tell giu that we have deserialized data
                 this.Notify(2); 
             }
-           // catch
+           catch
             {
-                //return false;
+                return false;
             }
 
             return true;
         }
 
-
+        /// <summary>
+        /// Stops computation.
+        /// </summary>
         public void StopComputation()
         {
             this.ComputationStarted = false;
@@ -421,8 +465,12 @@ namespace Tetris.Algorithms
         }
 
 
-
-
+        /// <summary>
+        /// Updates weights for position store equasion. 
+        /// </summary>
+        /// <param name="YPositionWeight">weight for y score</param>
+        /// <param name="BoxDensityWeight">weight for loacl density score</param>
+        /// <param name="NeighborWeight">weight for how mny neightbours are around</param>
         internal void UpdateWeights(int YPositionWeight, int BoxDensityWeight, int NeighborWeight)
         {
             this.YPositionWeight = YPositionWeight;

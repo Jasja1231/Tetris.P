@@ -44,10 +44,5 @@ namespace Tetris.Algorithms
             this.score = score;
             this.rotation = rotation;
         }
-
-        public static implicit operator Task<object>(Result v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
