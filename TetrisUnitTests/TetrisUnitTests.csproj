@@ -47,13 +47,16 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="ShapeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThreadWorkTest.cs" />
     <Compile Include="ValidatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +64,12 @@
       <Project>{ca569fd9-f33b-40d1-80a8-43f5d2b50702}</Project>
       <Name>Tetris</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AlgorithmsGUI\Tetris.csproj">
+      <Project>{ca569fd9-f33b-40d1-80a8-43f5d2b50702}</Project>
+      <Name>Tetris</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

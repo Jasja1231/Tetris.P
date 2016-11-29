@@ -99,17 +99,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Algorithms\CheckDensity.cs" />
     <Compile Include="Algorithms\FileReader.cs" />
     <Compile Include="Algorithms\FindGoodPlacement.cs" />
-    <Compile Include="Algorithms\Hole.cs" />
     <Compile Include="Algorithms\ImageProcessor.cs" />
     <Compile Include="Algorithms\Model.cs" />
     <Compile Include="Algorithms\MainTable.cs" />
     <Compile Include="Algorithms\Result.cs" />
     <Compile Include="Algorithms\Serializer.cs" />
     <Compile Include="Algorithms\Shape.cs" />
-    <Compile Include="Algorithms\ShapeInfo.cs" />
     <Compile Include="Algorithms\Shape_Comparer.cs" />
     <Compile Include="Algorithms\ThreadComputation.cs" />
     <Compile Include="App.xaml.cs">

@@ -18,7 +18,14 @@ namespace Tetris.Algorithms
             WeightDivisor = 10 + 12 + 20;
         }
 
+        /// <summary>
+        /// Tells us if computation is in playing state, i.e. we are making iterations while there
+        /// are shapes to place
+        /// </summary>
         private volatile bool playing;
+        /// <summary>
+        /// We use this variable to fast forward iterLeft amount of iterations
+        /// </summary>
         private int iterLeft;
 
         /// <summary>
@@ -32,6 +39,9 @@ namespace Tetris.Algorithms
 
         public int WeightDivisor { get; private set; }
 
+        /// <summary>
+        /// Variable to count the time of algorithm
+        /// </summary>
         private Stopwatch StopWatch = new Stopwatch();
         /// <summary>
         /// Last displayed image sources.
@@ -62,15 +72,6 @@ namespace Tetris.Algorithms
         public List<Result> BestResults = new List<Result>(10);/////////////////////////////////////////////////////
 
         /// <summary>
-        /// Adds a tile to a list of shapes
-        /// </summary>
-        /// <param name="s">Shape to be added</param>
-        public void AddShapeToList(Shape s)
-        {
-            this.shapes.Add(s);
-        }
-
-        /// <summary>
         /// Backtracking parameter. The user set K variable, constant for now
         /// </summary>
         private int k;
@@ -92,29 +93,6 @@ namespace Tetris.Algorithms
         /// </summary>
         public int MaxShapeHeight { get; set; }
 
-
-        ///NON TESTED
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Map"></param>
-        /// <param name="Tile"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public bool IsTilePlacementValid(byte[,] Map, byte[,] Tile, int x, int y)
-        {
-            for (int i = x, i2 = 0; i <= x + Tile.GetLength(0) - 1; i++, i2++)
-            {
-                for (int j = Map.GetLength(1) - 1 - y, j2 = Tile.GetLength(1) - 1; j >= Map.GetLength(1) - 1 - y - Tile.GetLength(1) - 1; j--, j2--)
-                {
-                    if (Map[i, j] + Tile[i2, j2] > 1)
-                        return false;
-                }
-            }
-            return true;
-        }
-
         public bool LoadFromFile(string p)
         {
             bool loaded = true; //status of loading from file
@@ -134,7 +112,7 @@ namespace Tetris.Algorithms
             return loaded;
         }
 
-        public void AddBestResults(List<Result> bestResults)
+        internal void AddBestResults(List<Result> bestResults)
         {
             //check if reset was pressed
             if (ComputationStarted == false)
@@ -271,7 +249,9 @@ namespace Tetris.Algorithms
             }
 
         }
-
+        /// <summary>
+        /// If we dont have any main tables, initialize them
+        /// </summary>
         private void InitializeMainTableList()
         {
             //Create k MAIN tables if they are empty
@@ -292,7 +272,7 @@ namespace Tetris.Algorithms
             }
         }
 
-        public void ApplyShapes(List<Controls.TileControl> list)
+        internal void ApplyShapes(List<Controls.TileControl> list)
         {
             int shapecount = 0;
             this.RemainingShapes = 0;
@@ -369,18 +349,6 @@ namespace Tetris.Algorithms
             this.ImageSources = isl;
         }
 
-        public T[,] ResizeArray<T>(T[,] original, int x, int y)
-        {
-            T[,] newArray = new T[x, y];
-            int minX = Math.Min(original.GetLength(0), newArray.GetLength(0));
-            int minY = Math.Min(original.GetLength(1), newArray.GetLength(1));
-
-            for (int i = 0; i < minY; ++i)
-                Array.Copy(original, i * original.GetLength(0), newArray, i * newArray.GetLength(0), minX);
-            return newArray;
-        }
-
-
         public bool SerializeTo(string pathToSerializeInto)
         {
             try
@@ -413,15 +381,11 @@ namespace Tetris.Algorithms
             return true;
         }
 
-
-        public void StopComputation()
+        internal void StopComputation()
         {
             this.ComputationStarted = false;
             this.StopWatch.Reset();
         }
-
-
-
 
         internal void UpdateWeights(int YPositionWeight, int BoxDensityWeight, int NeighborWeight)
         {

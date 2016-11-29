@@ -28,7 +28,7 @@ namespace Tetris.Algorithms
             return false;
         }
         //TODO: figure out good hash function for our shape class
-        public  int GetHashCode(Shape obj)
+        public int GetHashCode(Shape obj)
         {
             throw new NotImplementedException();
         }
