@@ -36,7 +36,7 @@ namespace Tetris.Algorithms
             //Create table [][] in here
             //table = new byte[width][height];
         }
-
+        // update mainTable according to calculated best result
         internal MainTable UpdateWithResult(Result r, Model m)
         {
             MainTable mt = new MainTable(r.Kth);
@@ -61,7 +61,7 @@ namespace Tetris.Algorithms
             return mt;
         }
 
-
+        //add shape to existing mainTable byteArray
         private void AddShapeToTable(MainTable mt, Shape s, Result r)
         {
             byte[,] table = s.rotations.ElementAt(r.rotation);
@@ -77,7 +77,7 @@ namespace Tetris.Algorithms
                 }
             }
         }
-
+        //resize byteArray
         private T[,] ResizeArray<T>(T[,] original, int rows, int cols)
         {
             var newArray = new T[rows, cols];

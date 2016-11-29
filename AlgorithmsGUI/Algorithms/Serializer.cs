@@ -17,7 +17,7 @@ namespace Tetris.Algorithms
     class Serializer
     {
         /// <summary>
-        /// 
+        /// serialization
         /// </summary>
         /// <param name="o">Set of Objects.</param>
         public static void Serialize(Model m, params Object[] o)

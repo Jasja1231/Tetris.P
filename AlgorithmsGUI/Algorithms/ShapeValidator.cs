@@ -54,7 +54,7 @@ namespace Tetris.Algorithms
 
             return 0;
         }
-
+        //find coordinates of a value in a byteArray
         private static Tuple<int, int> CoordinatesOf<T>(this T[,] matrix, T value)
         {
             int w = matrix.GetLength(0);
@@ -89,13 +89,14 @@ namespace Tetris.Algorithms
                 FloodFill(ref arr, x, y - 1, fill, old);
             }
         }
-
+        //check if shapes are the same
         public static bool AreEqual(Shape s1, Shape s2)
         {
             byte[,] map = s2.rotations.ElementAt(0);
             foreach (byte[,] rotation in s1.rotations)
             {
                 int checker = 0;
+                //if s1 height == s2 height && s1 width == s2 width
                 if (rotation.GetLength(1) == map.GetLength(1) && rotation.GetLength(0) == map.GetLength(0))
                 {
                     for (int y = 0; y < map.GetLength(1); y++)
@@ -111,7 +112,7 @@ namespace Tetris.Algorithms
             }
             return false;
         }
-
+        //check if there are duplicates among shapes
         public static void MarkDuplicates(List<Controls.TileControl> list)
         {
             for (int i = 0; i < list.Count; i++)

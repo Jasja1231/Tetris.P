@@ -6,6 +6,7 @@ namespace Tetris.Algorithms
 {
     class FindGoodPlacement
     {
+        //Thread work algorithm
         public Result work(Model m, MainTable mt, int shapeIdx)
         {
             Result r = new Result(shapeIdx,-1,-1,mt.Kth,-1,-1);
@@ -72,7 +73,7 @@ namespace Tetris.Algorithms
 
             return (double)(yweight*yScore + neighweight*neighbourScore + boxweight*boundingBoxDensity)/divisor;
         }
-
+        //count tiles in shape's bounding box
         private int CountTiles(Shape shape)
         {
             int count = 0;
@@ -136,7 +137,7 @@ namespace Tetris.Algorithms
             }
            return new Tuple<bool, int, int>(false,mainTableTiles, adjacentCount);
         }
-
+        //check if shape at [j,i] has neigbors in mainTable's byteArray
         private int SafeNeighborCount(byte[,] table, int j , int i )
         {
             int adjacentCount = 0;

@@ -65,7 +65,9 @@ namespace Tetris.Algorithms
             get { return shapes; }
             private set { shapes = value; }
         }
-
+        /// <summary>
+        /// All unique shapes
+        /// </summary>
         public Shape[] ShapesDatabase { get;  set; }
         public int[] ShapeQuantities { get; private set; }
 
@@ -96,7 +98,7 @@ namespace Tetris.Algorithms
         public int MaxShapeHeight { get; set; }
 
         /// <summary>
-        /// 
+        /// Check if shape does not overlap any tile in preexisting map
         /// </summary>
         /// <param name="Map"></param>
         /// <param name="Tile"></param>
@@ -117,7 +119,7 @@ namespace Tetris.Algorithms
         }
 
         /// <summary>
-        /// Loads  from file.
+        /// Loads content from file.
         /// </summary>
         /// <param name="p">file path</param>
         /// <returns>Boolean value representing if file loaded succesffully.</returns>
@@ -180,6 +182,7 @@ namespace Tetris.Algorithms
                 iterLeft--;
                 threadComp.preformIteration(this, this.k, MainTablesList);
             }
+            //there are no more shapes available, finish computation, display Summary
             else if (RemainingShapes <= 0)
             {
                 List<double> Densities = new List<double>();
@@ -396,18 +399,6 @@ namespace Tetris.Algorithms
         internal void ReadListOfImageSources(List<ImageSource> isl)
         {
             this.ImageSources = isl;
-        }
-
-
-        public T[,] ResizeArray<T>(T[,] original, int x, int y)
-        {
-            T[,] newArray = new T[x, y];
-            int minX = Math.Min(original.GetLength(0), newArray.GetLength(0));
-            int minY = Math.Min(original.GetLength(1), newArray.GetLength(1));
-
-            for (int i = 0; i < minY; ++i)
-                Array.Copy(original, i * original.GetLength(0), newArray, i * newArray.GetLength(0), minX);
-            return newArray;
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace Tetris.Algorithms
 {
     public static class ImageProcessor
     {
-
+        //convert Bitmap to BitmapImage
         private static BitmapImage BitmapToBitmapSource(Bitmap bitmap)
         {
             BitmapImage bitmapimage = new BitmapImage();
@@ -29,7 +29,7 @@ namespace Tetris.Algorithms
             }
             return bitmapimage;
         }
-
+        //convert BitmapImage to Bitmap
         private static Bitmap BitmapImageToBitmap(BitmapImage bitmapImage)
         {
             using (MemoryStream outStream = new MemoryStream())
@@ -42,12 +42,15 @@ namespace Tetris.Algorithms
                 return new Bitmap(bitmap);
             }
         }
-
+        //add given shape to existing bitmap
         private static void AddTileToBitmap(ref System.Drawing.Bitmap Bm, Shape Sh, int x, int y, int rotation)
         {
             int ShWidth = Sh.rotations.ElementAt(rotation).GetLength(0) - 1;
             int ShHeight = Sh.rotations.ElementAt(rotation).GetLength(1) - 1;
-
+            //i = iterator for bitmap y's
+            //j = iterator for bitmap x's
+            //i2 = iterator for shape y's
+            //j2 = iterator for shape x's
             for (int i = x, i2 = 0; i <= x + ShWidth; i++, i2++)
             {
                 for (int j = Bm.Height - 1 - y, j2 = ShHeight; j >= Bm.Height - 1 - y - ShHeight; j--, j2--)
@@ -59,7 +62,7 @@ namespace Tetris.Algorithms
                 }
             }
         }
-
+        //increase size of bitmap
         private static Bitmap CopytToExtendedBitmap(Bitmap original, int newwidth, int newheight)
         {
             Bitmap newbitmap = new Bitmap(newwidth, newheight);
@@ -71,7 +74,7 @@ namespace Tetris.Algorithms
 
             return newbitmap;
         }
-
+        //update images in all mainTables
         internal static BitmapImage[] UpdateImages (Model model, List<ImageSource>SourceImages)
         {
             var updated = new BitmapImage[model.K];
@@ -79,7 +82,6 @@ namespace Tetris.Algorithms
             foreach (Result result in model.BestResults)
             {
                 Bitmap ToUpdate = BitmapImageToBitmap((BitmapImage)(SourceImages.ElementAt(result.Kth)));
-                //int newheight = ToUpdate.Height + result.s.rotations.ElementAt(result.rotation).GetLength(1);
                 int newheight = result.y + model.ShapesDatabase[result.shapeIdx].rotations.ElementAt(result.rotation).GetLength(1);
                 if (newheight > ToUpdate.Height)
                 {
