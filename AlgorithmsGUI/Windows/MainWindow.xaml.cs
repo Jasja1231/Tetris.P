@@ -220,8 +220,7 @@ namespace Tetris.Windows
                 if (this.model.ComputationStarted == false)
                 {
                     this.controller.StartComputation(KSetter.SelectedValue);
-                    if(model.ComputationStarted == false)
-                        AddBitMaps();//DLATEGO
+                    AddBitMaps();//DLATEGO
                 }
                 //Or it was paused and we need to resume it
                 else
